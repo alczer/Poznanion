@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class MoveCamera : MonoBehaviour {
@@ -6,7 +6,12 @@ public class MoveCamera : MonoBehaviour {
     //
     // VARIABLES
     //
-
+	public int x,y,z;
+	void Start () {
+	x=0;
+	y=30;
+	z=-1;
+	}
     public float turnSpeed = 4.0f;		// Speed of camera turning when mouse moves in along an axis
     public float panSpeed = 4.0f;		// Speed of the camera when being panned
     public float zoomSpeed = 4.0f;		// Speed of the camera going back and forth
@@ -27,7 +32,18 @@ public class MoveCamera : MonoBehaviour {
 
     void Update()
     {
-        
+        	Vector3 tmp = (Camera.main.ScreenToViewportPoint(Input.mousePosition));
+	if(tmp.x>0.95)
+	x+=1;
+	else
+	if(tmp.x<0.05)
+	x-=1;
+	if(tmp.y>0.95)
+	z+=1;
+	else
+	if(tmp.y<0.05)
+	z-=1;
+        Camera.main.transform.position = new Vector3(x,y,z);
 
         // Get the right mouse button
         if (Input.GetMouseButtonDown(1))
