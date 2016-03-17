@@ -48,7 +48,7 @@ public class SpawnTile : MonoBehaviour {
         if (Physics.Raycast(myRay, out hit))
         { 
 
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonUp(0))
             {
                 if (tilesList.Count > 0)
                 {
