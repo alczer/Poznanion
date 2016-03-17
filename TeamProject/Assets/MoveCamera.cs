@@ -6,12 +6,14 @@ public class MoveCamera : MonoBehaviour {
     //
     // VARIABLES
     //
-	public int x,y,z;
+
 	void Start () {
-	x=0;
-	y=30;
-	z=-1;
+	
 	}
+    public int x=0;
+	public int y=30;
+    public int z = -1;
+
     public float turnSpeed = 4.0f;		// Speed of camera turning when mouse moves in along an axis
     public float panSpeed = 4.0f;		// Speed of the camera when being panned
     public float zoomSpeed = 4.0f;		// Speed of the camera going back and forth
@@ -32,18 +34,26 @@ public class MoveCamera : MonoBehaviour {
 
     void Update()
     {
-        	Vector3 tmp = (Camera.main.ScreenToViewportPoint(Input.mousePosition));
-	if(tmp.x>0.95)
-	x+=1;
-	else
-	if(tmp.x<0.05)
-	x-=1;
-	if(tmp.y>0.95)
-	z+=1;
-	else
-	if(tmp.y<0.05)
-	z-=1;
-        Camera.main.transform.position = new Vector3(x,y,z);
+        Vector3 tmp = (Camera.main.ScreenToViewportPoint(Input.mousePosition));
+	    
+        if(tmp.x>0.95)
+            transform.Translate(new Vector3(1, 0, 0), Space.Self);
+	    else
+	    if(tmp.x<0.05)
+            transform.Translate(new Vector3(-1, 0, 0), Space.Self);
+	    if(tmp.y>0.95)
+            transform.Translate(new Vector3(0, 1, 0), Space.Self);
+	    else
+	    if(tmp.y<0.05)
+            transform.Translate(new Vector3(0, -1, 0), Space.Self);
+        
+        // Get the left mouse button + LeftCTRL
+        if (Input.GetMouseButtonDown(0) && Input.GetKey(KeyCode.LeftControl)) 
+        {
+            // Get mouse origin
+            mouseOrigin = Input.mousePosition;
+            isRotating = true;
+        }
 
         // Get the right mouse button
         if (Input.GetMouseButtonDown(1))
@@ -67,13 +77,13 @@ public class MoveCamera : MonoBehaviour {
         if (!Input.GetMouseButton(2)) isZooming = false;
 
         // Rotate camera along X and Y axis
-        //if (isRotating)
-        //{
-        //    Vector3 pos = Camera.main.ScreenToViewportPoint(Input.mousePosition - mouseOrigin);
+        if (isRotating)
+        {
+            Vector3 pos = Camera.main.ScreenToViewportPoint(Input.mousePosition - mouseOrigin);
 
-        //    transform.RotateAround(transform.position, transform.right, -pos.y * turnSpeed);
-        //    transform.RotateAround(transform.position, Vector3.up, pos.x * turnSpeed);
-        //}
+            transform.RotateAround(transform.position, transform.right, -pos.y * turnSpeed);
+            transform.RotateAround(transform.position, Vector3.up, pos.x * turnSpeed);
+        }
 
         // Move the camera on it's XY plane
         if (isPanning)
