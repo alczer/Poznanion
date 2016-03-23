@@ -34,26 +34,27 @@ public class Tile : MonoBehaviour {
     {
         get { return this.material; }
         
+
     }
 
     public terrainTypes UpTerrain // This is your property
     {
         get { return this.upTerrain; }
-
+        set { this.upTerrain = value; }
     }
     public terrainTypes RightTerrain // This is your property
     {
         get { return this.rightTerrain; }
-
+        set { this.rightTerrain = value; }
     }
     public terrainTypes DownTerrain // This is your property
     {
         get { return this.downTerrain; }
-
+        set { this.downTerrain = value; }
     }
     public terrainTypes LeftTerrain // This is your property
     {
         get { return this.leftTerrain; }
-
+        set { this.leftTerrain = value; }
     }
 }
