@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 public class SpawnTile : MonoBehaviour {
 
-    List<Tile> tilesOnBoard = new List<Tile>();
+    GameObject[,] tilesOnBoard = new GameObject[200, 200];
     List<Tile> tilesList = new List<Tile>(); //List of all disponible tiles (not on board)
     Random rnd = new Random();
 
@@ -20,12 +20,22 @@ public class SpawnTile : MonoBehaviour {
     public GameObject objectToinstantiate;
     public int currentNbrTiles;
 
+    int[] getArrayPosition(float x, float z)
+    {
+        float col = 100 + (x / 10);
+        float row = 100 + (z / 10);
+        int[] array = new int[2] { (int)row, (int)col };
+        return array;
+    }
+
     void Start()
     {
         currentNbrTiles = 0;
-        Tile startTile = new Tile();
+
+        tilesOnBoard[100, 100] = Instantiate(objectToinstantiate, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
+        Tile startTile = tilesOnBoard[100, 100].AddComponent<Tile>();
         startTile.Init(terrainTypes.castle, terrainTypes.grassRoad, terrainTypes.grassRoad, terrainTypes.grass, 0, 0, startMaterial);
-        tilesOnBoard.Add(startTile);
+        tilesOnBoard[100, 100].GetComponent<Renderer>().material = startMaterial;
 
         Tile t1 = new Tile();
         t1.Init(terrainTypes.grassRoad, terrainTypes.grassRoad, terrainTypes.grassRoad, terrainTypes.grassRoad, 0, 0,m1);
@@ -55,16 +65,29 @@ public class SpawnTile : MonoBehaviour {
                     Vector3 position = hit.point;
                     position.x = Mathf.Round(position.x / 10) * 10; // 10 is the size of a Tile
                     position.z = Mathf.Round(position.z / 10) * 10; // 10 is the size of a Tile
-                    GameObject clone = Instantiate(objectToinstantiate, position, Quaternion.identity) as GameObject;// instatiate a prefab on the position where the ray hits the floor.
-                    int i = Random.Range(0, tilesList.Count);
-                    var item = tilesList[i];
 
-                    Tile tile = clone.AddComponent<Tile>();
-                    tile.Init(item.UpTerrain, item.RightTerrain, item.DownTerrain, item.LeftTerrain, position.x, position.z, item.Material);
-                    clone.GetComponent<Renderer>().material = item.Material;
-                    tilesList.RemoveAt(i);
-                    Debug.Log(hit.point);
-                    currentNbrTiles++;                  
+                    Debug.Log("Position x: " + position.x.ToString() + " Position z: " + position.z.ToString());
+                    int[] arrayIndex = getArrayPosition(position.x, position.z);
+                    Debug.Log("Position Array row: " + arrayIndex[0].ToString() + " Position array column: " + arrayIndex[1].ToString());
+
+
+                    if (tilesOnBoard[arrayIndex[0], arrayIndex[1]] != null)
+                    {
+                        Debug.Log("A tile is already at this position");
+                    }
+                    else
+                    {
+                        tilesOnBoard[arrayIndex[0], arrayIndex[1]] = Instantiate(objectToinstantiate, position, Quaternion.identity) as GameObject;// instatiate a prefab on the position where the ray hits the floor.
+                        int i = Random.Range(0, tilesList.Count);
+                        var item = tilesList[i];
+                        Tile tile = tilesOnBoard[arrayIndex[0], arrayIndex[1]].AddComponent<Tile>();
+                        tile.Init(item.UpTerrain, item.RightTerrain, item.DownTerrain, item.LeftTerrain, position.x, position.z, item.Material);
+                        tilesOnBoard[arrayIndex[0], arrayIndex[1]].GetComponent<Renderer>().material = item.Material;
+                        tilesList.RemoveAt(i);
+                        //Debug.Log(hit.point);
+                        currentNbrTiles++;
+  
+                    }            
                 }
             }
         }  
