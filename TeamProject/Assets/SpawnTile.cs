@@ -48,9 +48,16 @@ public class SpawnTile : MonoBehaviour {
         gameObject.transform.Rotate(new Vector3(0, 90, 0));
     }
 
-    void addTile(ref GameObject obj)
+    void placeTile(ref GameObject obj, int x, int y)
     {
+        tilesOnBoard[x, y] = Instantiate(obj, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
+    }
 
+    void addTileToList(terrainTypes up, terrainTypes right, terrainTypes down, terrainTypes left, float x, float y, Material m)
+    {
+        Tile tmp = new Tile();
+        tmp.Init(up, right, down, left, x, y, m);
+        tilesList.Add(tmp);
     }
 
     void Start()
@@ -58,30 +65,21 @@ public class SpawnTile : MonoBehaviour {
         currentlyPlacedTile = new int[2];
         currentNbrTiles = 0;
 
-        tilesOnBoard[100, 100] = Instantiate(objectToinstantiate, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
+        placeTile(ref objectToinstantiate, 100, 100);
         Tile startTile = tilesOnBoard[100, 100].AddComponent<Tile>();
         startTile.Init(terrainTypes.castle, terrainTypes.grassRoad, terrainTypes.grassRoad, terrainTypes.grass, 0, 0, startMaterial);
         tilesOnBoard[100, 100].GetComponent<Renderer>().material = startMaterial;
         currentlyPlacingTile = false;
-
-        Tile t1 = new Tile();
-        t1.Init(terrainTypes.grassRoad, terrainTypes.grassRoad, terrainTypes.grassRoad, terrainTypes.grassRoad, 0, 0,m1);
-        tilesList.Add(t1);
-        Tile t2 = new Tile();
-        t2.Init(terrainTypes.grassRoad, terrainTypes.grass, terrainTypes.grass, terrainTypes.grass, 0, 0, m2);
-        tilesList.Add(t2);
-        Tile t3 = new Tile();
-        t3.Init(terrainTypes.grass, terrainTypes.grass, terrainTypes.grass, terrainTypes.grass, 0, 0, m3);
-        tilesList.Add(t3);
-        Tile t4 = new Tile();
-        t4.Init(terrainTypes.castle, terrainTypes.castle, terrainTypes.castle, terrainTypes.castle, 0, 0, m4);
-        tilesList.Add(t4);
         
+        addTileToList(terrainTypes.grassRoad, terrainTypes.grassRoad, terrainTypes.grassRoad, terrainTypes.grassRoad, 0, 0, m1);
+        addTileToList(terrainTypes.grassRoad, terrainTypes.grass, terrainTypes.grass, terrainTypes.grass, 0, 0, m2);
+        addTileToList(terrainTypes.grass, terrainTypes.grass, terrainTypes.grass, terrainTypes.grass, 0, 0, m3);
+        addTileToList(terrainTypes.castle, terrainTypes.castle, terrainTypes.castle, terrainTypes.castle, 0, 0, m4);
+
     }
 
     void Update()
     {
-
         if (currentlyPlacingTile == false)
         {
             if (tilesList.Count > 0)
@@ -129,7 +127,7 @@ public class SpawnTile : MonoBehaviour {
                     {
                         if (currentlyPlacedTile != null) Destroy(tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]]);
                         newButton.SetActive(true);                                          
-                        tilesOnBoard[arrayIndex[0], arrayIndex[1]] = Instantiate(objectToinstantiate, position, Quaternion.identity) as GameObject;// instatiate a prefab on the position where the ray hits the floor.                            
+                        tilesOnBoard[arrayIndex[0], arrayIndex[1]] = Instantiate(objectToinstantiate, position, Quaternion.identity) as GameObject;// instatiate a prefab on the position where the ray hits the floor. 
                         Tile tile = tilesOnBoard[arrayIndex[0], arrayIndex[1]].AddComponent<Tile>();
                         tile.Init(choosenTile.UpTerrain, choosenTile.RightTerrain, choosenTile.DownTerrain, choosenTile.LeftTerrain, position.x, position.z, choosenTile.Material);
                         tilesOnBoard[arrayIndex[0], arrayIndex[1]].GetComponent<Renderer>().material = choosenTile.Material;
