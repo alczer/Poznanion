@@ -91,7 +91,10 @@ public class SpawnTile : MonoBehaviour {
                 newCanvas = Instantiate(Canvas) as GameObject;
                 newButton = Instantiate(Button) as GameObject;
                 newButton.transform.SetParent(newCanvas.transform, false);
-                newButton.transform.localPosition = new Vector3((float)Screen.width / 2 - (newButton.GetComponent<RectTransform>().rect.width / 4), (- (float)Screen.height / 2) + (newButton.GetComponent<RectTransform>().rect.height / 1.5f), 0);
+
+                newButton.transform.localScale = new Vector3(1.66f, 2, 0);
+                newButton.transform.localPosition = new Vector3((float)Screen.width *0.5f - (newButton.GetComponent<RectTransform>().rect.width *0.9f), (- (float)Screen.height *0.5f) + (newButton.GetComponent<RectTransform>().rect.height * 1.3f), 0);
+                
                 button = newButton.GetComponent<Button>();
                 button.onClick.AddListener(() => { currentlyPlacingTile = false; currentlyPlacedTile = null; Destroy(newButton); Destroy(newCanvas); });
                 newButton.SetActive(false);
