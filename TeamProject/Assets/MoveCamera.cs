@@ -54,15 +54,15 @@ public class MoveCamera : MonoBehaviour
         // Edge moving
         {
             Vector3 tmp = (Camera.main.ScreenToViewportPoint(Input.mousePosition));
-            if (tmp.x > 0.97)
+            if (tmp.x > 0.99)
                 transform.Translate(edgeSpeed, 0, 0);
             else
-            if (tmp.x < 0.03)
+            if (tmp.x < 0.01)
                 transform.Translate(-edgeSpeed, 0, 0);
-            if (tmp.y > 0.97)
+            if (tmp.y > 0.99)
                 transform.Translate(0, edgeSpeed, 0);
             else
-            if (tmp.y < 0.03)
+            if (tmp.y < 0.01)
                 transform.Translate(0, -edgeSpeed, 0);
         }
 
