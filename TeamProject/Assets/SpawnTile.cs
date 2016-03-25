@@ -91,7 +91,7 @@ public class SpawnTile : MonoBehaviour {
                 newCanvas = Instantiate(Canvas) as GameObject;
                 newButton = Instantiate(Button) as GameObject;
                 newButton.transform.SetParent(newCanvas.transform, false);
-                newButton.transform.localPosition = new Vector3((float)Screen.width / 2 - 90, -280, 0);
+                newButton.transform.localPosition = new Vector3((float)Screen.width / 2 - (newButton.GetComponent<RectTransform>().rect.width / 4), (- (float)Screen.height / 2) + (newButton.GetComponent<RectTransform>().rect.height / 1.5f), 0);
                 button = newButton.GetComponent<Button>();
                 button.onClick.AddListener(() => { currentlyPlacingTile = false; currentlyPlacedTile = null; Destroy(newButton); Destroy(newCanvas); });
                 newButton.SetActive(false);
@@ -114,10 +114,14 @@ public class SpawnTile : MonoBehaviour {
                     
                     if (tilesOnBoard[arrayIndex[0], arrayIndex[1]] != null)
                     {
-                        if (arrayIndex[0] == currentlyPlacedTile[0] && arrayIndex[1] == currentlyPlacedTile[1])
+                        if (newButton.activeSelf)
                         {
-                            rotateClockwise90(ref tilesOnBoard[arrayIndex[0], arrayIndex[1]]);
-                        }
+                            if (arrayIndex[0] == currentlyPlacedTile[0] && arrayIndex[1] == currentlyPlacedTile[1])
+                            {
+                                rotateClockwise90(ref tilesOnBoard[arrayIndex[0], arrayIndex[1]]);
+                            }
+
+                        }                        
                         else
                         {
                          Debug.Log("A tile is already at this position");
