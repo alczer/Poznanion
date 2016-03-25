@@ -25,7 +25,7 @@ public class MoveCamera : MonoBehaviour
     public float pinchZoomSpeed = 0.5f;
 
     // edge move speed
-    public float edgeSpeed = 0.9f;
+    public float edgeSpeed = 2f;
 
     // movement
     public float Xmax = 150f;
@@ -36,7 +36,7 @@ public class MoveCamera : MonoBehaviour
     public float cameraDistanceMin = 30f;
 
 
-
+    private float zoom;               //
     private Vector3 mouseOrigin;	// Position of cursor when mouse dragging starts
 
     private bool isPanning;		    // Is the camera being panned?
@@ -69,6 +69,9 @@ public class MoveCamera : MonoBehaviour
     //
     void Update()
     {
+        // Check current zoom
+        zoom = (int)Camera.main.transform.position.y * 0.01f;
+
         if (dontUseTouch)
         {
             // Get the left mouse button + LeftCTRL
@@ -102,15 +105,15 @@ public class MoveCamera : MonoBehaviour
             {
                 Vector3 tmp = (Camera.main.ScreenToViewportPoint(Input.mousePosition));
                 if (tmp.x > 0.99)
-                    transform.Translate(edgeSpeed, 0, 0);
+                    transform.Translate(edgeSpeed * zoom, 0, 0);
                 else
                 if (tmp.x < 0.01)
-                    transform.Translate(-edgeSpeed, 0, 0);
+                    transform.Translate(-edgeSpeed * zoom, 0, 0);
                 if (tmp.y > 0.99)
-                    transform.Translate(0, edgeSpeed, 0);
+                    transform.Translate(0, edgeSpeed * zoom, 0);
                 else
                 if (tmp.y < 0.01)
-                    transform.Translate(0, -edgeSpeed, 0);
+                    transform.Translate(0, -edgeSpeed * zoom, 0);
             }
 
             // Rotate camera along X and Y axis
@@ -154,7 +157,7 @@ public class MoveCamera : MonoBehaviour
             if (Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Moved)
             {
                 Vector2 touchDeltaPosition = Input.GetTouch(0).deltaPosition;
-                transform.Translate(-touchDeltaPosition.x * touchpanSpeed, -touchDeltaPosition.y * touchpanSpeed, 0);
+                transform.Translate(-touchDeltaPosition.x * touchpanSpeed * zoom, -touchDeltaPosition.y * touchpanSpeed * zoom, 0);
             }
 
             // Pinch Zoom
