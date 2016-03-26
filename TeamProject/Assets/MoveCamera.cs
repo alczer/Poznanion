@@ -28,8 +28,10 @@ public class MoveCamera : MonoBehaviour
     public float edgeSpeed = 2f;
 
     // movement
-    public float Xmax = 150f;
-    public float Zmax = 150f;
+    public float Xmax = 40f;
+    public float Xmin = -40f;
+    public float Zmax = 40f;
+    public float Zmin = -40f;
 
     // distance
     public float cameraDistanceMax = 90f;
@@ -186,9 +188,9 @@ public class MoveCamera : MonoBehaviour
 
         // limits
         transform.position = new Vector3(
-        Mathf.Clamp(transform.position.x, -Xmax, Xmax),
+        Mathf.Clamp(transform.position.x, Xmin, Xmax),
         Mathf.Clamp(transform.position.y, cameraDistanceMin, cameraDistanceMax),
-        Mathf.Clamp(transform.position.z, -Zmax, Zmax)
+        Mathf.Clamp(transform.position.z, Zmin, Zmax)
             );
 
 
