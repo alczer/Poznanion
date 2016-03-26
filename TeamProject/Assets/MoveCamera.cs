@@ -16,7 +16,7 @@ public class MoveCamera : MonoBehaviour
     public float touchpanSpeed = 0.5f;
 
     // middle button zoom
-    public float zoomSpeed = 4.0f; 
+    public float zoomSpeed = 4.0f;
 
     // scroll zoom
     public float scrollSpeed = 40f;
@@ -44,7 +44,15 @@ public class MoveCamera : MonoBehaviour
     private bool isZooming;         // Is the camera zooming (middlebutton)?
 
     private bool dontUseTouch = true;   // Use touchscreen, or not
+    void OnGUI()
+    {
+        if (GUI.Button(new Rect(10, 10, 100, 50), "Menu"))
+        {
+            Destroy(gameObject);
+            Application.LoadLevel("Menu");
+        }
 
+    }
     //
     // START
     //
@@ -107,13 +115,13 @@ public class MoveCamera : MonoBehaviour
                 if (tmp.x > 0.99)
                     transform.Translate(edgeSpeed * zoom, 0, 0);
                 else
-                if (tmp.x < 0.01)
-                    transform.Translate(-edgeSpeed * zoom, 0, 0);
+                    if (tmp.x < 0.01)
+                        transform.Translate(-edgeSpeed * zoom, 0, 0);
                 if (tmp.y > 0.99)
                     transform.Translate(0, edgeSpeed * zoom, 0);
                 else
-                if (tmp.y < 0.01)
-                    transform.Translate(0, -edgeSpeed * zoom, 0);
+                    if (tmp.y < 0.01)
+                        transform.Translate(0, -edgeSpeed * zoom, 0);
             }
 
             // Rotate camera along X and Y axis
@@ -182,7 +190,7 @@ public class MoveCamera : MonoBehaviour
                 transform.Translate(0, 0, -deltaMagnitudeDiff * pinchZoomSpeed);
             }
         }
-       
+
 
         // limits
         transform.position = new Vector3(
