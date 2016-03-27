@@ -2,33 +2,53 @@ using UnityEngine;
 using System.Collections;
 
 public class Menu : MonoBehaviour {
+    private bool Escape=false;
+    void Exit()
+    {
+        if( Escape==true)
+        {
+            if (GUI.Button(new Rect(110, 70, 100, 50), "Yes"))
+            {
+                Application.Quit();
+                Debug.Log("wyszedlo");
+            }
+            if (GUI.Button(new Rect(210, 70, 100, 50), "No"))
+            {
+                Escape = false;
+            }
+        }
 
+    }
     void OnGUI()
     {
         if (GUI.Button(new Rect(10, 10, 100, 50), "New Game"))
         {
-            
             Application.LoadLevel("game");
         }
         if (GUI.Button(new Rect(10, 70, 100, 50), "Exit"))
         {
-            Application.Quit();
+            Escape = true;
             Debug.Log("wyszedlo");
         }
-
+        Exit();
     }
 	// Use this for initialization
-	void Start () {
-	Debug.Log("weszlo");
-
+	void Start () 
+    {
+	    Debug.Log("weszlo");
 	}
 	
 	// Update is called once per frame
 	void Update () {
-       if (Input.GetKey(KeyCode.Escape))
+       if (Input.GetKeyUp(KeyCode.Escape))
    	 {
-       		 Application.Quit();
-          		 Debug.Log("wyszedlo");
+         if (Escape == true)
+         {
+             Application.Quit();
+             Debug.Log("wyszedlo");
+         }
+         else
+             Escape = true;
    	 }
 	}
 }

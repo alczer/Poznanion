@@ -24,6 +24,7 @@ public class SpawnTile : MonoBehaviour
     private bool currentlyPlacingTile;
     private int[] currentlyPlacedTile;
     private Tile choosenTile;
+    private bool Escape = false;
 
     Ray myRay;
     RaycastHit hit;
@@ -202,12 +203,26 @@ public class SpawnTile : MonoBehaviour
         }
         return possiblePositions.Distinct().ToList();
     }
+    void back_to_menu()
+    {
+        if (GUI.Button(new Rect(110, 10, 100, 50), "Quit game"))
+        {
+            Application.LoadLevel("Menu");
+        }
+        if (GUI.Button(new Rect(210, 10, 100, 50), "Continue game"))
+        {
+            Escape = false;
+        }
+    }
     void OnGUI()
     {
         if (GUI.Button(new Rect(10, 10, 100, 50), "Menu"))
         {
-            Application.LoadLevel("Menu");
-
+            Escape = true;
+        }
+        if (Escape == true)
+        {
+            back_to_menu();
         }
     }
     void Start()
@@ -224,12 +239,15 @@ public class SpawnTile : MonoBehaviour
         addTileToList(terrainTypes.grass, terrainTypes.grass, terrainTypes.grass, terrainTypes.grass, 0, 0, m3);
         addTileToList(terrainTypes.castle, terrainTypes.castle, terrainTypes.castle, terrainTypes.castle, 0, 0, m4);
     }
-
+   
     void Update()
     {
-        if (Input.GetKey(KeyCode.Escape))
+        if (Input.GetKeyUp(KeyCode.Escape)) 
         {
-            Application.LoadLevel("Menu");
+            if (Escape == true)
+                Application.LoadLevel("Menu");
+            else
+                Escape = true;
         }	
         if (currentlyPlacingTile == false)
         {
