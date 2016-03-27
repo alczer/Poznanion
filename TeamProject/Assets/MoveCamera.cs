@@ -44,15 +44,7 @@ public class MoveCamera : MonoBehaviour
     private bool isZooming;         // Is the camera zooming (middlebutton)?
 
     private bool dontUseTouch = true;   // Use touchscreen, or not
-    void OnGUI()
-    {
-        if (GUI.Button(new Rect(10, 10, 100, 50), "Menu"))
-        {
-            Destroy(gameObject);
-            Application.LoadLevel("Menu");
-        }
-
-    }
+  
     //
     // START
     //
@@ -77,6 +69,7 @@ public class MoveCamera : MonoBehaviour
     //
     void Update()
     {
+	
         // Check current zoom
         zoom = (int)Camera.main.transform.position.y * 0.01f;
 

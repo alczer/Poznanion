@@ -29,6 +29,7 @@ public class SpawnTile : MonoBehaviour
     RaycastHit hit;
     public GameObject objectToinstantiate;
     public int currentNbrTiles;
+    
 
     int[] getArrayPosition(float x, float z)
     {
@@ -201,6 +202,14 @@ public class SpawnTile : MonoBehaviour
         }
         return possiblePositions.Distinct().ToList();
     }
+    void OnGUI()
+    {
+        if (GUI.Button(new Rect(10, 10, 100, 50), "Menu"))
+        {
+            Application.LoadLevel("Menu");
+
+        }
+    }
     void Start()
     {
         currentlyPlacedTile = new int[2];
@@ -218,6 +227,10 @@ public class SpawnTile : MonoBehaviour
 
     void Update()
     {
+        if (Input.GetKey(KeyCode.Escape))
+        {
+            Application.LoadLevel("Menu");
+        }	
         if (currentlyPlacingTile == false)
         {
             if (tilesList.Count > 0)
