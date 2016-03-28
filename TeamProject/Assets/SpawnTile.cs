@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using System.Linq;
+using UnityEngine.UI;
 
 public class SpawnTile : MonoBehaviour
 {
@@ -16,14 +17,10 @@ public class SpawnTile : MonoBehaviour
     public Material m3;
     public Material m4;
     public GameObject Selected;
-    public GameObject Canvas;
-    public GameObject Button;
-    private GameObject newCanvas;
-    private GameObject newButton;
-    private Button button;
     private bool currentlyPlacingTile;
     private int[] currentlyPlacedTile;
     private Tile choosenTile;
+    public GameObject OKButton;
 
     Ray myRay;
     RaycastHit hit;
@@ -45,32 +42,6 @@ public class SpawnTile : MonoBehaviour
         float[] array = new float[2] { x, z };
         return array;
     }
-    /*
-    void rotateClockwise270(ref GameObject gameObject)
-    {
-        terrainTypes up = gameObject.GetComponent<Tile>().UpTerrain;
-        terrainTypes right = gameObject.GetComponent<Tile>().RightTerrain;
-        terrainTypes down = gameObject.GetComponent<Tile>().DownTerrain;
-        terrainTypes left = gameObject.GetComponent<Tile>().LeftTerrain;
-        gameObject.GetComponent<Tile>().UpTerrain = right;
-        gameObject.GetComponent<Tile>().RightTerrain = down;
-        gameObject.GetComponent<Tile>().DownTerrain = left;
-        gameObject.GetComponent<Tile>().LeftTerrain = up;
-        gameObject.transform.Rotate(new Vector3(0, 270, 0));
-    }
-    void rotateClockwise180(ref GameObject gameObject)
-    {
-        terrainTypes up = gameObject.GetComponent<Tile>().UpTerrain;
-        terrainTypes right = gameObject.GetComponent<Tile>().RightTerrain;
-        terrainTypes down = gameObject.GetComponent<Tile>().DownTerrain;
-        terrainTypes left = gameObject.GetComponent<Tile>().LeftTerrain;
-        gameObject.GetComponent<Tile>().UpTerrain = down;
-        gameObject.GetComponent<Tile>().RightTerrain = left;
-        gameObject.GetComponent<Tile>().DownTerrain = up;
-        gameObject.GetComponent<Tile>().LeftTerrain = right;
-        gameObject.transform.Rotate(new Vector3(0, 180, 0));
-    }
-    */
     void rotateClockwise90(ref GameObject gameObject)
     {
         terrainTypes up = gameObject.GetComponent<Tile>().UpTerrain;
@@ -216,6 +187,22 @@ public class SpawnTile : MonoBehaviour
         addTileToList(terrainTypes.castle, terrainTypes.castle, terrainTypes.castle, terrainTypes.castle, 0, 0, m4);
     }
 
+   public void ButtonClicked()
+    {
+        currentlyPlacingTile = false;
+        currentlyPlacedTile = null;
+        for (int row = 0; row < possibleMoves.GetLength(0); row++)
+        {
+            for (int col = 0; col < possibleMoves.GetLength(1); col++)
+            {
+                if (possibleMoves[row, col] != null)
+                    Destroy(possibleMoves[row, col]);
+                possibleMoves[row, col] = null;
+            }
+        }
+        OKButton.SetActive(false);
+    }
+
     void Update()
     {
         if (currentlyPlacingTile == false)
@@ -235,29 +222,7 @@ public class SpawnTile : MonoBehaviour
                         possibleMoves[arrPosition[0], arrPosition[1]] = Instantiate(Selected, new Vector3(position[0], (float)0.01, position[1]), Quaternion.identity) as GameObject;
                     }
                 }
-                newCanvas = Instantiate(Canvas) as GameObject;
-                newButton = Instantiate(Button) as GameObject;
-                newButton.transform.SetParent(newCanvas.transform, false);
-                newButton.transform.localScale = new Vector3(1.66f, 2, 0);
-                newButton.transform.localPosition = new Vector3((float)Screen.width * 0.5f - (newButton.GetComponent<RectTransform>().rect.width * 0.9f), (-(float)Screen.height * 0.5f) + (newButton.GetComponent<RectTransform>().rect.height * 1.3f), 0);
-                button = newButton.GetComponent<Button>();
-                button.onClick.AddListener(() =>
-                {
-                    currentlyPlacingTile = false;
-                    currentlyPlacedTile = null;
-                    Destroy(newButton);
-                    Destroy(newCanvas);
-                    for (int row = 0; row < possibleMoves.GetLength(0); row++)
-                    {
-                        for (int col = 0; col < possibleMoves.GetLength(1); col++)
-                        {
-                            if (possibleMoves[row, col] != null)
-                                Destroy(possibleMoves[row, col]);
-                            possibleMoves[row, col] = null;
-                        }
-                    }
-                });
-                newButton.SetActive(false);
+                OKButton.SetActive(false);
             }
         }
         else
@@ -276,7 +241,7 @@ public class SpawnTile : MonoBehaviour
 
                     if (tilesOnBoard[arrayIndex[0], arrayIndex[1]] != null)
                     {
-                        if (newButton.activeSelf)
+                        if (OKButton.activeSelf)
                         {
                             if (arrayIndex[0] == currentlyPlacedTile[0] && arrayIndex[1] == currentlyPlacedTile[1])
                             {
@@ -293,8 +258,8 @@ public class SpawnTile : MonoBehaviour
                     {
                         if (possibleMoves[arrayIndex[0], arrayIndex[1]]!=null)
                         {
-                            if (currentlyPlacedTile != null) Destroy(tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]]);
-                            newButton.SetActive(true);
+                            if (currentlyPlacedTile != null) Destroy(tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]]);                         
+                            OKButton.SetActive(true);
                             tilesOnBoard[arrayIndex[0], arrayIndex[1]] = Instantiate(objectToinstantiate, position, Quaternion.identity) as GameObject;// instatiate a prefab on the position where the ray hits the floor.                         
                             Tile tile = tilesOnBoard[arrayIndex[0], arrayIndex[1]].AddComponent<Tile>();
                             tile.Init(choosenTile.UpTerrain, choosenTile.RightTerrain, choosenTile.DownTerrain, choosenTile.LeftTerrain, position.x, position.z, choosenTile.Material);
