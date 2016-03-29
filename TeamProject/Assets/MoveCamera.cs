@@ -38,7 +38,8 @@ public class MoveCamera : MonoBehaviour
     public float cameraDistanceMin = 30f;
 
 
-    private float zoom;               //
+    private float zoom;
+    
     private Vector3 mouseOrigin;	// Position of cursor when mouse dragging starts
 
     private bool isPanning;		    // Is the camera being panned?
@@ -50,8 +51,11 @@ public class MoveCamera : MonoBehaviour
     //
     // START
     //
+
     void Start()
     {
+        Debug.Log("DPI =" + Screen.dpi);
+        
         //check if our current system info equals a desktop
         if (SystemInfo.deviceType == DeviceType.Desktop)
         {
@@ -72,7 +76,7 @@ public class MoveCamera : MonoBehaviour
     void Update()
     {
         // Check current zoom
-        zoom = (int)Camera.main.transform.position.y * 0.01f;
+        zoom = Camera.main.transform.position.y * 0.01f;
 
         if (dontUseTouch)
         {
@@ -139,13 +143,13 @@ public class MoveCamera : MonoBehaviour
             }
 
             // W A S D controls
-            if (Input.GetKey(KeyCode.D))
+            if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
                 transform.Translate(edgeSpeed * zoom, 0, 0);
-            if (Input.GetKey(KeyCode.A))
+            if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
                 transform.Translate(-edgeSpeed * zoom, 0, 0);
-            if (Input.GetKey(KeyCode.W))
+            if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
                 transform.Translate(0, edgeSpeed * zoom, 0);
-            if (Input.GetKey(KeyCode.S))
+            if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
                 transform.Translate(0, -edgeSpeed * zoom, 0);
 
             // middle button zoom
@@ -170,7 +174,8 @@ public class MoveCamera : MonoBehaviour
             if (Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Moved)
             {
                 Vector2 touchDeltaPosition = Input.GetTouch(0).deltaPosition;
-                transform.Translate(-touchDeltaPosition.x * touchpanSpeed * zoom, -touchDeltaPosition.y * touchpanSpeed * zoom, 0);
+                transform.Translate(-touchDeltaPosition.x * touchpanSpeed * zoom / Screen.dpi * 300,
+                                    -touchDeltaPosition.y * touchpanSpeed * zoom / Screen.dpi * 300, 0);
             }
 
             // Pinch Zoom
@@ -203,8 +208,5 @@ public class MoveCamera : MonoBehaviour
         Mathf.Clamp(transform.position.y, cameraDistanceMin, cameraDistanceMax),
         Mathf.Clamp(transform.position.z, Zmin, Zmax)
             );
-
-
-
     }
 }
