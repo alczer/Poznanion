@@ -28,15 +28,18 @@ public class MoveCamera : MonoBehaviour
     public float edgeSpeed = 2f;
 
     // movement
-    public float Xmax = 150f;
-    public float Zmax = 150f;
+    public float Xmax = 40f;
+    public float Xmin = -40f;
+    public float Zmax = 40f;
+    public float Zmin = -40f;
 
     // distance
     public float cameraDistanceMax = 90f;
     public float cameraDistanceMin = 30f;
 
 
-    private float zoom;               //
+    private float zoom;
+
     private Vector3 mouseOrigin;	// Position of cursor when mouse dragging starts
 
     private bool isPanning;		    // Is the camera being panned?
@@ -44,12 +47,15 @@ public class MoveCamera : MonoBehaviour
     private bool isZooming;         // Is the camera zooming (middlebutton)?
 
     private bool dontUseTouch = true;   // Use touchscreen, or not
-  
+
     //
     // START
     //
+
     void Start()
     {
+        Debug.Log("DPI =" + Screen.dpi);
+
         //check if our current system info equals a desktop
         if (SystemInfo.deviceType == DeviceType.Desktop)
         {
@@ -69,9 +75,8 @@ public class MoveCamera : MonoBehaviour
     //
     void Update()
     {
-	
         // Check current zoom
-        zoom = (int)Camera.main.transform.position.y * 0.01f;
+        zoom = Camera.main.transform.position.y * 0.01f;
 
         if (dontUseTouch)
         {
@@ -96,6 +101,7 @@ public class MoveCamera : MonoBehaviour
                 mouseOrigin = Input.mousePosition;
                 isZooming = true;
             }
+
             // Disable movements on button release
             if (!Input.GetMouseButton(0)) isRotating = false;
             if (!Input.GetMouseButton(1)) isPanning = false;
@@ -108,13 +114,13 @@ public class MoveCamera : MonoBehaviour
                 if (tmp.x > 0.99)
                     transform.Translate(edgeSpeed * zoom, 0, 0);
                 else
-                    if (tmp.x < 0.01)
-                        transform.Translate(-edgeSpeed * zoom, 0, 0);
+                if (tmp.x < 0.01)
+                    transform.Translate(-edgeSpeed * zoom, 0, 0);
                 if (tmp.y > 0.99)
                     transform.Translate(0, edgeSpeed * zoom, 0);
                 else
-                    if (tmp.y < 0.01)
-                        transform.Translate(0, -edgeSpeed * zoom, 0);
+                if (tmp.y < 0.01)
+                    transform.Translate(0, -edgeSpeed * zoom, 0);
             }
 
             // Rotate camera along X and Y axis
@@ -135,6 +141,16 @@ public class MoveCamera : MonoBehaviour
                 Vector3 move = new Vector3(-pos.x * panSpeed, -pos.y * panSpeed, 0);
                 transform.Translate(move, Space.Self);
             }
+
+            // W A S D controls
+            if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
+                transform.Translate(edgeSpeed * zoom, 0, 0);
+            if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
+                transform.Translate(-edgeSpeed * zoom, 0, 0);
+            if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
+                transform.Translate(0, edgeSpeed * zoom, 0);
+            if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
+                transform.Translate(0, -edgeSpeed * zoom, 0);
 
             // middle button zoom
             if (isZooming)
@@ -158,7 +174,8 @@ public class MoveCamera : MonoBehaviour
             if (Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Moved)
             {
                 Vector2 touchDeltaPosition = Input.GetTouch(0).deltaPosition;
-                transform.Translate(-touchDeltaPosition.x * touchpanSpeed * zoom, -touchDeltaPosition.y * touchpanSpeed * zoom, 0);
+                transform.Translate(-touchDeltaPosition.x * touchpanSpeed * zoom / Screen.dpi * 300,
+                                    -touchDeltaPosition.y * touchpanSpeed * zoom / Screen.dpi * 300, 0);
             }
 
             // Pinch Zoom
@@ -187,12 +204,9 @@ public class MoveCamera : MonoBehaviour
 
         // limits
         transform.position = new Vector3(
-        Mathf.Clamp(transform.position.x, -Xmax, Xmax),
+        Mathf.Clamp(transform.position.x, Xmin, Xmax),
         Mathf.Clamp(transform.position.y, cameraDistanceMin, cameraDistanceMax),
-        Mathf.Clamp(transform.position.z, -Zmax, Zmax)
+        Mathf.Clamp(transform.position.z, Zmin, Zmax)
             );
-
-
-
     }
 }
