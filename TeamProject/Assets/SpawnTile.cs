@@ -254,7 +254,7 @@ public class SpawnTile : MonoBehaviour
                     float[] position = getCoordinates(arrPosition[0], arrPosition[1]);
                     if (possibleMoves[arrPosition[0], arrPosition[1]] == null)
                     {
-                        possibleMoves[arrPosition[0], arrPosition[1]] = Instantiate(Selected, new Vector3(position[0], (float)0.01, position[1]), Quaternion.identity) as GameObject;
+                        possibleMoves[arrPosition[0], arrPosition[1]] = Instantiate(Selected, new Vector3(position[0], (float)0.1, position[1]), Quaternion.identity) as GameObject;
                     }
                 }
                 OKButton.SetActive(false);
