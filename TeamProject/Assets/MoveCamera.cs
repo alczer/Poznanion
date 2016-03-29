@@ -97,6 +97,7 @@ public class MoveCamera : MonoBehaviour
                 mouseOrigin = Input.mousePosition;
                 isZooming = true;
             }
+
             // Disable movements on button release
             if (!Input.GetMouseButton(0)) isRotating = false;
             if (!Input.GetMouseButton(1)) isPanning = false;
@@ -136,6 +137,16 @@ public class MoveCamera : MonoBehaviour
                 Vector3 move = new Vector3(-pos.x * panSpeed, -pos.y * panSpeed, 0);
                 transform.Translate(move, Space.Self);
             }
+
+            // W A S D controls
+            if (Input.GetKey(KeyCode.D))
+                transform.Translate(edgeSpeed * zoom, 0, 0);
+            if (Input.GetKey(KeyCode.A))
+                transform.Translate(-edgeSpeed * zoom, 0, 0);
+            if (Input.GetKey(KeyCode.W))
+                transform.Translate(0, edgeSpeed * zoom, 0);
+            if (Input.GetKey(KeyCode.S))
+                transform.Translate(0, -edgeSpeed * zoom, 0);
 
             // middle button zoom
             if (isZooming)
