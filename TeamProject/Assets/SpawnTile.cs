@@ -7,18 +7,26 @@ using UnityEngine.UI;
 
 public class SpawnTile : MonoBehaviour
 {
+    
 
     GameObject[,] tilesOnBoard = new GameObject[200, 200];
     GameObject[,] possibleMoves = new GameObject[200, 200];
     List<Tile> tilesList = new List<Tile>(); //List of all disponible tiles (not on board)
+
     public Material startMaterial;
     public Material m1;
     public Material m2;
     public Material m3;
     public Material m4;
     public GameObject Selected;
+    private MoveCamera moveCamera;
+    private float maxX = 0;
+    private float minX = 0;
+    private float maxY = 0;
+    private float minY = 0;
     private bool currentlyPlacingTile;
     private int[] currentlyPlacedTile;
+
     private Tile choosenTile;
     public GameObject OKButton;
 
@@ -54,6 +62,7 @@ public class SpawnTile : MonoBehaviour
         gameObject.GetComponent<Tile>().LeftTerrain = down;
         gameObject.transform.Rotate(new Vector3(0, 90, 0));
     }
+
     void rotateFirstMatchingRotation(ref GameObject gameObject, int[] gameObjectPosition)
     {
         if ((tilesOnBoard[gameObjectPosition[0] - 1, gameObjectPosition[1]] == null || tilesOnBoard[gameObjectPosition[0] - 1, gameObjectPosition[1]].GetComponent<Tile>().DownTerrain == gameObject.GetComponent<Tile>().LeftTerrain)
@@ -86,6 +95,7 @@ public class SpawnTile : MonoBehaviour
 
 
     }
+
     void placeTile(ref GameObject obj, int x, int y)
     {
         tilesOnBoard[x, y] = Instantiate(obj, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
@@ -97,6 +107,7 @@ public class SpawnTile : MonoBehaviour
         tmp.Init(up, right, down, left, x, y, m);
         tilesList.Add(tmp);
     }
+
     List<int[]> findMatchingEdges(List<int[]> movesList, Tile choosenTile)
     {
         List<int[]> matchingEdges = new List<int[]>();
@@ -172,8 +183,23 @@ public class SpawnTile : MonoBehaviour
         }
         return possiblePositions.Distinct().ToList();
     }
+
+    //
+    // START
+    //
     void Start()
     {
+        // Camera - sets initial range of camera
+        GameObject go = GameObject.Find("Main Camera");
+        moveCamera = go.GetComponent<MoveCamera>();
+        // Initial overwrite settings - not needed
+        moveCamera.Xmax = 40;
+        moveCamera.Xmin = -40;
+        moveCamera.Zmax = 40;
+        moveCamera.Zmin = -40;
+        // =======================================
+
+
         currentlyPlacedTile = new int[2];
         currentNbrTiles = 0;
         placeTile(ref objectToinstantiate, 100, 100);
@@ -189,6 +215,11 @@ public class SpawnTile : MonoBehaviour
 
    public void ButtonClicked()
     {
+ 	//Change camera max range
+        moveCamera.Xmax = 40 + maxX;
+        moveCamera.Xmin = -40 + minX;
+        moveCamera.Zmax = 40 + maxY;
+        moveCamera.Zmin = -40 + minY;
         currentlyPlacingTile = false;
         currentlyPlacedTile = null;
         for (int row = 0; row < possibleMoves.GetLength(0); row++)
@@ -202,6 +233,10 @@ public class SpawnTile : MonoBehaviour
         }
         OKButton.SetActive(false);
     }
+
+    //
+    // UPDATE
+    //
 
     void Update()
     {
