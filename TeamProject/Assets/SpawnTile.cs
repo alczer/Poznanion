@@ -13,11 +13,17 @@ public class SpawnTile : MonoBehaviour
     GameObject[,] possibleMoves = new GameObject[200, 200];
     List<Tile> tilesList = new List<Tile>(); //List of all disponible tiles (not on board)
 
+
+    // Materials
     public Material startMaterial;
     public Material m1;
     public Material m2;
     public Material m3;
     public Material m4;
+    public Material m5;
+    public Material m6;
+
+
     public GameObject Selected;
     private MoveCamera moveCamera;
     private float maxX = 0;
@@ -211,6 +217,9 @@ public class SpawnTile : MonoBehaviour
         addTileToList(terrainTypes.grassRoad, terrainTypes.grass, terrainTypes.grass, terrainTypes.grass, 0, 0, m2);
         addTileToList(terrainTypes.grass, terrainTypes.grass, terrainTypes.grass, terrainTypes.grass, 0, 0, m3);
         addTileToList(terrainTypes.castle, terrainTypes.castle, terrainTypes.castle, terrainTypes.castle, 0, 0, m4);
+        addTileToList(terrainTypes.grassRoad, terrainTypes.castle, terrainTypes.castle, terrainTypes.castle, 0, 0, m5);
+        addTileToList(terrainTypes.grass, terrainTypes.castle, terrainTypes.castle, terrainTypes.castle, 0, 0, m6);
+
     }
 
    public void ButtonClicked()
