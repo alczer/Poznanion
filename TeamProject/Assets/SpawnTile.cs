@@ -7,12 +7,9 @@ using UnityEngine.UI;
 
 public class SpawnTile : MonoBehaviour
 {
-    
-
     GameObject[,] tilesOnBoard = new GameObject[200, 200];
     GameObject[,] possibleMoves = new GameObject[200, 200];
     List<Tile> tilesList = new List<Tile>(); //List of all disponible tiles (not on board)
-
 
     // Materials
     public Material startMaterial;
@@ -23,13 +20,14 @@ public class SpawnTile : MonoBehaviour
     public Material m5;
     public Material m6;
 
-
     public GameObject Selected;
     private MoveCamera moveCamera;
     private float maxX = 0;
     private float minX = 0;
-    private float maxY = 0;
-    private float minY = 0;
+    private float maxZ = 0;
+    private float minZ = 0;
+    private bool cameraCheck = false;
+
     private bool currentlyPlacingTile;
     private int[] currentlyPlacedTile;
 
@@ -190,6 +188,34 @@ public class SpawnTile : MonoBehaviour
         return possiblePositions.Distinct().ToList();
     }
 
+    void UpdateCamera()
+    {
+        moveCamera.Xmax = 40 + maxX*4;
+        moveCamera.Xmin = -40 + minX*4;
+        moveCamera.Zmax = 40 - minZ*4;
+        moveCamera.Zmin = -40 - maxZ*4;
+    }
+
+    void CheckCamera(int[] x)
+    {
+        if (x[1] - 100 > maxX)
+            maxX = x[1] - 100;
+        if (x[1] - 100 < minX)
+            minX = x[1] - 100;
+        if (x[0] - 100 > maxZ)
+            maxZ = x[0] - 100;
+        if (x[0] - 100 < minZ)
+            minZ = x[0] - 100;
+
+        cameraCheck = true;
+        //Debug.Log(x[0]);
+        //Debug.Log(x[1]);
+        //Debug.Log(maxX);
+        //Debug.Log(minX);
+        //Debug.Log(maxZ);
+        //Debug.Log(minZ);
+    }
+
     //
     // START
     //
@@ -204,7 +230,6 @@ public class SpawnTile : MonoBehaviour
         moveCamera.Zmax = 40;
         moveCamera.Zmin = -40;
         // =======================================
-
 
         currentlyPlacedTile = new int[2];
         currentNbrTiles = 0;
@@ -224,11 +249,6 @@ public class SpawnTile : MonoBehaviour
 
    public void ButtonClicked()
     {
- 	//Change camera max range
-        moveCamera.Xmax = 40 + maxX;
-        moveCamera.Xmin = -40 + minX;
-        moveCamera.Zmax = 40 + maxY;
-        moveCamera.Zmin = -40 + minY;
         currentlyPlacingTile = false;
         currentlyPlacedTile = null;
         for (int row = 0; row < possibleMoves.GetLength(0); row++)
@@ -241,6 +261,12 @@ public class SpawnTile : MonoBehaviour
             }
         }
         OKButton.SetActive(false);
+
+        if (cameraCheck)
+        {
+            UpdateCamera();
+            cameraCheck = false;
+        }
     }
 
     //
@@ -289,6 +315,7 @@ public class SpawnTile : MonoBehaviour
                         {
                             if (arrayIndex[0] == currentlyPlacedTile[0] && arrayIndex[1] == currentlyPlacedTile[1])
                             {
+
                                 rotateFirstMatchingRotation(ref tilesOnBoard[arrayIndex[0], arrayIndex[1]], arrayIndex);
                                 //rotateClockwise90(ref tilesOnBoard[arrayIndex[0], arrayIndex[1]]);              
                             }
@@ -304,12 +331,15 @@ public class SpawnTile : MonoBehaviour
                         {
                             if (currentlyPlacedTile != null) Destroy(tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]]);                         
                             OKButton.SetActive(true);
-                            tilesOnBoard[arrayIndex[0], arrayIndex[1]] = Instantiate(objectToinstantiate, position, Quaternion.identity) as GameObject;// instatiate a prefab on the position where the ray hits the floor.                         
+                            tilesOnBoard[arrayIndex[0], arrayIndex[1]] = Instantiate(objectToinstantiate, position, Quaternion.identity) as GameObject; // instatiate a prefab on the position where the ray hits the floor.                         
+                            
                             Tile tile = tilesOnBoard[arrayIndex[0], arrayIndex[1]].AddComponent<Tile>();
                             tile.Init(choosenTile.UpTerrain, choosenTile.RightTerrain, choosenTile.DownTerrain, choosenTile.LeftTerrain, position.x, position.z, choosenTile.Material);
                             rotateFirstMatchingRotation(ref tilesOnBoard[arrayIndex[0], arrayIndex[1]], arrayIndex);
                             tilesOnBoard[arrayIndex[0], arrayIndex[1]].GetComponent<Renderer>().material = choosenTile.Material;
                             currentlyPlacedTile = arrayIndex;
+
+                            CheckCamera(arrayIndex);
                         }
                     }
                 }
