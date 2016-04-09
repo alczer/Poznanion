@@ -8,13 +8,15 @@ using UnityEngine.UI;
 public class Game : MonoBehaviour {
     GameObject[,] tilesOnBoard = new GameObject[200, 200];
     GameObject[,] possibleMoves = new GameObject[200, 200];
-    
-    GameObject gameManager = GameObject.Find("GameManager");
+
+    GameObject gameManager;
     public CameraManager CM;
     public TilesManager TM;
     public GameObject Selected;
-
-
+    public GameObject NextTileImage;
+    
+ 
+    
     private bool currentlyPlacingTile;
     private int[] currentlyPlacedTile;
     private Tile choosenTile;
@@ -47,14 +49,6 @@ public class Game : MonoBehaviour {
     }
     void Start()
     {
-        // Camera - sets initial range of camera
-        GameObject go = GameObject.Find("Main Camera");
-        CM.moveCamera = go.GetComponent<MoveCamera>();
-        // Initial overwrite settings - not needed
-        CM.moveCamera.Xmax = 40;
-        CM.moveCamera.Xmin = -40;
-        CM.moveCamera.Zmax = 40;
-        CM.moveCamera.Zmin = -40;
         currentlyPlacedTile = new int[2];
         currentNbrTiles = 0;
         TM.placeTile(ref objectToinstantiate, 100, 100,ref tilesOnBoard);
@@ -65,7 +59,6 @@ public class Game : MonoBehaviour {
         tilesOnBoard[100, 100].GetComponent<Renderer>().material = TM.CRFR;
         currentlyPlacingTile = false;
         TM.init();
-       
     }
     // Update is called once per frame
     void Update()
@@ -76,6 +69,7 @@ public class Game : MonoBehaviour {
             {
                 int i = Random.Range(0, TM.tilesList.Count);
                 choosenTile = TM.tilesList[i];
+                NextTileImage.GetComponent<Image>().material = choosenTile.Material;
 
                 TM.tilesList[i].TypeCount--;
                 if (TM.tilesList[i].TypeCount == 0)
@@ -137,6 +131,7 @@ public class Game : MonoBehaviour {
                                 choosenTile.DownL.terrain, choosenTile.LeftD.terrain, choosenTile.LeftM.terrain, choosenTile.LeftU.terrain, choosenTile.GrassAreas, choosenTile.CastleAreas, choosenTile.RoadAreas);
                             TM.rotateFirstMatchingRotation(ref tilesOnBoard[arrayIndex[0], arrayIndex[1]], arrayIndex, ref tilesOnBoard);
                             tilesOnBoard[arrayIndex[0], arrayIndex[1]].GetComponent<Renderer>().material = choosenTile.Material;
+
                             currentlyPlacedTile = arrayIndex;
                             CM.CheckCamera(arrayIndex);
                         }
