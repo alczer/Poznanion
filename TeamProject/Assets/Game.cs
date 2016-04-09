@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using System.Linq;
-using UnityEngine.UI;
 
 public class Game : MonoBehaviour {
     GameObject[,] tilesOnBoard = new GameObject[200, 200];
@@ -14,8 +13,6 @@ public class Game : MonoBehaviour {
     public TilesManager TM;
     public GameObject Selected;
     public GameObject NextTileImage;
-    
- 
     
     private bool currentlyPlacingTile;
     private int[] currentlyPlacedTile;
@@ -47,6 +44,7 @@ public class Game : MonoBehaviour {
             CM.cameraCheck = false;
         }
     }
+    // Start
     void Start()
     {
         currentlyPlacedTile = new int[2];
@@ -67,17 +65,24 @@ public class Game : MonoBehaviour {
         {
             if (TM.tilesList.Count > 0)
             {
-                int i = Random.Range(0, TM.tilesList.Count);
-                choosenTile = TM.tilesList[i];
+                int i;
+                int j = 0;
+                List<int[]> possiblePositions;
+                do{
+                    i = Random.Range(0, TM.tilesList.Count);
+                    choosenTile = TM.tilesList[i];
+                    possiblePositions = TM.findMatchingEdges(TM.findSourrounding(ref tilesOnBoard), choosenTile, ref tilesOnBoard);
+                    j++;
+                } while (possiblePositions.Count == 0 && j < 10);
                 NextTileImage.GetComponent<Image>().material = choosenTile.Material;
-
                 TM.tilesList[i].TypeCount--;
                 if (TM.tilesList[i].TypeCount == 0)
                 {
                     TM.tilesList.RemoveAt(i);
                 }
                 currentlyPlacingTile = true;
-                List<int[]> possiblePositions = TM.findMatchingEdges(TM.findSourrounding(ref tilesOnBoard), choosenTile, ref tilesOnBoard);
+                
+                
                 foreach (var arrPosition in possiblePositions)
                 {
                     float[] position = TM.getCoordinates(arrPosition[0], arrPosition[1]);
@@ -122,7 +127,11 @@ public class Game : MonoBehaviour {
                     {
                         if (possibleMoves[arrayIndex[0], arrayIndex[1]] != null)
                         {
-                            if (currentlyPlacedTile != null) Destroy(tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]]);
+                            if (currentlyPlacedTile != null)
+                            {
+                                Destroy(tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]]);
+                                tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]] = null;
+                            }
                             OKButton.SetActive(true);
                             tilesOnBoard[arrayIndex[0], arrayIndex[1]] = Instantiate(objectToinstantiate, position, Quaternion.identity) as GameObject; // instatiate a prefab on the position where the ray hits the floor.                         
                             Tile tile = tilesOnBoard[arrayIndex[0], arrayIndex[1]].AddComponent<Tile>();
