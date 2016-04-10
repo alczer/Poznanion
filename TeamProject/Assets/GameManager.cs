@@ -1,15 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using System.Collections.Generic;
 
 // Game States
-public enum GameState {MAIN_MENU, PAUSED, GAME, CREDITS, HELP }
+public enum GameState {MAIN_MENU,ADD_PLAYER_MENU, PAUSED, GAME, CREDITS, HELP }
 
 public delegate void OnStateChangeHandler();
 
 public class GameManager : MonoBehaviour
 {
-    
+    private List<Player> playersList = new List<Player>();
+    private int currentPlayer = 0; 
     protected GameManager() { }
     private static GameManager instance = null;
     public event OnStateChangeHandler OnStateChange;
@@ -19,14 +21,33 @@ public class GameManager : MonoBehaviour
     {
         get
         {
-            if (GameManager.instance == null)
+            if (instance == null)
             {
-                GameManager.instance = new GameManager();
-                DontDestroyOnLoad(GameManager.instance);
+                GameObject g = new GameObject("GameManager");//new GameManager();
+                instance = g.AddComponent<GameManager>();
+                DontDestroyOnLoad(g);
             }
             return GameManager.instance;
         }
-
+    }
+    public void AddPlayer(Player player)
+    {
+        playersList.Add(player);
+    }
+    public Player GetCurrentPlayer()
+    {
+        return playersList[currentPlayer];
+    }
+    public void NextPlayer()
+    {
+        if (currentPlayer == playersList.Count - 1)
+        {
+            currentPlayer = 0;
+        }
+        else
+        {
+            currentPlayer++;
+        }
     }
 
     public void SetGameState(GameState state)
@@ -39,6 +60,9 @@ public class GameManager : MonoBehaviour
                 break;
             case GameState.GAME:
                 SceneManager.LoadScene("game");
+                break;
+            case GameState.ADD_PLAYER_MENU:
+                SceneManager.LoadScene("addPlayer");
                 break;
             case GameState.CREDITS:                
                 break;
@@ -55,8 +79,4 @@ public class GameManager : MonoBehaviour
     {
         GameManager.instance = null;
     }
-   
-
-
 }
-

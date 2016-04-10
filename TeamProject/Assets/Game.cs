@@ -12,11 +12,10 @@ public class Game : MonoBehaviour {
     GameObject gameManager;
     public CameraManager CM;
     public TilesManager TM;
+    GameManager GM;
     public GameObject Selected;
     public GameObject NextTileImage;
-    
- 
-    
+    public Text playername; 
     private bool currentlyPlacingTile;
     private int[] currentlyPlacedTile;
     private Tile choosenTile;
@@ -40,6 +39,7 @@ public class Game : MonoBehaviour {
             }
         }
         OKButton.SetActive(false);
+        GM.NextPlayer();
 
         if (CM.cameraCheck)
         {
@@ -47,7 +47,11 @@ public class Game : MonoBehaviour {
             CM.cameraCheck = false;
         }
     }
-    void Start()
+    void Awake()
+    {
+        GM = GameManager.Instance;
+    }
+        void Start()
     {
         currentlyPlacedTile = new int[2];
         currentNbrTiles = 0;
@@ -59,6 +63,7 @@ public class Game : MonoBehaviour {
         tilesOnBoard[100, 100].GetComponent<Renderer>().material = TM.CRFR;
         currentlyPlacingTile = false;
         TM.init();
+
     }
     // Update is called once per frame
     void Update()
@@ -76,7 +81,8 @@ public class Game : MonoBehaviour {
                 {
                     TM.tilesList.RemoveAt(i);
                 }
-                currentlyPlacingTile = true;
+                currentlyPlacingTile = true;                
+                playername.text = GM.GetCurrentPlayer().name;
                 List<int[]> possiblePositions = TM.findMatchingEdges(TM.findSourrounding(ref tilesOnBoard), choosenTile, ref tilesOnBoard);
                 foreach (var arrPosition in possiblePositions)
                 {
