@@ -88,7 +88,7 @@ public class Game : MonoBehaviour {
                 }
                 currentlyPlacingTile = true;                
                 playername.text = GM.GetCurrentPlayer().name;
-                List<int[]> possiblePositions = TM.findMatchingEdges(TM.findSourrounding(ref tilesOnBoard), choosenTile, ref tilesOnBoard);
+                 possiblePositions = TM.findMatchingEdges(TM.findSourrounding(ref tilesOnBoard), choosenTile, ref tilesOnBoard);
 
                 foreach (var arrPosition in possiblePositions)
                 {
