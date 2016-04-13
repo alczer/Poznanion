@@ -53,7 +53,7 @@ public class UIManager : MonoBehaviour
             InputField inputField = RedInput.GetComponent<InputField>();
             if (string.IsNullOrEmpty(inputField.text))
             {
-                inputField.text = "Czerwony gracz";
+                inputField.text = "Czerwony";
             }
             GM.AddPlayer(new Player(inputField.text,PlayerColor.RED));
         }
@@ -62,7 +62,7 @@ public class UIManager : MonoBehaviour
             InputField inputField = GreenInput.GetComponent<InputField>();
             if (string.IsNullOrEmpty(inputField.text))
             {
-                inputField.text = "Zielony gracz";
+                inputField.text = "Zielony";
             }
             GM.AddPlayer(new Player(inputField.text, PlayerColor.GREEN));
         }
@@ -71,7 +71,7 @@ public class UIManager : MonoBehaviour
             InputField inputField = BlueInput.GetComponent<InputField>();
             if (string.IsNullOrEmpty(inputField.text))
             {
-                inputField.text = "Niebieski gracz";
+                inputField.text = "Niebieski";
             }
             GM.AddPlayer(new Player(inputField.text, PlayerColor.BLUE));
         }
@@ -80,7 +80,7 @@ public class UIManager : MonoBehaviour
             InputField inputField = YellowInput.GetComponent<InputField>();
             if (string.IsNullOrEmpty(inputField.text))
             {
-                inputField.text = "Żółty gracz";
+                inputField.text = "Żółty";
             }
             GM.AddPlayer(new Player(inputField.text, PlayerColor.YELLOW));
         }
@@ -89,7 +89,7 @@ public class UIManager : MonoBehaviour
             InputField inputField = BlackInput.GetComponent<InputField>();
             if (string.IsNullOrEmpty(inputField.text))
             {
-                inputField.text = "Czarny gracz";
+                inputField.text = "Czarny";
             }
             GM.AddPlayer(new Player(inputField.text, PlayerColor.BLACK));
         }
