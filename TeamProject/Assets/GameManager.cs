@@ -10,8 +10,8 @@ public delegate void OnStateChangeHandler();
 
 public class GameManager : MonoBehaviour
 {
-    private List<Player> playersList = new List<Player>();
-    private int currentPlayer = 0; 
+    public List<Player> playersList = new List<Player>();
+    public int currentPlayer = 0; 
     protected GameManager() { }
     private static GameManager instance = null;
     public event OnStateChangeHandler OnStateChange;

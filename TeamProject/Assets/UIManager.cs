@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System;
+using System.Collections.Generic;
 
 enum PlayerOptions
 {
@@ -39,6 +40,7 @@ public class UIManager : MonoBehaviour
     void Awake()
     {
         GM = GameManager.Instance;
+        
         GM.OnStateChange += HandleOnStateChange;
         playerOptionsRed = PlayerOptions.PLAYER_PLAYER;
         playerOptionsGreen = PlayerOptions.PLAYER_EMPTY;
@@ -48,6 +50,7 @@ public class UIManager : MonoBehaviour
     }
     public void StartGame()
     {
+        GM.playersList = new List<Player>();
         if(RedInput.activeSelf == true)
         {
             InputField inputField = RedInput.GetComponent<InputField>();
@@ -92,6 +95,28 @@ public class UIManager : MonoBehaviour
                 inputField.text = "Czarny";
             }
             GM.AddPlayer(new Player(inputField.text, PlayerColor.BLACK));
+        }
+
+        ////
+        if (RedAI.activeSelf == true)
+        {
+            GM.AddPlayer(new Player("AI1", PlayerColor.RED, PlayerType.AI));
+        }
+        if (GreenAI.activeSelf == true)
+        {
+            GM.AddPlayer(new Player("AI2", PlayerColor.GREEN, PlayerType.AI));
+        }
+        if (BlueAI.activeSelf == true)
+        {
+            GM.AddPlayer(new Player("AI3", PlayerColor.BLUE, PlayerType.AI));
+        }
+        if (YellowAI.activeSelf == true)
+        {
+            GM.AddPlayer(new Player("AI4", PlayerColor.YELLOW, PlayerType.AI));
+        }
+        if (BlackAI.activeSelf == true)
+        {
+            GM.AddPlayer(new Player("AI5", PlayerColor.BLACK, PlayerType.AI));
         }
 
         GM.SetGameState(GameState.GAME);
