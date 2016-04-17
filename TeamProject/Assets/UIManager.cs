@@ -197,6 +197,17 @@ public class UIManager : MonoBehaviour
         HandlePlayerOptions(playerOptionsBlack, ref BlackFrame, ref BlackInput, ref BlackAI);
         CheckStartGamePossibility();
     }
+    public void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (GM.gameState == GameState.MAIN_MENU)
+            Quit();
+            else
+                GM.SetGameState(GameState.MAIN_MENU);
+        }
+    }
+
     public void HandleOnStateChange()
     {
         Debug.Log("CHANGED STATE!");

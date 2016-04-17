@@ -49,7 +49,6 @@ public class GameManager : MonoBehaviour
             currentPlayer++;
         }
     }
-
     public void SetGameState(GameState state)
     {
         this.gameState = state;
@@ -74,7 +73,7 @@ public class GameManager : MonoBehaviour
                
         OnStateChange();
     }
-
+  
     public void OnApplicationQuit()
     {
         GameManager.instance = null;
