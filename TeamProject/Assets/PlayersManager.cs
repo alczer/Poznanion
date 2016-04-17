@@ -4,6 +4,6 @@ using System.Collections.Generic;
 
 public class PlayersManager : MonoBehaviour {
     
-    public List<Player> tilesList = new List<Player>();
+    public List<Player> playersList = new List<Player>();
 
 }

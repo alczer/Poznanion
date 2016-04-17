@@ -67,28 +67,87 @@ public class Game : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
-        if (currentlyPlacingTile == false)
+        if (GM.GetCurrentPlayer().type == PlayerType.AI)
+        {
+            if (currentlyPlacingTile == false)
+            {
+                if (TM.tilesList.Count > 0)
+                {
+                    int i;
+                    int j = 0;
+                    int rolled = 0;
+
+                    List<int[]> possiblePositions;
+                    do
+                    {
+                        i = Random.Range(0, TM.tilesList.Count);
+                        choosenTile = TM.tilesList[i];
+                        possiblePositions = TM.findMatchingEdges(TM.findSourrounding(ref tilesOnBoard), choosenTile, ref tilesOnBoard);
+                        j++;
+                    } while (possiblePositions.Count == 0 && j < 10);
+
+                    NextTileImage.GetComponent<Image>().material = choosenTile.Material;
+                    rolled = Random.Range(0, possiblePositions.Count);
+
+                    TM.tilesList[i].TypeCount--;
+                    if (TM.tilesList[i].TypeCount == 0)
+                    {
+                        TM.tilesList.RemoveAt(i);
+                    }
+                    currentlyPlacingTile = true;
+                    playername.text = GM.GetCurrentPlayer().name;
+
+                    for (int k = 0; k < possiblePositions.Count; k++)
+                    {
+                        int[] arrPosition = possiblePositions[k];
+
+                        float[] position = TM.getCoordinates(arrPosition[0], arrPosition[1]);
+                        if (possibleMoves[arrPosition[0], arrPosition[1]] == null)
+                        {
+                            //possibleMoves[arrPosition[0], arrPosition[1]] = Instantiate(Selected, new Vector3(position[0], (float)0.1, position[1]), Quaternion.identity) as GameObject;
+
+                            if (k == rolled)
+                            {
+                                tilesOnBoard[arrPosition[0], arrPosition[1]] = Instantiate(objectToinstantiate, new Vector3(position[0], (float)0.1, position[1]), Quaternion.identity) as GameObject; // instatiate a prefab on the position where the ray hits the floor.                         
+                                Tile tile = tilesOnBoard[arrPosition[0], arrPosition[1]].AddComponent<Tile>();
+                                tile.Init(choosenTile.UpTerrain, choosenTile.RightTerrain, choosenTile.DownTerrain, choosenTile.LeftTerrain, position[0], position[1], choosenTile.Material, choosenTile.TypeCount, choosenTile.Middle.terrain
+                                    , choosenTile.UpL.terrain, choosenTile.UpM.terrain, choosenTile.UpR.terrain, choosenTile.RightU.terrain, choosenTile.RightM.terrain, choosenTile.RightD.terrain, choosenTile.DownR.terrain, choosenTile.DownM.terrain,
+                                    choosenTile.DownL.terrain, choosenTile.LeftD.terrain, choosenTile.LeftM.terrain, choosenTile.LeftU.terrain, choosenTile.GrassAreas, choosenTile.CastleAreas, choosenTile.RoadAreas);
+                                TM.rotateFirstMatchingRotation(ref tilesOnBoard[arrPosition[0], arrPosition[1]], arrPosition, ref tilesOnBoard);
+                                tilesOnBoard[arrPosition[0], arrPosition[1]].GetComponent<Renderer>().material = choosenTile.Material;
+
+                                currentlyPlacedTile = arrPosition;
+                                CM.CheckCamera(arrPosition);
+                            }
+                        }
+                    }
+                    OKButton.SetActive(true);
+                }
+            }
+        }
+        else if (currentlyPlacingTile == false)
         {
             if (TM.tilesList.Count > 0)
             {
                 int i;
                 int j = 0;
                 List<int[]> possiblePositions;
-                do{
+                do
+                {
                     i = Random.Range(0, TM.tilesList.Count);
                     choosenTile = TM.tilesList[i];
                     possiblePositions = TM.findMatchingEdges(TM.findSourrounding(ref tilesOnBoard), choosenTile, ref tilesOnBoard);
                     j++;
                 } while (possiblePositions.Count == 0 && j < 10);
+
                 NextTileImage.GetComponent<Image>().material = choosenTile.Material;
                 TM.tilesList[i].TypeCount--;
                 if (TM.tilesList[i].TypeCount == 0)
                 {
                     TM.tilesList.RemoveAt(i);
                 }
-                currentlyPlacingTile = true;                
+                currentlyPlacingTile = true;
                 playername.text = GM.GetCurrentPlayer().name;
-                 possiblePositions = TM.findMatchingEdges(TM.findSourrounding(ref tilesOnBoard), choosenTile, ref tilesOnBoard);
 
                 foreach (var arrPosition in possiblePositions)
                 {
@@ -101,6 +160,7 @@ public class Game : MonoBehaviour {
                 OKButton.SetActive(false);
             }
         }
+
         else
         {
             myRay = Camera.main.ScreenPointToRay(Input.mousePosition);
