@@ -3,8 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using System.Linq;
+using System;
 
-public class Game : MonoBehaviour {
+public class Game : MonoBehaviour
+{
     GameObject[,] tilesOnBoard = new GameObject[200, 200];
     GameObject[,] possibleMoves = new GameObject[200, 200];
 
@@ -14,11 +16,13 @@ public class Game : MonoBehaviour {
     GameManager GM;
     public GameObject Selected;
     public GameObject NextTileImage;
-    public Text playername; 
+    public Text playername;
     private bool currentlyPlacingTile;
     private int[] currentlyPlacedTile;
     private Tile choosenTile;
     public GameObject OKButton;
+    public GameObject MeepleButton;
+    public GameObject Mask;
     Ray myRay;
     RaycastHit hit;
     public GameObject objectToinstantiate;
@@ -38,6 +42,7 @@ public class Game : MonoBehaviour {
             }
         }
         OKButton.SetActive(false);
+        MeepleButton.SetActive(false);
         GM.NextPlayer();
 
         if (CM.cameraCheck)
@@ -50,20 +55,40 @@ public class Game : MonoBehaviour {
     {
         GM = GameManager.Instance;
     }
-        void Start()
+    void Start()
     {
         currentlyPlacedTile = new int[2];
         currentNbrTiles = 0;
-        TM.placeTile(ref objectToinstantiate, 100, 100,ref tilesOnBoard);
+        TM.placeTile(ref objectToinstantiate, 100, 100, ref tilesOnBoard);
         Tile startTile = tilesOnBoard[100, 100].AddComponent<Tile>();
-        startTile.Init(terrainTypes.castle, terrainTypes.road, terrainTypes.grass, terrainTypes.road, 0, 0, TM.CRFR, 1, terrainTypes.road, terrainTypes.castle, terrainTypes.castle, terrainTypes.castle,
-            terrainTypes.grass, terrainTypes.road, terrainTypes.grass, terrainTypes.grass, terrainTypes.grass, terrainTypes.grass, terrainTypes.grass, terrainTypes.road, terrainTypes.grass,
-            new List<List<int>>() { new List<int>() { 4, 12 }, new List<int>() { 6, 7, 8, 9, 10 } }, new List<List<int>>() { new List<int>() { 1, 2, 3 } }, new List<List<int>>() { new List<int>() { 5, 0, 11 } });
+        startTile.Init(terrainTypes.castle, terrainTypes.road, terrainTypes.grass, terrainTypes.road, 0, 0, TM.CRFR, 1, 0, new List<Area>() { new Area {edges = new List<int>() {1,2,3} ,terrain = terrainTypes.castle},
+            new Area { edges = new List<int>() { 5, 0, 11 }, terrain = terrainTypes.road }, new Area { edges = new List<int>() { 4,12 }, terrain = terrainTypes.grass },new Area { edges = new List<int>() {6,7,8,9,10}, terrain = terrainTypes.grass } });
         tilesOnBoard[100, 100].GetComponent<Renderer>().material = TM.CRFR;
         currentlyPlacingTile = false;
         TM.init();
 
     }
+    /*
+    public static Color hexToColor(string hex)
+    {
+        hex = hex.Replace("0x", "");//in case the string is formatted 0xFFFFFF
+        hex = hex.Replace("#", "");//in case the string is formatted #FFFFFF
+        byte a = 255;//assume fully visible unless specified in hex
+        byte r = byte.Parse(hex.Substring(0, 2), System.Globalization.NumberStyles.HexNumber);
+        byte g = byte.Parse(hex.Substring(2, 2), System.Globalization.NumberStyles.HexNumber);
+        byte b = byte.Parse(hex.Substring(4, 2), System.Globalization.NumberStyles.HexNumber);
+        //Only use alpha if the string has enough characters
+        if (hex.Length == 8)
+        {
+            a = byte.Parse(hex.Substring(4, 2), System.Globalization.NumberStyles.HexNumber);
+        }
+        return new Color32(r, g, b, a);
+    }
+    Color yellowColor = hexToColor("ffff00");
+    Color blueColor = hexToColor("0000ff");
+    Color greenColor = hexToColor("00ff00");
+    Color redColor = hexToColor("ff0000");
+    */
     // Update is called once per frame
     void Update()
     {
@@ -80,14 +105,14 @@ public class Game : MonoBehaviour {
                     List<int[]> possiblePositions;
                     do
                     {
-                        i = Random.Range(0, TM.tilesList.Count);
+                        i = UnityEngine.Random.Range(0, TM.tilesList.Count);
                         choosenTile = TM.tilesList[i];
                         possiblePositions = TM.findMatchingEdges(TM.findSourrounding(ref tilesOnBoard), choosenTile, ref tilesOnBoard);
                         j++;
                     } while (possiblePositions.Count == 0 && j < 10);
 
                     NextTileImage.GetComponent<Image>().material = choosenTile.Material;
-                    rolled = Random.Range(0, possiblePositions.Count);
+                    rolled = UnityEngine.Random.Range(0, possiblePositions.Count);
 
                     TM.tilesList[i].TypeCount--;
                     if (TM.tilesList[i].TypeCount == 0)
@@ -109,10 +134,7 @@ public class Game : MonoBehaviour {
                             if (k == rolled)
                             {
                                 tilesOnBoard[arrPosition[0], arrPosition[1]] = Instantiate(objectToinstantiate, new Vector3(position[0], (float)0.1, position[1]), Quaternion.identity) as GameObject; // instatiate a prefab on the position where the ray hits the floor.                         
-                                Tile tile = tilesOnBoard[arrPosition[0], arrPosition[1]].AddComponent<Tile>();
-                                tile.Init(choosenTile.UpTerrain, choosenTile.RightTerrain, choosenTile.DownTerrain, choosenTile.LeftTerrain, position[0], position[1], choosenTile.Material, choosenTile.TypeCount, choosenTile.Middle.terrain
-                                    , choosenTile.UpL.terrain, choosenTile.UpM.terrain, choosenTile.UpR.terrain, choosenTile.RightU.terrain, choosenTile.RightM.terrain, choosenTile.RightD.terrain, choosenTile.DownR.terrain, choosenTile.DownM.terrain,
-                                    choosenTile.DownL.terrain, choosenTile.LeftD.terrain, choosenTile.LeftM.terrain, choosenTile.LeftU.terrain, choosenTile.GrassAreas, choosenTile.CastleAreas, choosenTile.RoadAreas);
+                                Tile tile = tilesOnBoard[arrPosition[0], arrPosition[1]].AddComponent<Tile>();tile.Init(choosenTile.UpTerrain, choosenTile.RightTerrain, choosenTile.DownTerrain, choosenTile.LeftTerrain, position[0], position[1], choosenTile.Material, choosenTile.TypeCount, choosenTile.Turn, choosenTile.Areas);
                                 TM.rotateFirstMatchingRotation(ref tilesOnBoard[arrPosition[0], arrPosition[1]], arrPosition, ref tilesOnBoard);
                                 tilesOnBoard[arrPosition[0], arrPosition[1]].GetComponent<Renderer>().material = choosenTile.Material;
 
@@ -134,12 +156,11 @@ public class Game : MonoBehaviour {
                 List<int[]> possiblePositions;
                 do
                 {
-                    i = Random.Range(0, TM.tilesList.Count);
+                    i = UnityEngine.Random.Range(0, TM.tilesList.Count);
                     choosenTile = TM.tilesList[i];
                     possiblePositions = TM.findMatchingEdges(TM.findSourrounding(ref tilesOnBoard), choosenTile, ref tilesOnBoard);
                     j++;
                 } while (possiblePositions.Count == 0 && j < 10);
-
                 NextTileImage.GetComponent<Image>().material = choosenTile.Material;
                 TM.tilesList[i].TypeCount--;
                 if (TM.tilesList[i].TypeCount == 0)
@@ -148,6 +169,7 @@ public class Game : MonoBehaviour {
                 }
                 currentlyPlacingTile = true;
                 playername.text = GM.GetCurrentPlayer().name;
+                possiblePositions = TM.findMatchingEdges(TM.findSourrounding(ref tilesOnBoard), choosenTile, ref tilesOnBoard);
 
                 foreach (var arrPosition in possiblePositions)
                 {
@@ -158,9 +180,9 @@ public class Game : MonoBehaviour {
                     }
                 }
                 OKButton.SetActive(false);
+                MeepleButton.SetActive(false);
             }
         }
-
         else
         {
             myRay = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -168,6 +190,39 @@ public class Game : MonoBehaviour {
             {
                 if (Input.GetMouseButtonUp(0))
                 {
+
+                    //Texture2D tex = (Texture2D) Mask.GetComponent<Renderer>().material.mainTexture;
+                    // Texture2D tex = (Texture2D)hit.collider.gameObject.GetComponent<Renderer>().material.mainTexture; // Get texture of object under mouse pointer
+                    //Debug.Log(tex.GetPixelBilinear(hit.textureCoord2.x, hit.textureCoord2.y));
+                    /*
+                    if (tex.GetPixelBilinear(hit.textureCoord2.x, hit.textureCoord2.y) == blueColor)
+                    {
+
+                        Debug.Log("Clicked CASTLE !!!!!!!!!!!!!!!");
+                    }
+                    else if (tex.GetPixelBilinear(hit.textureCoord2.x, hit.textureCoord2.y) == redColor)
+                    {
+
+                        Debug.Log("Clicked GRASS 1 !!!!!!!!!!!!!!!");
+                    }
+                    else if (tex.GetPixelBilinear(hit.textureCoord2.x, hit.textureCoord2.y) == yellowColor)
+                    {
+
+                        Debug.Log("Clicked ROAD !!!!!!!!!!!!!!!");
+                    }
+                    else if (tex.GetPixelBilinear(hit.textureCoord2.x, hit.textureCoord2.y) == greenColor)
+                    {
+
+                        Debug.Log("Clicked GRASS 2 !!!!!!!!!!!!!!!");
+                    }
+                    else
+                    {
+                        Debug.Log("No color detected!");
+
+                    }
+
+    */
+
                     Vector3 position = hit.point;
                     position.x = Mathf.Round(position.x / 10) * 10; // 10 is the size of a Tile
                     position.z = Mathf.Round(position.z / 10) * 10; // 10 is the size of a Tile
@@ -200,16 +255,23 @@ public class Game : MonoBehaviour {
                                 tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]] = null;
                             }
                             OKButton.SetActive(true);
+                            MeepleButton.SetActive(true);
                             tilesOnBoard[arrayIndex[0], arrayIndex[1]] = Instantiate(objectToinstantiate, position, Quaternion.identity) as GameObject; // instatiate a prefab on the position where the ray hits the floor.                         
                             Tile tile = tilesOnBoard[arrayIndex[0], arrayIndex[1]].AddComponent<Tile>();
-                            tile.Init(choosenTile.UpTerrain, choosenTile.RightTerrain, choosenTile.DownTerrain, choosenTile.LeftTerrain, position.x, position.z, choosenTile.Material, choosenTile.TypeCount, choosenTile.Middle.terrain
-                                , choosenTile.UpL.terrain, choosenTile.UpM.terrain, choosenTile.UpR.terrain, choosenTile.RightU.terrain, choosenTile.RightM.terrain, choosenTile.RightD.terrain, choosenTile.DownR.terrain, choosenTile.DownM.terrain,
-                                choosenTile.DownL.terrain, choosenTile.LeftD.terrain, choosenTile.LeftM.terrain, choosenTile.LeftU.terrain, choosenTile.GrassAreas, choosenTile.CastleAreas, choosenTile.RoadAreas);
+                            tile.Init(choosenTile.UpTerrain, choosenTile.RightTerrain, choosenTile.DownTerrain, choosenTile.LeftTerrain, position.x, position.z, choosenTile.Material, choosenTile.TypeCount, choosenTile.Turn, choosenTile.Areas);
                             TM.rotateFirstMatchingRotation(ref tilesOnBoard[arrayIndex[0], arrayIndex[1]], arrayIndex, ref tilesOnBoard);
                             tilesOnBoard[arrayIndex[0], arrayIndex[1]].GetComponent<Renderer>().material = choosenTile.Material;
-
                             currentlyPlacedTile = arrayIndex;
                             CM.CheckCamera(arrayIndex);
+                            List<Area> lists = TM.possibleMeepleAreas(ref tilesOnBoard, arrayIndex[0], arrayIndex[1]);
+                            foreach (var list in lists)
+                            {
+
+                                String result = String.Join(" ", list.edges.Select(item => item.ToString()).ToArray());
+                                Debug.Log("Możliwy obszar:");
+                                Debug.Log(result);
+
+                            }
                         }
                     }
                 }

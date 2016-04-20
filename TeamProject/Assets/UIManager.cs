@@ -232,6 +232,11 @@ public class UIManager : MonoBehaviour
                 GM.SetGameState(GameState.MAIN_MENU);
         }
     }
+    public void showPossibleMeeple()
+    {
+        // TM.
+
+    }
 
     public void HandleOnStateChange()
     {
