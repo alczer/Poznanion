@@ -55,7 +55,7 @@ public class UIManager : MonoBehaviour
             {
                 inputField.text = "Czerwony gracz";
             }
-            GM.AddPlayer(new Player(inputField.text,PlayerColor.RED));
+            GM.AddPlayer(new Player(inputField.text,PlayerColor.RED,new Color(1, 0, 0, 1)));
         }
         if (GreenInput.activeSelf == true)
         {
@@ -64,7 +64,7 @@ public class UIManager : MonoBehaviour
             {
                 inputField.text = "Zielony gracz";
             }
-            GM.AddPlayer(new Player(inputField.text, PlayerColor.GREEN));
+            GM.AddPlayer(new Player(inputField.text, PlayerColor.GREEN,new Color(0, 1, 0, 1)));
         }
         if (BlueInput.activeSelf == true)
         {
@@ -73,7 +73,7 @@ public class UIManager : MonoBehaviour
             {
                 inputField.text = "Niebieski gracz";
             }
-            GM.AddPlayer(new Player(inputField.text, PlayerColor.BLUE));
+            GM.AddPlayer(new Player(inputField.text, PlayerColor.BLUE,new Color(0, 0, 1, 1)));
         }
         if (YellowInput.activeSelf == true)
         {
@@ -82,7 +82,7 @@ public class UIManager : MonoBehaviour
             {
                 inputField.text = "Żółty gracz";
             }
-            GM.AddPlayer(new Player(inputField.text, PlayerColor.YELLOW));
+            GM.AddPlayer(new Player(inputField.text, PlayerColor.YELLOW,new Color(1, (float)0.92, (float)0.016, 1)));
         }
         if (BlackInput.activeSelf == true)
         {
@@ -91,7 +91,7 @@ public class UIManager : MonoBehaviour
             {
                 inputField.text = "Czarny gracz";
             }
-            GM.AddPlayer(new Player(inputField.text, PlayerColor.BLACK));
+            GM.AddPlayer(new Player(inputField.text, PlayerColor.BLACK,new Color(0, 0, 0, 1)));
         }
 
         GM.SetGameState(GameState.GAME);
@@ -197,6 +197,8 @@ public class UIManager : MonoBehaviour
         HandlePlayerOptions(playerOptionsBlack, ref BlackFrame, ref BlackInput, ref BlackAI);
         CheckStartGamePossibility();
     }
+
+
     public void HandleOnStateChange()
     {
         Debug.Log("CHANGED STATE!");
