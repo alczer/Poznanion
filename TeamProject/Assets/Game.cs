@@ -70,6 +70,7 @@ public class Game : MonoBehaviour {
     public void MeepleButtonClicked()
     {
         currentlyPlacingMeeple = true;
+        possibleMeeple = TM.possibleMeepleAreas(ref tilesOnBoard, currentlyPlacedTile[0], currentlyPlacedTile[1]);
         Debug.Log("--------------------------dla kliknięcia----------------------------------------------");
         foreach (var list in possibleMeeple)
         {
@@ -80,7 +81,7 @@ public class Game : MonoBehaviour {
 
         }
         Debug.Log("-------------------------------------------------------------------------------------");
-        possibleMeeple = TM.possibleMeepleAreas(ref tilesOnBoard, currentlyPlacedTile[0], currentlyPlacedTile[1]);
+        
         MeepleButton.SetActive(false);
     }
 
@@ -187,8 +188,7 @@ public class Game : MonoBehaviour {
 
 
                                     Destroy(meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]]);
-                                    int element = tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas.FindIndex(a => a.color == ColorTypeConverter.ToRGBHex(hitColor));
-                                    tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas[element].player = null;
+                                    tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas.Find(a => a.color == ColorTypeConverter.ToRGBHex(hitColor)).player  = null;
                                     choosenArea = "";
                                     placedMeeple = false;
                                 }
@@ -197,8 +197,7 @@ public class Game : MonoBehaviour {
                                     if(meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]] != null)
                                     {
                                         Destroy(meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]]);
-                                        int element = tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas.FindIndex(a => a.color == ColorTypeConverter.ToRGBHex(hitColor));
-                                        tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas[element].player = null;
+                                        tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas.Find(a => a.color == ColorTypeConverter.ToRGBHex(hitColor)).player = null;
                                         choosenArea = "";
                                         placedMeeple = false;
                                     }
@@ -210,15 +209,13 @@ public class Game : MonoBehaviour {
                                         meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]] = Instantiate(FarmerMeeple, hit.point, Quaternion.identity) as GameObject;
                                         meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]].transform.Rotate(new Vector3(-90, 0, 0));
                                         meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Renderer>().material.color = GM.GetCurrentPlayer().rgbaColor;
-                                        int element = tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas.FindIndex(a => a.color == ColorTypeConverter.ToRGBHex(hitColor));
-                                        tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas[element].player = GM.GetCurrentPlayer();
+                                        tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas.Find(a => a.color == ColorTypeConverter.ToRGBHex(hitColor)).player = GM.GetCurrentPlayer();
                                     }
                                     else
                                     {
                                         meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]] = Instantiate(StandingMeeple, hit.point, Quaternion.identity) as GameObject;
                                         meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Renderer>().material.color = GM.GetCurrentPlayer().rgbaColor;
-                                        int element = tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas.FindIndex(a => a.color == ColorTypeConverter.ToRGBHex(hitColor));
-                                        tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas[element].player = GM.GetCurrentPlayer();
+                                        tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas.Find(a => a.color == ColorTypeConverter.ToRGBHex(hitColor)).player = GM.GetCurrentPlayer();
 
                                     }
                                 }
