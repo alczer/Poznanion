@@ -33,12 +33,18 @@ public class TilesManager : MonoBehaviour {
     public Material FFRF_M;
     public Material FFFF_M;
 
-    public void addTileToList(terrainTypes up, terrainTypes right, terrainTypes down, terrainTypes left, float x, float y, Material m, int count, terrainTypes middle,
-        terrainTypes upL, terrainTypes upM, terrainTypes upR, terrainTypes rightU, terrainTypes rightM, terrainTypes rightD, terrainTypes downR, terrainTypes downM, terrainTypes downL,
-        terrainTypes leftD, terrainTypes leftM, terrainTypes leftU, List<List<int>> grassAreas, List<List<int>> castleAreas, List<List<int>> roadAreas)
+
+    public struct AreaTuple
+    {
+        public int x;
+        public int y;
+        public Area area;
+        public bool initialized;
+    }
+    public void addTileToList(terrainTypes up, terrainTypes right, terrainTypes down, terrainTypes left, float x, float y, Material m, int count, int turn,List<Area> areas)
     {
         Tile tmp = new Tile();
-        tmp.Init(up, right, down, left, x, y, m, count, middle, upL, upM, upR, rightU, rightM, rightD, downR, downM, downL, leftD, leftM, leftU, grassAreas, castleAreas, roadAreas);
+        tmp.Init(up, right, down, left, x, y, m, count, turn, areas);
         tilesList.Add(tmp);
     }
     public void placeTile(ref GameObject obj, int x, int y, ref GameObject[,] tilesOnBoard)
@@ -62,44 +68,140 @@ public class TilesManager : MonoBehaviour {
         return array;
     }
 
+    public List<Area> possibleMeepleAreas(ref GameObject[,] board, int x, int y)
+    {
+        List<Area> possibleAreas = new List<Area>();
+        //Check which area can hold meeple:
+        //For each area on the tile
+        foreach (var area in board[x, y].GetComponent<Tile>().Areas)
+        {
+            //Check if we can place meeple in there
+            //And add area to the list if we can.
+            if (isMovePossible(ref board, x, y, area, null))
+                possibleAreas.Add(area);
+        }
+        //Return the list with areas that are ready for meeple.
+        return possibleAreas;
+    }
+
+    public AreaTuple areaNeighbour(ref GameObject[,] board, int x, int y, int edge)
+    {
+        AreaTuple neighbour = new AreaTuple();
+        neighbour.initialized = false;
+        int[] neighbourCor = new int[2];
+        Hashtable correspondingEdges = new Hashtable();
+        correspondingEdges.Add(1, 5);
+        correspondingEdges.Add(2, 8);
+        correspondingEdges.Add(3, 7);
+        correspondingEdges.Add(4, 12);
+        correspondingEdges.Add(5, 11);
+        correspondingEdges.Add(6, 10);
+        correspondingEdges.Add(7, 3);
+        correspondingEdges.Add(8, 2);
+        correspondingEdges.Add(9, 1);
+        correspondingEdges.Add(10, 6);
+        correspondingEdges.Add(11, 5);
+        correspondingEdges.Add(12, 4);
+        if (edge == 1 || edge == 2 || edge == 3)
+        {
+            neighbourCor[0] = x - 1;
+            neighbourCor[1] = y;
+        }
+        else if (edge == 4 || edge == 5 || edge == 6)
+        {
+            neighbourCor[0] = x;
+            neighbourCor[1] = y + 1;
+        }
+        else if (edge == 7 || edge == 8 || edge == 9)
+        {
+            neighbourCor[0] = x + 1;
+            neighbourCor[1] = y;
+        }
+        else if (edge == 10 || edge == 11 || edge == 12)
+        {
+            neighbourCor[0] = x;
+            neighbourCor[1] = y - 1;
+        }
+        if (board[neighbourCor[0], neighbourCor[1]] != null)
+        {
+            foreach (var area in board[neighbourCor[0], neighbourCor[1]].GetComponent<Tile>().Areas)
+            {
+                if (area.edges.Contains(edge))
+                {
+                 neighbour.area = area;
+                }
+    
+            }
+            neighbour.x = neighbourCor[0];
+            neighbour.y = neighbourCor[1];
+            neighbour.initialized = true;    
+
+        }
+
+        
+        return neighbour;
+    }
+
+    public List<AreaTuple> areaNeighbours(ref GameObject[,] board, int x, int y, List<int> edges)
+    {
+        List<AreaTuple> neighbours = new List<AreaTuple>();
+        foreach(var edge in edges)
+        {
+            AreaTuple neighbour = areaNeighbour(ref board, x, y, edge);
+            if(neighbour.initialized)
+                neighbours.Add(neighbour);
+        }
+        return neighbours;
+    }
+
+    public bool isMovePossible(ref GameObject[,] board, int x, int y, Area currentlyChecked, List<AreaTuple> checkedAreas)
+    {
+        //If the tile has meeple already, we can't place meeple in there.
+        if (currentlyChecked.player != null)
+            return false;
+        //Proper algorithm: ensure existence of checkedAreas
+        if (checkedAreas==null)
+            checkedAreas = new List<AreaTuple>();
+        //By this line we've checked current area. Now it's time for neighbours.
+        //For each neighbouring area:
+        foreach(var neighbourTuple in areaNeighbours(ref board, x, y, currentlyChecked.edges))
+        {
+            //If we've already checked it, go on
+            if (checkedAreas.Contains(neighbourTuple))
+                continue;
+            checkedAreas.Add(neighbourTuple);
+            //Otherwise ensure move recurrently. If it's impossible, return false.
+            if (!isMovePossible(ref board, neighbourTuple.x, neighbourTuple.y, neighbourTuple.area, checkedAreas))
+                return false;
+        }
+        //If we got here, it means that move is possible.
+        return true;
+    }
+
     public void rotateClockwise90(ref GameObject gameObject)
     {
         terrainTypes up = gameObject.GetComponent<Tile>().UpTerrain;
         terrainTypes right = gameObject.GetComponent<Tile>().RightTerrain;
         terrainTypes down = gameObject.GetComponent<Tile>().DownTerrain;
         terrainTypes left = gameObject.GetComponent<Tile>().LeftTerrain;
-
-        tileEdges upL = gameObject.GetComponent<Tile>().UpL;
-        tileEdges upM = gameObject.GetComponent<Tile>().UpM;
-        tileEdges upR = gameObject.GetComponent<Tile>().UpR;
-        tileEdges rightU = gameObject.GetComponent<Tile>().RightU;
-        tileEdges rightM = gameObject.GetComponent<Tile>().RightM;
-        tileEdges rightD = gameObject.GetComponent<Tile>().RightD;
-        tileEdges downR = gameObject.GetComponent<Tile>().DownR;
-        tileEdges downM = gameObject.GetComponent<Tile>().DownM;
-        tileEdges downL = gameObject.GetComponent<Tile>().DownL;
-        tileEdges leftD = gameObject.GetComponent<Tile>().LeftD;
-        tileEdges leftM = gameObject.GetComponent<Tile>().LeftM;
-        tileEdges leftU = gameObject.GetComponent<Tile>().LeftU;
-
+        foreach (var area in gameObject.GetComponent<Tile>().Areas)
+        {
+            for (int i = 0; i < area.edges.Count; i++)
+            {
+                if (area.edges[i] < 10)
+                {
+                    area.edges[i] += 3;
+                }
+                else
+                {
+                    area.edges[i] = area.edges[i] + 3 - 12;
+                }
+            }
+        }
         gameObject.GetComponent<Tile>().UpTerrain = left;
         gameObject.GetComponent<Tile>().RightTerrain = up;
         gameObject.GetComponent<Tile>().DownTerrain = right;
         gameObject.GetComponent<Tile>().LeftTerrain = down;
-
-        gameObject.GetComponent<Tile>().UpL = rightU;
-        gameObject.GetComponent<Tile>().UpM = rightM;
-        gameObject.GetComponent<Tile>().UpR = rightD;
-        gameObject.GetComponent<Tile>().RightU = downR;
-        gameObject.GetComponent<Tile>().RightM = downM;
-        gameObject.GetComponent<Tile>().RightD = downL;
-        gameObject.GetComponent<Tile>().DownR = leftD;
-        gameObject.GetComponent<Tile>().DownM = leftM;
-        gameObject.GetComponent<Tile>().DownL = leftU;
-        gameObject.GetComponent<Tile>().LeftD = upL;
-        gameObject.GetComponent<Tile>().LeftM = upM;
-        gameObject.GetComponent<Tile>().LeftU = upR;
-
         gameObject.transform.Rotate(new Vector3(0, 90, 0));
     }
 
@@ -208,24 +310,21 @@ public class TilesManager : MonoBehaviour {
     public void init ()
     {
         //RRRR
-        addTileToList(terrainTypes.road, terrainTypes.road, terrainTypes.road, terrainTypes.road, 0, 0, RRRR, 1, terrainTypes.intersection, terrainTypes.grass, terrainTypes.road, terrainTypes.grass,
-            terrainTypes.grass, terrainTypes.road, terrainTypes.grass, terrainTypes.grass, terrainTypes.road, terrainTypes.grass, terrainTypes.grass, terrainTypes.road, terrainTypes.grass,
-            new List<List<int>>() { new List<int>() { 3, 4 }, new List<int>() { 6, 7 }, new List<int>() { 9, 10 }, new List<int>() { 12, 1 } }, new List<List<int>>() { },
-            new List<List<int>>() { new List<int>() { 2 }, new List<int>() { 5 }, new List<int>() { 8 }, new List<int>() { 11 } });
+        addTileToList(terrainTypes.road, terrainTypes.road, terrainTypes.road, terrainTypes.road, 0, 0, RRRR, 1,0, new List<Area>() { new Area {edges = new List<int>() {3,4} ,terrain = terrainTypes.grass},
+            new Area { edges = new List<int>() {6,7}, terrain = terrainTypes.grass },new Area { edges = new List<int>() {9,10}, terrain = terrainTypes.grass },new Area { edges = new List<int>() {12,1}, terrain = terrainTypes.grass },
+            new Area { edges = new List<int>() {2}, terrain = terrainTypes.road },new Area { edges = new List<int>() {5}, terrain = terrainTypes.road },new Area { edges = new List<int>() {8}, terrain = terrainTypes.road },
+            new Area { edges = new List<int>() {11}, terrain = terrainTypes.road },new Area { edges = new List<int>() {0}, terrain = terrainTypes.intersection }});
         //CCRC
-        addTileToList(terrainTypes.castle, terrainTypes.castle, terrainTypes.road, terrainTypes.castle, 0, 0, CCRC, 1, terrainTypes.castle, terrainTypes.castle, terrainTypes.castle, terrainTypes.castle,
-                terrainTypes.castle, terrainTypes.castle, terrainTypes.castle, terrainTypes.grass, terrainTypes.road, terrainTypes.grass, terrainTypes.castle, terrainTypes.castle, terrainTypes.castle,
-                new List<List<int>>() { new List<int>() { 7 }, new List<int>() { 9 } }, new List<List<int>>() { new List<int>() { 1, 2, 3, 4, 5, 6, 10, 11, 12 } }, new List<List<int>>() { new List<int>() { 8 } });
+        addTileToList(terrainTypes.castle, terrainTypes.castle, terrainTypes.road, terrainTypes.castle, 0, 0, CCRC, 1,0, new List<Area>() { new Area { edges = new List<int>() {0,1,2,3,4,5,6,10,11,12}, terrain = terrainTypes.castle },
+            new Area { edges = new List<int>() {7}, terrain = terrainTypes.grass},new Area { edges = new List<int>() {9}, terrain = terrainTypes.grass},new Area { edges = new List<int>() {8}, terrain = terrainTypes.road }});
         //CCFC
-        addTileToList(terrainTypes.castle, terrainTypes.castle, terrainTypes.grass, terrainTypes.castle, 0, 0, CCFC, 3, terrainTypes.castle, terrainTypes.castle, terrainTypes.castle, terrainTypes.castle,
-                terrainTypes.castle, terrainTypes.castle, terrainTypes.castle, terrainTypes.grass, terrainTypes.grass, terrainTypes.grass, terrainTypes.castle, terrainTypes.castle, terrainTypes.castle,
-                new List<List<int>>() { new List<int>() { 7, 8, 9 } }, new List<List<int>>() { new List<int>() { 1, 2, 3, 4, 5, 6, 10, 11, 12 } }, new List<List<int>>() { new List<int>() { } });
+        addTileToList(terrainTypes.castle, terrainTypes.castle, terrainTypes.grass, terrainTypes.castle, 0, 0, CCFC, 3,0, new List<Area>() { new Area { edges = new List<int>() { 0, 1, 2, 3, 4, 5, 6, 10, 11, 12 }, terrain = terrainTypes.castle },
+        new Area { edges = new List<int>() {7,8,9}, terrain = terrainTypes.grass }});
         //CFFF
-        addTileToList(terrainTypes.castle, terrainTypes.grass, terrainTypes.grass, terrainTypes.grass, 0, 0, CFFF, 5, terrainTypes.grass, terrainTypes.castle, terrainTypes.castle, terrainTypes.castle,
-            terrainTypes.grass, terrainTypes.grass, terrainTypes.grass, terrainTypes.grass, terrainTypes.grass, terrainTypes.grass, terrainTypes.grass, terrainTypes.grass, terrainTypes.grass,
-            new List<List<int>>() { new List<int>() { 4, 5, 6, 7, 8, 9, 10, 11, 12 } }, new List<List<int>>() { new List<int>() { 1, 2, 3 } }, new List<List<int>>() { });
+        addTileToList(terrainTypes.castle, terrainTypes.grass, terrainTypes.grass, terrainTypes.grass, 0, 0, CFFF, 5,0, new List<Area>() {new Area{edges = new List<int>() {1,2,3}, terrain = terrainTypes.castle },
+            new Area { edges = new List<int>() {4,5,6,7,8,9,10,11,12}, terrain = terrainTypes.grass } });
 
-    /*
+        /*
         //public Material CRFR; 4 - START
         addTileToList(terrainTypes.castle, terrainTypes.grassRoad, terrainTypes.grass, terrainTypes.grassRoad, 0, 0, CRFR, 3);
         //public Material CFFF; 

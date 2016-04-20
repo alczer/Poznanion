@@ -10,8 +10,8 @@ public delegate void OnStateChangeHandler();
 
 public class GameManager : MonoBehaviour
 {
-    public List<Player> playersList = new List<Player>();
-    public int currentPlayer = 0; 
+    private List<Player> playersList = new List<Player>();
+    private int currentPlayer = 0; 
     protected GameManager() { }
     private static GameManager instance = null;
     public event OnStateChangeHandler OnStateChange;
@@ -49,6 +49,7 @@ public class GameManager : MonoBehaviour
             currentPlayer++;
         }
     }
+
     public void SetGameState(GameState state)
     {
         this.gameState = state;
@@ -73,7 +74,7 @@ public class GameManager : MonoBehaviour
                
         OnStateChange();
     }
-  
+
     public void OnApplicationQuit()
     {
         GameManager.instance = null;

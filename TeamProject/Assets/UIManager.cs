@@ -3,7 +3,6 @@ using System.Collections;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System;
-using System.Collections.Generic;
 
 enum PlayerOptions
 {
@@ -40,7 +39,6 @@ public class UIManager : MonoBehaviour
     void Awake()
     {
         GM = GameManager.Instance;
-        
         GM.OnStateChange += HandleOnStateChange;
         playerOptionsRed = PlayerOptions.PLAYER_PLAYER;
         playerOptionsGreen = PlayerOptions.PLAYER_EMPTY;
@@ -50,13 +48,12 @@ public class UIManager : MonoBehaviour
     }
     public void StartGame()
     {
-        GM.playersList = new List<Player>();
         if(RedInput.activeSelf == true)
         {
             InputField inputField = RedInput.GetComponent<InputField>();
             if (string.IsNullOrEmpty(inputField.text))
             {
-                inputField.text = "Czerwony";
+                inputField.text = "Czerwony gracz";
             }
             GM.AddPlayer(new Player(inputField.text,PlayerColor.RED));
         }
@@ -65,7 +62,7 @@ public class UIManager : MonoBehaviour
             InputField inputField = GreenInput.GetComponent<InputField>();
             if (string.IsNullOrEmpty(inputField.text))
             {
-                inputField.text = "Zielony";
+                inputField.text = "Zielony gracz";
             }
             GM.AddPlayer(new Player(inputField.text, PlayerColor.GREEN));
         }
@@ -74,7 +71,7 @@ public class UIManager : MonoBehaviour
             InputField inputField = BlueInput.GetComponent<InputField>();
             if (string.IsNullOrEmpty(inputField.text))
             {
-                inputField.text = "Niebieski";
+                inputField.text = "Niebieski gracz";
             }
             GM.AddPlayer(new Player(inputField.text, PlayerColor.BLUE));
         }
@@ -83,7 +80,7 @@ public class UIManager : MonoBehaviour
             InputField inputField = YellowInput.GetComponent<InputField>();
             if (string.IsNullOrEmpty(inputField.text))
             {
-                inputField.text = "Żółty";
+                inputField.text = "Żółty gracz";
             }
             GM.AddPlayer(new Player(inputField.text, PlayerColor.YELLOW));
         }
@@ -92,31 +89,9 @@ public class UIManager : MonoBehaviour
             InputField inputField = BlackInput.GetComponent<InputField>();
             if (string.IsNullOrEmpty(inputField.text))
             {
-                inputField.text = "Czarny";
+                inputField.text = "Czarny gracz";
             }
             GM.AddPlayer(new Player(inputField.text, PlayerColor.BLACK));
-        }
-
-        ////
-        if (RedAI.activeSelf == true)
-        {
-            GM.AddPlayer(new Player("AI1", PlayerColor.RED, PlayerType.AI));
-        }
-        if (GreenAI.activeSelf == true)
-        {
-            GM.AddPlayer(new Player("AI2", PlayerColor.GREEN, PlayerType.AI));
-        }
-        if (BlueAI.activeSelf == true)
-        {
-            GM.AddPlayer(new Player("AI3", PlayerColor.BLUE, PlayerType.AI));
-        }
-        if (YellowAI.activeSelf == true)
-        {
-            GM.AddPlayer(new Player("AI4", PlayerColor.YELLOW, PlayerType.AI));
-        }
-        if (BlackAI.activeSelf == true)
-        {
-            GM.AddPlayer(new Player("AI5", PlayerColor.BLACK, PlayerType.AI));
         }
 
         GM.SetGameState(GameState.GAME);
@@ -222,15 +197,11 @@ public class UIManager : MonoBehaviour
         HandlePlayerOptions(playerOptionsBlack, ref BlackFrame, ref BlackInput, ref BlackAI);
         CheckStartGamePossibility();
     }
-    public void Update()
+
+    public void showPossibleMeeple()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            if (GM.gameState == GameState.MAIN_MENU)
-            Quit();
-            else
-                GM.SetGameState(GameState.MAIN_MENU);
-        }
+       // TM.
+
     }
 
     public void HandleOnStateChange()
