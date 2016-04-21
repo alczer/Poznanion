@@ -194,7 +194,11 @@ public class TilesManager : MonoBehaviour {
         {
             for (int i = 0; i < area.edges.Count; i++)
             {
-                if (area.edges[i] < 10)
+                if (area.edges[i] == 0)
+                {
+                    //skip
+                }
+                else if (area.edges[i] < 10)
                 {
                     area.edges[i] += 3;
                 }

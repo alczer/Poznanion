@@ -108,20 +108,20 @@ public class MoveCamera : MonoBehaviour
             if (!Input.GetMouseButton(2)) isZooming = false;
 
             // Edge moving
-            if (!isZooming && !isRotating && !isPanning)
-            {
-                Vector3 tmp = (Camera.main.ScreenToViewportPoint(Input.mousePosition));
-                if (tmp.x > 0.99)
-                    transform.Translate(edgeSpeed * zoom, 0, 0);
-                else
-                if (tmp.x < 0.01)
-                    transform.Translate(-edgeSpeed * zoom, 0, 0);
-                if (tmp.y > 0.99)
-                    transform.Translate(0, edgeSpeed * zoom, 0);
-                else
-                if (tmp.y < 0.01)
-                    transform.Translate(0, -edgeSpeed * zoom, 0);
-            }
+            //if (!isZooming && !isRotating && !isPanning)
+            //{
+            //    Vector3 tmp = (Camera.main.ScreenToViewportPoint(Input.mousePosition));
+            //    if (tmp.x > 0.99)
+            //        transform.Translate(edgeSpeed * zoom, 0, 0);
+            //    else
+            //    if (tmp.x < 0.01)
+            //        transform.Translate(-edgeSpeed * zoom, 0, 0);
+            //    if (tmp.y > 0.99)
+            //        transform.Translate(0, edgeSpeed * zoom, 0);
+            //    else
+            //    if (tmp.y < 0.01)
+            //        transform.Translate(0, -edgeSpeed * zoom, 0);
+            //}
 
             // Rotate camera along X and Y axis
             if (isRotating)
