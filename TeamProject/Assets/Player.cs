@@ -9,13 +9,17 @@ public class Player{
     public string name;
     public PlayerColor color;
     public PlayerType type;
+    public int meeples;
+    public Color rgbaColor;
 
-    public Player(string n, PlayerColor col, PlayerType typ = PlayerType.HUMAN)
+    public Player(string n, PlayerColor col, Color rgba, PlayerType typ = PlayerType.HUMAN)
     {
         this.name = n;
         this.points = 0;
         this.color = col;
         this.type = typ;
+        this.meeples = 5;
+        this.rgbaColor = rgba;
     }
 
 

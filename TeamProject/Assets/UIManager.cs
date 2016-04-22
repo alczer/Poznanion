@@ -51,14 +51,14 @@ public class UIManager : MonoBehaviour
     public void StartGame()
     {
         GM.playersList = new List<Player>();
-        if(RedInput.activeSelf == true)
+        if (RedInput.activeSelf == true)
         {
             InputField inputField = RedInput.GetComponent<InputField>();
             if (string.IsNullOrEmpty(inputField.text))
             {
                 inputField.text = "Czerwony";
             }
-            GM.AddPlayer(new Player(inputField.text,PlayerColor.RED));
+            GM.AddPlayer(new Player(inputField.text, PlayerColor.RED, new Color(1, 0, 0, 1)));
         }
         if (GreenInput.activeSelf == true)
         {
@@ -67,7 +67,7 @@ public class UIManager : MonoBehaviour
             {
                 inputField.text = "Zielony";
             }
-            GM.AddPlayer(new Player(inputField.text, PlayerColor.GREEN));
+            GM.AddPlayer(new Player(inputField.text, PlayerColor.GREEN, new Color(0, 1, 0, 1)));
         }
         if (BlueInput.activeSelf == true)
         {
@@ -76,7 +76,7 @@ public class UIManager : MonoBehaviour
             {
                 inputField.text = "Niebieski";
             }
-            GM.AddPlayer(new Player(inputField.text, PlayerColor.BLUE));
+            GM.AddPlayer(new Player(inputField.text, PlayerColor.BLUE, new Color(0, 0, 1, 1)));
         }
         if (YellowInput.activeSelf == true)
         {
@@ -85,7 +85,7 @@ public class UIManager : MonoBehaviour
             {
                 inputField.text = "Żółty";
             }
-            GM.AddPlayer(new Player(inputField.text, PlayerColor.YELLOW));
+            GM.AddPlayer(new Player(inputField.text, PlayerColor.YELLOW, new Color(1, (float)0.92, (float)0.016, 1)));
         }
         if (BlackInput.activeSelf == true)
         {
@@ -94,29 +94,29 @@ public class UIManager : MonoBehaviour
             {
                 inputField.text = "Czarny";
             }
-            GM.AddPlayer(new Player(inputField.text, PlayerColor.BLACK));
+            GM.AddPlayer(new Player(inputField.text, PlayerColor.BLACK, new Color(0, 0, 0, 1)));
         }
 
         ////
         if (RedAI.activeSelf == true)
         {
-            GM.AddPlayer(new Player("AI1", PlayerColor.RED, PlayerType.AI));
+            GM.AddPlayer(new Player("AI1", PlayerColor.RED, new Color(1, 0, 0, 1), PlayerType.AI));
         }
         if (GreenAI.activeSelf == true)
         {
-            GM.AddPlayer(new Player("AI2", PlayerColor.GREEN, PlayerType.AI));
+            GM.AddPlayer(new Player("AI2", PlayerColor.GREEN, new Color(0, 1, 0, 1), PlayerType.AI));
         }
         if (BlueAI.activeSelf == true)
         {
-            GM.AddPlayer(new Player("AI3", PlayerColor.BLUE, PlayerType.AI));
+            GM.AddPlayer(new Player("AI3", PlayerColor.BLUE, new Color(0, 0, 1, 1), PlayerType.AI));
         }
         if (YellowAI.activeSelf == true)
         {
-            GM.AddPlayer(new Player("AI4", PlayerColor.YELLOW, PlayerType.AI));
+            GM.AddPlayer(new Player("AI4", PlayerColor.YELLOW, new Color(1, (float)0.92, (float)0.016, 1), PlayerType.AI));
         }
         if (BlackAI.activeSelf == true)
         {
-            GM.AddPlayer(new Player("AI5", PlayerColor.BLACK, PlayerType.AI));
+            GM.AddPlayer(new Player("AI5", PlayerColor.BLACK, new Color(0, 0, 0, 1),  PlayerType.AI));
         }
 
         GM.SetGameState(GameState.GAME);
@@ -231,11 +231,6 @@ public class UIManager : MonoBehaviour
             else
                 GM.SetGameState(GameState.MAIN_MENU);
         }
-    }
-    public void showPossibleMeeple()
-    {
-        // TM.
-
     }
 
     public void HandleOnStateChange()

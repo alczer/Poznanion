@@ -8,7 +8,12 @@ using System;
 public class Game : MonoBehaviour
 {
     GameObject[,] tilesOnBoard = new GameObject[200, 200];
+    GameObject[,] masks = new GameObject[200, 200];
     GameObject[,] possibleMoves = new GameObject[200, 200];
+    string choosenArea = "";
+    GameObject[,] meeples = new GameObject[200, 200];
+
+    List<Area> possibleMeeple = new List<Area>();
 
     GameObject gameManager;
     public CameraManager CM;
@@ -18,11 +23,18 @@ public class Game : MonoBehaviour
     public GameObject NextTileImage;
     public Text playername;
     private bool currentlyPlacingTile;
+    private bool currentlyPlacingMeeple;
+    private bool placedMeeple;
     private int[] currentlyPlacedTile;
     private Tile choosenTile;
     public GameObject OKButton;
     public GameObject MeepleButton;
     public GameObject Mask;
+    public GameObject StandingMeeple;
+    public GameObject FarmerMeeple;
+    private List<GameObject> placedMeepleObject;
+    private Area placedMeepleArea;
+    private int currentlyPlacedMeeple;
     Ray myRay;
     RaycastHit hit;
     public GameObject objectToinstantiate;
@@ -30,6 +42,7 @@ public class Game : MonoBehaviour
 
     public void ButtonClicked()
     {
+        currentlyPlacingMeeple = false;
         currentlyPlacingTile = false;
         currentlyPlacedTile = null;
         for (int row = 0; row < possibleMoves.GetLength(0); row++)
@@ -50,7 +63,29 @@ public class Game : MonoBehaviour
             CM.UpdateCamera();
             CM.cameraCheck = false;
         }
+        currentlyPlacedMeeple++;
+
+
     }
+
+    public void MeepleButtonClicked()
+    {
+        currentlyPlacingMeeple = true;
+        possibleMeeple = TM.possibleMeepleAreas(ref tilesOnBoard, currentlyPlacedTile[0], currentlyPlacedTile[1]);
+        Debug.Log("--------------------------dla kliknięcia----------------------------------------------");
+        foreach (var list in possibleMeeple)
+        {
+
+            String result = String.Join(" ", list.edges.Select(item => item.ToString()).ToArray());
+            Debug.Log("Możliwy obszar:");
+            Debug.Log(result);
+
+        }
+        Debug.Log("-------------------------------------------------------------------------------------");
+
+        MeepleButton.SetActive(false);
+    }
+
     void Awake()
     {
         GM = GameManager.Instance;
@@ -59,36 +94,34 @@ public class Game : MonoBehaviour
     {
         currentlyPlacedTile = new int[2];
         currentNbrTiles = 0;
-        TM.placeTile(ref objectToinstantiate, 100, 100, ref tilesOnBoard);
+        TM.placeTile(ref objectToinstantiate, ref Mask, 100, 100, ref tilesOnBoard, ref masks);
         Tile startTile = tilesOnBoard[100, 100].AddComponent<Tile>();
-        startTile.Init(terrainTypes.castle, terrainTypes.road, terrainTypes.grass, terrainTypes.road, 0, 0, TM.CRFR, 1, 0, new List<Area>() { new Area {edges = new List<int>() {1,2,3} ,terrain = terrainTypes.castle},
-            new Area { edges = new List<int>() { 5, 0, 11 }, terrain = terrainTypes.road }, new Area { edges = new List<int>() { 4,12 }, terrain = terrainTypes.grass },new Area { edges = new List<int>() {6,7,8,9,10}, terrain = terrainTypes.grass } });
+        startTile.Init(terrainTypes.castle, terrainTypes.road, terrainTypes.grass, terrainTypes.road, 0, 0, TM.CRFR, TM.CRFR_Mask, 1, 0, new List<Area>() { new Area {edges = new List<int>() {1,2,3} ,terrain = terrainTypes.castle,color = "#1600FF"},
+            new Area { edges = new List<int>() { 5, 0, 11 }, terrain = terrainTypes.road,color = "#0CFF00" }, new Area { edges = new List<int>() { 4,12 }, terrain = terrainTypes.grass,color = "#FFFF01" },new Area { edges = new List<int>() {6,7,8,9,10}, terrain = terrainTypes.grass,color = "#FF0000" } });
         tilesOnBoard[100, 100].GetComponent<Renderer>().material = TM.CRFR;
+        masks[100, 100].GetComponent<Renderer>().material = TM.CRFR_Mask;
         currentlyPlacingTile = false;
+        currentlyPlacingMeeple = false;
+        placedMeeple = false;
+        currentlyPlacedMeeple = 0;
         TM.init();
 
     }
-    /*
-    public static Color hexToColor(string hex)
+
+    public static class ColorTypeConverter
     {
-        hex = hex.Replace("0x", "");//in case the string is formatted 0xFFFFFF
-        hex = hex.Replace("#", "");//in case the string is formatted #FFFFFF
-        byte a = 255;//assume fully visible unless specified in hex
-        byte r = byte.Parse(hex.Substring(0, 2), System.Globalization.NumberStyles.HexNumber);
-        byte g = byte.Parse(hex.Substring(2, 2), System.Globalization.NumberStyles.HexNumber);
-        byte b = byte.Parse(hex.Substring(4, 2), System.Globalization.NumberStyles.HexNumber);
-        //Only use alpha if the string has enough characters
-        if (hex.Length == 8)
+        public static string ToRGBHex(Color c)
         {
-            a = byte.Parse(hex.Substring(4, 2), System.Globalization.NumberStyles.HexNumber);
+            return string.Format("#{0:X2}{1:X2}{2:X2}", ToByte(c.r), ToByte(c.g), ToByte(c.b));
         }
-        return new Color32(r, g, b, a);
+
+        private static byte ToByte(float f)
+        {
+            f = Mathf.Clamp01(f);
+            return (byte)(f * 255);
+        }
     }
-    Color yellowColor = hexToColor("ffff00");
-    Color blueColor = hexToColor("0000ff");
-    Color greenColor = hexToColor("00ff00");
-    Color redColor = hexToColor("ff0000");
-    */
+
     // Update is called once per frame
     void Update()
     {
@@ -134,9 +167,13 @@ public class Game : MonoBehaviour
                             if (k == rolled)
                             {
                                 tilesOnBoard[arrPosition[0], arrPosition[1]] = Instantiate(objectToinstantiate, new Vector3(position[0], (float)0.1, position[1]), Quaternion.identity) as GameObject; // instatiate a prefab on the position where the ray hits the floor.                         
-                                Tile tile = tilesOnBoard[arrPosition[0], arrPosition[1]].AddComponent<Tile>();tile.Init(choosenTile.UpTerrain, choosenTile.RightTerrain, choosenTile.DownTerrain, choosenTile.LeftTerrain, position[0], position[1], choosenTile.Material, choosenTile.TypeCount, choosenTile.Turn, choosenTile.Areas);
-                                TM.rotateFirstMatchingRotation(ref tilesOnBoard[arrPosition[0], arrPosition[1]], arrPosition, ref tilesOnBoard);
+                                Tile tile = tilesOnBoard[arrPosition[0], arrPosition[1]].AddComponent<Tile>();
+                                tile.Init(choosenTile.UpTerrain, choosenTile.RightTerrain, choosenTile.DownTerrain, choosenTile.LeftTerrain, position[0], position[1], choosenTile.Material, choosenTile.Mask, choosenTile.TypeCount, choosenTile.Turn, choosenTile.Areas);
+                                masks[arrPosition[0], arrPosition[1]] = Instantiate(Mask, new Vector3(position[0], (float)0.1, position[1]), Quaternion.identity) as GameObject;
+                                TM.rotateFirstMatchingRotation(ref tilesOnBoard[arrPosition[0], arrPosition[1]], ref masks[arrPosition[0], arrPosition[1]], arrPosition, ref tilesOnBoard);
+
                                 tilesOnBoard[arrPosition[0], arrPosition[1]].GetComponent<Renderer>().material = choosenTile.Material;
+                                masks[arrPosition[0], arrPosition[1]].GetComponent<Renderer>().material = choosenTile.Mask;
 
                                 currentlyPlacedTile = arrPosition;
                                 CM.CheckCamera(arrPosition);
@@ -147,7 +184,8 @@ public class Game : MonoBehaviour
                 }
             }
         }
-        else if (currentlyPlacingTile == false)
+        else
+        if (currentlyPlacingTile == false)
         {
             if (TM.tilesList.Count > 0)
             {
@@ -190,86 +228,129 @@ public class Game : MonoBehaviour
             {
                 if (Input.GetMouseButtonUp(0))
                 {
-
-                    //Texture2D tex = (Texture2D) Mask.GetComponent<Renderer>().material.mainTexture;
-                    // Texture2D tex = (Texture2D)hit.collider.gameObject.GetComponent<Renderer>().material.mainTexture; // Get texture of object under mouse pointer
-                    //Debug.Log(tex.GetPixelBilinear(hit.textureCoord2.x, hit.textureCoord2.y));
-                    /*
-                    if (tex.GetPixelBilinear(hit.textureCoord2.x, hit.textureCoord2.y) == blueColor)
+                    if (currentlyPlacingMeeple == true)
                     {
+                        tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Collider>().enabled = false;
+                        if (hit.transform.GetComponent<Renderer>().material.mainTexture.name == masks[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Renderer>().material.mainTexture.name)
+                        {
 
-                        Debug.Log("Clicked CASTLE !!!!!!!!!!!!!!!");
-                    }
-                    else if (tex.GetPixelBilinear(hit.textureCoord2.x, hit.textureCoord2.y) == redColor)
-                    {
 
-                        Debug.Log("Clicked GRASS 1 !!!!!!!!!!!!!!!");
-                    }
-                    else if (tex.GetPixelBilinear(hit.textureCoord2.x, hit.textureCoord2.y) == yellowColor)
-                    {
+                            Texture2D tex = hit.collider.GetComponent<MeshRenderer>().material.mainTexture as Texture2D;
+                            Vector2 pixelUV = hit.textureCoord;
+                            float uvX = pixelUV.x * tex.width;
+                            float uvY = pixelUV.y * tex.height;
+                            Color hitColor = tex.GetPixel((int)uvX, (int)uvY);
 
-                        Debug.Log("Clicked ROAD !!!!!!!!!!!!!!!");
-                    }
-                    else if (tex.GetPixelBilinear(hit.textureCoord2.x, hit.textureCoord2.y) == greenColor)
-                    {
+                            if (possibleMeeple.Any(a => a.color == ColorTypeConverter.ToRGBHex(hitColor)))
+                            {
+                                Debug.Log(ColorTypeConverter.ToRGBHex(hitColor));
+                                if (ColorTypeConverter.ToRGBHex(hitColor) == choosenArea)
+                                {
+                                    Debug.Log("Usuwam kafelek który już był tutaj!");
 
-                        Debug.Log("Clicked GRASS 2 !!!!!!!!!!!!!!!");
+
+                                    Destroy(meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]]);
+                                    int element = tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas.FindIndex(a => a.color == ColorTypeConverter.ToRGBHex(hitColor));
+                                    tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas[element].player = null;
+                                    choosenArea = "";
+                                    placedMeeple = false;
+                                }
+                                else
+                                {
+                                    if (meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]] != null)
+                                    {
+                                        Destroy(meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]]);
+                                        tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas.Find(a => a.color == ColorTypeConverter.ToRGBHex(hitColor)).player = GM.GetCurrentPlayer();
+                                        choosenArea = "";
+                                        placedMeeple = false;
+                                    }
+                                    Debug.Log("TAK, tu można postawić meepla!");
+                                    choosenArea = possibleMeeple.Find(a => a.color == ColorTypeConverter.ToRGBHex(hitColor)).color;
+                                    placedMeeple = true;
+                                    if (possibleMeeple.Find(a => a.color == ColorTypeConverter.ToRGBHex(hitColor)).terrain == terrainTypes.grass)
+                                    {
+                                        meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]] = Instantiate(FarmerMeeple, hit.point, Quaternion.identity) as GameObject;
+                                        meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]].transform.Rotate(new Vector3(-90, 0, 0));
+                                        meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Renderer>().material.color = GM.GetCurrentPlayer().rgbaColor;
+                                        tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas.Find(a => a.color == ColorTypeConverter.ToRGBHex(hitColor)).player = GM.GetCurrentPlayer();
+                                    }
+                                    else
+                                    {
+                                        meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]] = Instantiate(StandingMeeple, hit.point, Quaternion.identity) as GameObject;
+                                        meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]].transform.Translate(new Vector3(0, 2, 0));
+                                        meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Renderer>().material.color = GM.GetCurrentPlayer().rgbaColor;
+                                        tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas.Find(a => a.color == ColorTypeConverter.ToRGBHex(hitColor)).player = GM.GetCurrentPlayer();
+
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                Debug.Log("NIE MOŻNA tu postawić meepla!");
+
+                            }
+
+                        }
                     }
                     else
                     {
-                        Debug.Log("No color detected!");
+                        Vector3 position = hit.point;
+                        position.x = Mathf.Round(position.x / 10) * 10; // 10 is the size of a Tile
+                        position.z = Mathf.Round(position.z / 10) * 10; // 10 is the size of a Tile
+                        //Debug.Log("Position x: " + position.x.ToString() + " Position z: " + position.z.ToString());
 
-                    }
 
-    */
+                        int[] arrayIndex = TM.getArrayPosition(position.x, position.z);
+                        //Debug.Log("Position Array row: " + arrayIndex[0].ToString() + " Position array column: " + arrayIndex[1].ToString());
 
-                    Vector3 position = hit.point;
-                    position.x = Mathf.Round(position.x / 10) * 10; // 10 is the size of a Tile
-                    position.z = Mathf.Round(position.z / 10) * 10; // 10 is the size of a Tile
-                    Debug.Log("Position x: " + position.x.ToString() + " Position z: " + position.z.ToString());
-                    int[] arrayIndex = TM.getArrayPosition(position.x, position.z);
-                    Debug.Log("Position Array row: " + arrayIndex[0].ToString() + " Position array column: " + arrayIndex[1].ToString());
-
-                    if (tilesOnBoard[arrayIndex[0], arrayIndex[1]] != null)
-                    {
-                        if (OKButton.activeSelf)
+                        if (tilesOnBoard[arrayIndex[0], arrayIndex[1]] != null)
                         {
-                            if (arrayIndex[0] == currentlyPlacedTile[0] && arrayIndex[1] == currentlyPlacedTile[1])
+                            if (OKButton.activeSelf)
                             {
-                                TM.rotateFirstMatchingRotation(ref tilesOnBoard[arrayIndex[0], arrayIndex[1]], arrayIndex, ref tilesOnBoard);
-                                //rotateClockwise90(ref tilesOnBoard[arrayIndex[0], arrayIndex[1]]);              
+                                if (arrayIndex[0] == currentlyPlacedTile[0] && arrayIndex[1] == currentlyPlacedTile[1])
+                                {
+                                    TM.rotateFirstMatchingRotation(ref tilesOnBoard[arrayIndex[0], arrayIndex[1]], ref masks[arrayIndex[0], arrayIndex[1]], arrayIndex, ref tilesOnBoard);
+                                    //rotateClockwise90(ref tilesOnBoard[arrayIndex[0], arrayIndex[1]]);              
+                                }
+                            }
+                            else
+                            {
+                                Debug.Log("A tile is already at this position");
                             }
                         }
-                        else
+                        else if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject() == false)
                         {
-                            Debug.Log("A tile is already at this position");
-                        }
-                    }
-                    else if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject() == false)
-                    {
-                        if (possibleMoves[arrayIndex[0], arrayIndex[1]] != null)
-                        {
-                            if (currentlyPlacedTile != null)
+                            if (possibleMoves[arrayIndex[0], arrayIndex[1]] != null)
                             {
-                                Destroy(tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]]);
-                                tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]] = null;
-                            }
-                            OKButton.SetActive(true);
-                            MeepleButton.SetActive(true);
-                            tilesOnBoard[arrayIndex[0], arrayIndex[1]] = Instantiate(objectToinstantiate, position, Quaternion.identity) as GameObject; // instatiate a prefab on the position where the ray hits the floor.                         
-                            Tile tile = tilesOnBoard[arrayIndex[0], arrayIndex[1]].AddComponent<Tile>();
-                            tile.Init(choosenTile.UpTerrain, choosenTile.RightTerrain, choosenTile.DownTerrain, choosenTile.LeftTerrain, position.x, position.z, choosenTile.Material, choosenTile.TypeCount, choosenTile.Turn, choosenTile.Areas);
-                            TM.rotateFirstMatchingRotation(ref tilesOnBoard[arrayIndex[0], arrayIndex[1]], arrayIndex, ref tilesOnBoard);
-                            tilesOnBoard[arrayIndex[0], arrayIndex[1]].GetComponent<Renderer>().material = choosenTile.Material;
-                            currentlyPlacedTile = arrayIndex;
-                            CM.CheckCamera(arrayIndex);
-                            List<Area> lists = TM.possibleMeepleAreas(ref tilesOnBoard, arrayIndex[0], arrayIndex[1]);
-                            foreach (var list in lists)
-                            {
+                                if (currentlyPlacedTile != null)
+                                {
+                                    Destroy(tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]]);
+                                    Destroy(masks[currentlyPlacedTile[0], currentlyPlacedTile[1]]);
+                                    tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]] = null;
+                                }
+                                OKButton.SetActive(true);
+                                MeepleButton.SetActive(true);
+                                tilesOnBoard[arrayIndex[0], arrayIndex[1]] = Instantiate(objectToinstantiate, position, Quaternion.identity) as GameObject; // instatiate a prefab on the position where the ray hits the floor. 
+                                masks[arrayIndex[0], arrayIndex[1]] = Instantiate(Mask, position, Quaternion.identity) as GameObject;
 
-                                String result = String.Join(" ", list.edges.Select(item => item.ToString()).ToArray());
-                                Debug.Log("Możliwy obszar:");
-                                Debug.Log(result);
+                                Tile tile = tilesOnBoard[arrayIndex[0], arrayIndex[1]].AddComponent<Tile>();
+                                tile.Init(choosenTile.UpTerrain, choosenTile.RightTerrain, choosenTile.DownTerrain, choosenTile.LeftTerrain, position.x, position.z, choosenTile.Material, choosenTile.Mask, choosenTile.TypeCount, choosenTile.Turn, choosenTile.Areas);
+                                TM.rotateFirstMatchingRotation(ref tilesOnBoard[arrayIndex[0], arrayIndex[1]], ref masks[arrayIndex[0], arrayIndex[1]], arrayIndex, ref tilesOnBoard);
+                                tilesOnBoard[arrayIndex[0], arrayIndex[1]].GetComponent<Renderer>().material = choosenTile.Material;
+                                masks[arrayIndex[0], arrayIndex[1]].GetComponent<Renderer>().material = choosenTile.Mask;
+                                currentlyPlacedTile = arrayIndex;
+                                CM.CheckCamera(arrayIndex);
+                                /*
+                                possibleMeeple = TM.possibleMeepleAreas(ref tilesOnBoard, currentlyPlacedTile[0], currentlyPlacedTile[1]);
+                                foreach (var list in possibleMeeple)
+                                {
+
+                                    String result = String.Join(" ", list.edges.Select(item => item.ToString()).ToArray());
+                                    Debug.Log("Możliwy obszar:");
+                                    Debug.Log(result);
+
+                                }
+                                */
 
                             }
                         }

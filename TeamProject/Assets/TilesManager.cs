@@ -34,6 +34,12 @@ public class TilesManager : MonoBehaviour
     public Material FFRF_M;
     public Material FFFF_M;
 
+    public Material CCC_Mask;
+    public Material CCCR_Mask;
+    public Material C_Mask;
+    public Material CRFR_Mask;
+    public Material RRRR_Mask;
+
 
     public struct AreaTuple
     {
@@ -42,15 +48,16 @@ public class TilesManager : MonoBehaviour
         public Area area;
         public bool initialized;
     }
-    public void addTileToList(terrainTypes up, terrainTypes right, terrainTypes down, terrainTypes left, float x, float y, Material m, int count, int turn, List<Area> areas)
+    public void addTileToList(terrainTypes up, terrainTypes right, terrainTypes down, terrainTypes left, float x, float y, Material m, Material mask, int count, int turn, List<Area> areas)
     {
         Tile tmp = new Tile();
-        tmp.Init(up, right, down, left, x, y, m, count, turn, areas);
+        tmp.Init(up, right, down, left, x, y, m, mask, count, turn, areas);
         tilesList.Add(tmp);
     }
-    public void placeTile(ref GameObject obj, int x, int y, ref GameObject[,] tilesOnBoard)
+    public void placeTile(ref GameObject tile, ref GameObject mask, int x, int y, ref GameObject[,] tilesOnBoard, ref GameObject[,] masks)
     {
-        tilesOnBoard[x, y] = Instantiate(obj, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
+        tilesOnBoard[x, y] = Instantiate(tile, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
+        masks[x, y] = Instantiate(mask, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
     }
 
     public int[] getArrayPosition(float x, float z)
@@ -68,7 +75,6 @@ public class TilesManager : MonoBehaviour
         float[] array = new float[2] { x, z };
         return array;
     }
-
     public List<Area> possibleMeepleAreas(ref GameObject[,] board, int x, int y)
     {
         List<Area> possibleAreas = new List<Area>();
@@ -179,7 +185,7 @@ public class TilesManager : MonoBehaviour
         return true;
     }
 
-    public void rotateClockwise90(ref GameObject gameObject)
+    public void rotateClockwise90(ref GameObject gameObject, ref GameObject mask)
     {
         terrainTypes up = gameObject.GetComponent<Tile>().UpTerrain;
         terrainTypes right = gameObject.GetComponent<Tile>().RightTerrain;
@@ -204,16 +210,17 @@ public class TilesManager : MonoBehaviour
         gameObject.GetComponent<Tile>().DownTerrain = right;
         gameObject.GetComponent<Tile>().LeftTerrain = down;
         gameObject.transform.Rotate(new Vector3(0, 90, 0));
+        mask.transform.Rotate(new Vector3(0, 90, 0));
     }
 
-    public void rotateFirstMatchingRotation(ref GameObject gameObject, int[] gameObjectPosition, ref GameObject[,] tilesOnBoard)
+    public void rotateFirstMatchingRotation(ref GameObject gameObject, ref GameObject mask, int[] gameObjectPosition, ref GameObject[,] tilesOnBoard)
     {
         if ((tilesOnBoard[gameObjectPosition[0] - 1, gameObjectPosition[1]] == null || tilesOnBoard[gameObjectPosition[0] - 1, gameObjectPosition[1]].GetComponent<Tile>().DownTerrain == gameObject.GetComponent<Tile>().LeftTerrain)
             && (tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1] + 1] == null || tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1] + 1].GetComponent<Tile>().LeftTerrain == gameObject.GetComponent<Tile>().UpTerrain)
             && (tilesOnBoard[gameObjectPosition[0] + 1, gameObjectPosition[1]] == null || tilesOnBoard[gameObjectPosition[0] + 1, gameObjectPosition[1]].GetComponent<Tile>().UpTerrain == gameObject.GetComponent<Tile>().RightTerrain)
             && (tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1] - 1] == null || tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1] - 1].GetComponent<Tile>().RightTerrain == gameObject.GetComponent<Tile>().DownTerrain))
         {
-            rotateClockwise90(ref gameObject);
+            rotateClockwise90(ref gameObject, ref mask);
         }
         else if ((tilesOnBoard[gameObjectPosition[0] - 1, gameObjectPosition[1]] == null || tilesOnBoard[gameObjectPosition[0] - 1, gameObjectPosition[1]].GetComponent<Tile>().DownTerrain == gameObject.GetComponent<Tile>().DownTerrain)
             && (tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1] + 1] == null || tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1] + 1].GetComponent<Tile>().LeftTerrain == gameObject.GetComponent<Tile>().LeftTerrain)
@@ -221,17 +228,17 @@ public class TilesManager : MonoBehaviour
             && (tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1] - 1] == null || tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1] - 1].GetComponent<Tile>().RightTerrain == gameObject.GetComponent<Tile>().RightTerrain))
         {
 
-            rotateClockwise90(ref gameObject);
-            rotateClockwise90(ref gameObject);
+            rotateClockwise90(ref gameObject, ref mask);
+            rotateClockwise90(ref gameObject, ref mask);
         }
         else if ((tilesOnBoard[gameObjectPosition[0] - 1, gameObjectPosition[1]] == null || tilesOnBoard[gameObjectPosition[0] - 1, gameObjectPosition[1]].GetComponent<Tile>().DownTerrain == gameObject.GetComponent<Tile>().RightTerrain)
             && (tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1] + 1] == null || tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1] + 1].GetComponent<Tile>().LeftTerrain == gameObject.GetComponent<Tile>().DownTerrain)
             && (tilesOnBoard[gameObjectPosition[0] + 1, gameObjectPosition[1]] == null || tilesOnBoard[gameObjectPosition[0] + 1, gameObjectPosition[1]].GetComponent<Tile>().UpTerrain == gameObject.GetComponent<Tile>().LeftTerrain)
             && (tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1] - 1] == null || tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1] - 1].GetComponent<Tile>().RightTerrain == gameObject.GetComponent<Tile>().UpTerrain))
         {
-            rotateClockwise90(ref gameObject);
-            rotateClockwise90(ref gameObject);
-            rotateClockwise90(ref gameObject);
+            rotateClockwise90(ref gameObject, ref mask);
+            rotateClockwise90(ref gameObject, ref mask);
+            rotateClockwise90(ref gameObject, ref mask);
         }
     }
     public List<int[]> findMatchingEdges(List<int[]> movesList, Tile choosenTile, ref GameObject[,] tilesOnBoard)
@@ -311,19 +318,19 @@ public class TilesManager : MonoBehaviour
     public void init()
     {
         //RRRR
-        addTileToList(terrainTypes.road, terrainTypes.road, terrainTypes.road, terrainTypes.road, 0, 0, RRRR, 1, 0, new List<Area>() { new Area {edges = new List<int>() {3,4} ,terrain = terrainTypes.grass},
-            new Area { edges = new List<int>() {6,7}, terrain = terrainTypes.grass },new Area { edges = new List<int>() {9,10}, terrain = terrainTypes.grass },new Area { edges = new List<int>() {12,1}, terrain = terrainTypes.grass },
-            new Area { edges = new List<int>() {2}, terrain = terrainTypes.road },new Area { edges = new List<int>() {5}, terrain = terrainTypes.road },new Area { edges = new List<int>() {8}, terrain = terrainTypes.road },
-            new Area { edges = new List<int>() {11}, terrain = terrainTypes.road },new Area { edges = new List<int>() {0}, terrain = terrainTypes.intersection }});
+        addTileToList(terrainTypes.road, terrainTypes.road, terrainTypes.road, terrainTypes.road, 0, 0, RRRR, RRRR_Mask, 1, 0, new List<Area>() { new Area {edges = new List<int>() {3,4} ,terrain = terrainTypes.grass, color = "#810000"},
+            new Area { edges = new List<int>() {6,7}, terrain = terrainTypes.grass, color = "#FF0000" },new Area { edges = new List<int>() {9,10}, terrain = terrainTypes.grass,color = "#FD05FF" },new Area { edges = new List<int>() {12,1}, terrain = terrainTypes.grass, color = "#0CFF00" },
+            new Area { edges = new List<int>() {2}, terrain = terrainTypes.road ,color = "#FFFF01"},new Area { edges = new List<int>() {5}, terrain = terrainTypes.road , color = "#000100"},new Area { edges = new List<int>() {8}, terrain = terrainTypes.road ,color = "#1700FF"},
+            new Area { edges = new List<int>() {11}, terrain = terrainTypes.road,color = "#00FFFF" },new Area { edges = new List<int>() {0}, terrain = terrainTypes.intersection ,color = "000000"}});
         //CCRC
-        addTileToList(terrainTypes.castle, terrainTypes.castle, terrainTypes.road, terrainTypes.castle, 0, 0, CCRC, 1, 0, new List<Area>() { new Area { edges = new List<int>() {0,1,2,3,4,5,6,10,11,12}, terrain = terrainTypes.castle },
-            new Area { edges = new List<int>() {7}, terrain = terrainTypes.grass},new Area { edges = new List<int>() {9}, terrain = terrainTypes.grass},new Area { edges = new List<int>() {8}, terrain = terrainTypes.road }});
+        addTileToList(terrainTypes.castle, terrainTypes.castle, terrainTypes.road, terrainTypes.castle, 0, 0, CCRC, CCCR_Mask, 1, 0, new List<Area>() { new Area { edges = new List<int>() {0,1,2,3,4,5,6,10,11,12}, terrain = terrainTypes.castle,color = "#1600FF" },
+            new Area { edges = new List<int>() {7}, terrain = terrainTypes.grass, color = "#0CFF00"},new Area { edges = new List<int>() {9}, terrain = terrainTypes.grass, color = "#FF0000"},new Area { edges = new List<int>() {8}, terrain = terrainTypes.road ,color = "#FFFF01"}});
         //CCFC
-        addTileToList(terrainTypes.castle, terrainTypes.castle, terrainTypes.grass, terrainTypes.castle, 0, 0, CCFC, 3, 0, new List<Area>() { new Area { edges = new List<int>() { 0, 1, 2, 3, 4, 5, 6, 10, 11, 12 }, terrain = terrainTypes.castle },
-        new Area { edges = new List<int>() {7,8,9}, terrain = terrainTypes.grass }});
+        addTileToList(terrainTypes.castle, terrainTypes.castle, terrainTypes.grass, terrainTypes.castle, 0, 0, CCFC, CCC_Mask, 3, 0, new List<Area>() { new Area { edges = new List<int>() { 0, 1, 2, 3, 4, 5, 6, 10, 11, 12 }, terrain = terrainTypes.castle, color = "#1600FF" },
+        new Area { edges = new List<int>() {7,8,9}, terrain = terrainTypes.grass, color = "#FF0000" }});
         //CFFF
-        addTileToList(terrainTypes.castle, terrainTypes.grass, terrainTypes.grass, terrainTypes.grass, 0, 0, CFFF, 5, 0, new List<Area>() {new Area{edges = new List<int>() {1,2,3}, terrain = terrainTypes.castle },
-            new Area { edges = new List<int>() {4,5,6,7,8,9,10,11,12}, terrain = terrainTypes.grass } });
+        addTileToList(terrainTypes.castle, terrainTypes.grass, terrainTypes.grass, terrainTypes.grass, 0, 0, CFFF, C_Mask, 5, 0, new List<Area>() {new Area{edges = new List<int>() {1,2,3}, terrain = terrainTypes.castle,color = "#1600FF" },
+            new Area { edges = new List<int>() {4,5,6,7,8,9,10,11,12}, terrain = terrainTypes.grass,color = "#FF0000" } });
 
         /*
         //public Material CRFR; 4 - START

@@ -37,26 +37,26 @@ public class Test : MonoBehaviour
             {
 
                 Texture2D tex = (Texture2D)hit.collider.gameObject.GetComponent<Renderer>().material.mainTexture; // Get texture of object under mouse pointer
-                                                                                                                    if (tex.GetPixelBilinear(hit.textureCoord2.x, hit.textureCoord2.y) == blueColor)
-                                                                                                                     {
-                                                                                                                  
-                                                                                                                                     Debug.Log("Clicked CASTLE !!!!!!!!!!!!!!!");
-                                                                                                                                }
-                                                                                                                    
+                if (tex.GetPixelBilinear(hit.textureCoord2.x, hit.textureCoord2.y) == blueColor)
+                {
 
-                                                                                                                               Debug.Log("Clicked me!");
+                    Debug.Log("Clicked CASTLE !!!!!!!!!!!!!!!");
+                }
+
+
+                Debug.Log("Clicked me!");
 
             }
 
         }
 
     }
-           //     Texture2D tex = (Texture2D)hit.collider.gameObject.GetComponent<Renderer>().material.mainTexture; // Get texture of object under mouse pointer
-            //    if (tex.GetPixelBilinear(hit.textureCoord2.x, hit.textureCoord2.y) == blueColor)
-             //   {
-//
- //                   Debug.Log("Clicked CASTLE !!!!!!!!!!!!!!!");
-  //              }
-   //             Debug.Log("Clicked me!");
-     
+    //     Texture2D tex = (Texture2D)hit.collider.gameObject.GetComponent<Renderer>().material.mainTexture; // Get texture of object under mouse pointer
+    //    if (tex.GetPixelBilinear(hit.textureCoord2.x, hit.textureCoord2.y) == blueColor)
+    //   {
+    //
+    //                   Debug.Log("Clicked CASTLE !!!!!!!!!!!!!!!");
+    //              }
+    //             Debug.Log("Clicked me!");
+
 }

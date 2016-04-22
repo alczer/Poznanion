@@ -4,14 +4,14 @@ using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 
 // Game States
-public enum GameState {MAIN_MENU,ADD_PLAYER_MENU, PAUSED, GAME, CREDITS, HELP }
+public enum GameState { MAIN_MENU, ADD_PLAYER_MENU, PAUSED, GAME, CREDITS, HELP }
 
 public delegate void OnStateChangeHandler();
 
 public class GameManager : MonoBehaviour
 {
     public List<Player> playersList = new List<Player>();
-    public int currentPlayer = 0; 
+    private int currentPlayer = 0;
     protected GameManager() { }
     private static GameManager instance = null;
     public event OnStateChangeHandler OnStateChange;
@@ -49,6 +49,7 @@ public class GameManager : MonoBehaviour
             currentPlayer++;
         }
     }
+
     public void SetGameState(GameState state)
     {
         this.gameState = state;
@@ -63,17 +64,17 @@ public class GameManager : MonoBehaviour
             case GameState.ADD_PLAYER_MENU:
                 SceneManager.LoadScene("addPlayer");
                 break;
-            case GameState.CREDITS:                
+            case GameState.CREDITS:
                 break;
             case GameState.HELP:
                 break;
             case GameState.PAUSED:
                 break;
         }
-               
+
         OnStateChange();
     }
-  
+
     public void OnApplicationQuit()
     {
         GameManager.instance = null;
