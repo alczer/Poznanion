@@ -72,7 +72,21 @@ public class Game : MonoBehaviour
     {
         currentlyPlacingMeeple = true;
         possibleMeeple = TM.possibleMeepleAreas(ref tilesOnBoard, currentlyPlacedTile[0], currentlyPlacedTile[1]);
+        string koordynaty = "Jesteśmy na klocku x: " + currentlyPlacedTile[0] + " y: " + currentlyPlacedTile[1];
+        Debug.Log(koordynaty);
         Debug.Log("--------------------------dla kliknięcia----------------------------------------------");
+        String result1 = "";
+        foreach (var l in tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas)
+        {
+           result1 += String.Join(" ", l.edges.Select(item => item.ToString()).ToArray());
+            result1 += " | ";
+            
+        }
+        Debug.Log("Istniejące obszary:");
+        Debug.Log(result1);
+
+        Debug.Log("--------------------------możliwe:----------------------------------------------");
+
         foreach (var list in possibleMeeple)
         {
 
@@ -139,7 +153,7 @@ public class Game : MonoBehaviour
                     do
                     {
                         i = UnityEngine.Random.Range(0, TM.tilesList.Count);
-                        choosenTile = TM.tilesList[i];
+                        choosenTile.Clone(TM.tilesList[i]); 
                         possiblePositions = TM.findMatchingEdges(TM.findSourrounding(ref tilesOnBoard), choosenTile, ref tilesOnBoard);
                         j++;
                     } while (possiblePositions.Count == 0 && j < 10);
@@ -195,7 +209,8 @@ public class Game : MonoBehaviour
                 do
                 {
                     i = UnityEngine.Random.Range(0, TM.tilesList.Count);
-                    choosenTile = TM.tilesList[i];
+                    choosenTile = new Tile();
+                    choosenTile.Clone(TM.tilesList[i]);
                     possiblePositions = TM.findMatchingEdges(TM.findSourrounding(ref tilesOnBoard), choosenTile, ref tilesOnBoard);
                     j++;
                 } while (possiblePositions.Count == 0 && j < 10);
@@ -310,6 +325,13 @@ public class Game : MonoBehaviour
                                 if (arrayIndex[0] == currentlyPlacedTile[0] && arrayIndex[1] == currentlyPlacedTile[1])
                                 {
                                     TM.rotateFirstMatchingRotation(ref tilesOnBoard[arrayIndex[0], arrayIndex[1]], ref masks[arrayIndex[0], arrayIndex[1]], arrayIndex, ref tilesOnBoard);
+                                    String result3 = "";
+                                    foreach (var l in tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas)
+                                    {
+                                        result3 += String.Join(" ", l.edges.Select(item => item.ToString()).ToArray());
+                                        result3 += " | ";
+                                    }
+                                    Debug.Log(result3);
                                     //rotateClockwise90(ref tilesOnBoard[arrayIndex[0], arrayIndex[1]]);              
                                 }
                             }
@@ -327,30 +349,43 @@ public class Game : MonoBehaviour
                                     Destroy(tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]]);
                                     Destroy(masks[currentlyPlacedTile[0], currentlyPlacedTile[1]]);
                                     tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]] = null;
+                                    masks[currentlyPlacedTile[0], currentlyPlacedTile[1]] = null;
                                 }
                                 OKButton.SetActive(true);
                                 MeepleButton.SetActive(true);
+                                Debug.Log("#################################");
                                 tilesOnBoard[arrayIndex[0], arrayIndex[1]] = Instantiate(objectToinstantiate, position, Quaternion.identity) as GameObject; // instatiate a prefab on the position where the ray hits the floor. 
                                 masks[arrayIndex[0], arrayIndex[1]] = Instantiate(Mask, position, Quaternion.identity) as GameObject;
 
                                 Tile tile = tilesOnBoard[arrayIndex[0], arrayIndex[1]].AddComponent<Tile>();
+                                Debug.Log("choosen tile:");
+                                String result9 = "";
+                                foreach (var l in choosenTile.Areas)
+                                {
+                                    result9 += String.Join(" ", l.edges.Select(item => item.ToString()).ToArray());
+                                    result9 += " | ";
+
+                                }
+                                Debug.Log(result9);
+
+
                                 tile.Init(choosenTile.UpTerrain, choosenTile.RightTerrain, choosenTile.DownTerrain, choosenTile.LeftTerrain, position.x, position.z, choosenTile.Material, choosenTile.Mask, choosenTile.TypeCount, choosenTile.Turn, choosenTile.Areas);
                                 TM.rotateFirstMatchingRotation(ref tilesOnBoard[arrayIndex[0], arrayIndex[1]], ref masks[arrayIndex[0], arrayIndex[1]], arrayIndex, ref tilesOnBoard);
+
+                                String result4 = "";
+                                foreach (var l in tilesOnBoard[arrayIndex[0], arrayIndex[1]].GetComponent<Tile>().Areas)
+                                {
+                                    result4 += String.Join(" ", l.edges.Select(item => item.ToString()).ToArray());
+                                    result4 += " | ";
+
+                                }
+                                Debug.Log(result4);
+
+
                                 tilesOnBoard[arrayIndex[0], arrayIndex[1]].GetComponent<Renderer>().material = choosenTile.Material;
                                 masks[arrayIndex[0], arrayIndex[1]].GetComponent<Renderer>().material = choosenTile.Mask;
                                 currentlyPlacedTile = arrayIndex;
                                 CM.CheckCamera(arrayIndex);
-                                /*
-                                possibleMeeple = TM.possibleMeepleAreas(ref tilesOnBoard, currentlyPlacedTile[0], currentlyPlacedTile[1]);
-                                foreach (var list in possibleMeeple)
-                                {
-
-                                    String result = String.Join(" ", list.edges.Select(item => item.ToString()).ToArray());
-                                    Debug.Log("Możliwy obszar:");
-                                    Debug.Log(result);
-
-                                }
-                                */
 
                             }
                         }

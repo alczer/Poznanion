@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+
 public enum terrainTypes
 {
     grass,
@@ -44,6 +46,40 @@ public class Tile : MonoBehaviour
         this.turn = turn1;
         this.areas = areas1;
     }
+    public void Clone(Tile other)
+    { 
+        
+        this.upTerrain = other.upTerrain;
+        this.rightTerrain = other.rightTerrain;
+        this.downTerrain = other.downTerrain;
+        this.leftTerrain = other.leftTerrain;
+        this.material = other.material;
+        this.mask = other.mask;
+        this.xPosition = other.xPosition;
+        this.yPosition = other.yPosition;
+        
+        //turn = other.turn;
+        List<Area> ar = new List<Area>();
+        for (int k = 0; k < other.Areas.Count; k++)
+        {
+            ar.Add(new Area());
+
+        }
+        for (int h = 0; h < other.Areas.Count; h++)
+        {
+            ar[h].color = other.Areas[h].color;
+            ar[h].terrain = other.Areas[h].terrain;
+            ar[h].edges = new List<int>();
+            for (int y = 0; y < other.Areas[h].edges.Count; y++)
+            {
+                int o = other.Areas[h].edges[y];
+                ar[h].edges.Add(o);
+            }
+        }
+        this.areas = ar;  
+    }
+  
+
     public Material Material // This is your property
     {
         get { return this.material; }

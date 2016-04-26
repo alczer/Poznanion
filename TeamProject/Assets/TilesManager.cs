@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using System.Linq;
 using UnityEngine.UI;
+using System;
 
 public class TilesManager : MonoBehaviour
 {
@@ -80,11 +81,22 @@ public class TilesManager : MonoBehaviour
         List<Area> possibleAreas = new List<Area>();
         //Check which area can hold meeple:
         //For each area on the tile
+        List<AreaTuple> list = new List<AreaTuple>();
+        foreach (var area in board[x, y].GetComponent<Tile>().Areas)
+        {
+            AreaTuple temp;
+            temp.x = x;
+            temp.y = y;
+            temp.area = area;
+            temp.initialized = true;
+            list.Add(temp);
+        }
+
         foreach (var area in board[x, y].GetComponent<Tile>().Areas)
         {
             //Check if we can place meeple in there
             //And add area to the list if we can.
-            if (isMovePossible(ref board, x, y, area, null))
+            if (isMovePossible(ref board, x, y, area, list))
                 possibleAreas.Add(area);
         }
         //Return the list with areas that are ready for meeple.
@@ -95,57 +107,50 @@ public class TilesManager : MonoBehaviour
     {
         AreaTuple neighbour = new AreaTuple();
         neighbour.initialized = false;
-        int[] neighbourCor = new int[2];
-        Hashtable correspondingEdges = new Hashtable();
-        correspondingEdges.Add(1, 5);
-        correspondingEdges.Add(2, 8);
-        correspondingEdges.Add(3, 7);
-        correspondingEdges.Add(4, 12);
-        correspondingEdges.Add(5, 11);
-        correspondingEdges.Add(6, 10);
-        correspondingEdges.Add(7, 3);
-        correspondingEdges.Add(8, 2);
-        correspondingEdges.Add(9, 1);
-        correspondingEdges.Add(10, 6);
-        correspondingEdges.Add(11, 5);
-        correspondingEdges.Add(12, 4);
+        int[] correspondingEdges = new int[13];
+        correspondingEdges[1] = 9;
+        correspondingEdges[2] = 8;
+        correspondingEdges[3] = 7;
+        correspondingEdges[4] = 12;
+        correspondingEdges[5] = 11;
+        correspondingEdges[6] = 10;
+        correspondingEdges[7] = 3;
+        correspondingEdges[8]= 2;
+        correspondingEdges[9] = 1;
+        correspondingEdges[10] = 6;
+        correspondingEdges[11] = 5;
+        correspondingEdges[12] = 4;
+        neighbour.x = x;
+        neighbour.y = y;
         if (edge == 1 || edge == 2 || edge == 3)
         {
-            neighbourCor[0] = x - 1;
-            neighbourCor[1] = y;
+            (neighbour.x)--;
         }
         else if (edge == 4 || edge == 5 || edge == 6)
         {
-            neighbourCor[0] = x;
-            neighbourCor[1] = y + 1;
+            (neighbour.y)++;
         }
         else if (edge == 7 || edge == 8 || edge == 9)
         {
-            neighbourCor[0] = x + 1;
-            neighbourCor[1] = y;
+            (neighbour.x)++;
         }
         else if (edge == 10 || edge == 11 || edge == 12)
         {
-            neighbourCor[0] = x;
-            neighbourCor[1] = y - 1;
+            (neighbour.y)--;
         }
-        if (board[neighbourCor[0], neighbourCor[1]] != null)
+        if (board[neighbour.x, neighbour.y] != null)
         {
-            foreach (var area in board[neighbourCor[0], neighbourCor[1]].GetComponent<Tile>().Areas)
+            foreach (var area in board[neighbour.x, neighbour.y].GetComponent<Tile>().Areas)
             {
-                if (area.edges.Contains(edge))
+                if (area.edges.Contains(correspondingEdges[edge]))
                 {
                     neighbour.area = area;
+                    break;
                 }
-
             }
-            neighbour.x = neighbourCor[0];
-            neighbour.y = neighbourCor[1];
+
             neighbour.initialized = true;
-
         }
-
-
         return neighbour;
     }
 
@@ -158,6 +163,13 @@ public class TilesManager : MonoBehaviour
             if (neighbour.initialized)
                 neighbours.Add(neighbour);
         }
+        foreach (var n in neighbours)
+        {
+            Debug.Log("Klocek sąsiad to : " + n.x + " " + n.y);
+            Debug.Log("Obszar klokcka sąsiada to : " + String.Join(" ", n.area.edges.Select(item => item.ToString()).ToArray()));
+        }
+        Debug.Log("---");
+        //Debug.Log("wielkość listy:"+neighbours.Count);
         return neighbours;
     }
 
@@ -191,20 +203,47 @@ public class TilesManager : MonoBehaviour
         terrainTypes right = gameObject.GetComponent<Tile>().RightTerrain;
         terrainTypes down = gameObject.GetComponent<Tile>().DownTerrain;
         terrainTypes left = gameObject.GetComponent<Tile>().LeftTerrain;
-        foreach (var area in gameObject.GetComponent<Tile>().Areas)
-        {
-            for (int i = 0; i < area.edges.Count; i++)
-            {
-                if (area.edges[i] < 10)
+        /*
+                foreach (var area in gameObject.GetComponent<Tile>().Areas)
                 {
-                    area.edges[i] += 3;
+                    for (int i = 0; i < area.edges.Count; i++)
+                    {
+                        if (area.edges[i] == 0)
+                        {
+                            //skip
+                        }
+                        else if (area.edges[i] < 10)
+                        {
+                            area.edges[i] += 3;
+                        }
+                        else
+                        {
+                            area.edges[i] = area.edges[i] + 3 - 12;
+                        }
+                    }
+                }
+        */
+        for (int j = 0; j < gameObject.GetComponent<Tile>().Areas.Count; j++)
+        {
+            for (int i = 0; i < gameObject.GetComponent<Tile>().Areas[j].edges.Count; i++)
+            {
+                if (gameObject.GetComponent<Tile>().Areas[j].edges[i] == 0)
+                {
+                    //skip
+                }
+                else if (gameObject.GetComponent<Tile>().Areas[j].edges[i] < 10)
+                {
+                    gameObject.GetComponent<Tile>().Areas[j].edges[i] += 3;
                 }
                 else
                 {
-                    area.edges[i] = area.edges[i] + 3 - 12;
+                    gameObject.GetComponent<Tile>().Areas[j].edges[i] = gameObject.GetComponent<Tile>().Areas[j].edges[i] + 3 - 12;
                 }
             }
+
+
         }
+
         gameObject.GetComponent<Tile>().UpTerrain = left;
         gameObject.GetComponent<Tile>().RightTerrain = up;
         gameObject.GetComponent<Tile>().DownTerrain = right;
@@ -220,25 +259,95 @@ public class TilesManager : MonoBehaviour
             && (tilesOnBoard[gameObjectPosition[0] + 1, gameObjectPosition[1]] == null || tilesOnBoard[gameObjectPosition[0] + 1, gameObjectPosition[1]].GetComponent<Tile>().UpTerrain == gameObject.GetComponent<Tile>().RightTerrain)
             && (tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1] - 1] == null || tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1] - 1].GetComponent<Tile>().RightTerrain == gameObject.GetComponent<Tile>().DownTerrain))
         {
+            
+            Debug.Log("%%%%%%%%%%%%%%%%%%%%%");
+            Debug.Log("przed obrotem:");
+            String result5 = "";
+            foreach (var l in tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().Areas)
+            {
+                result5 += String.Join(" ", l.edges.Select(item => item.ToString()).ToArray());
+                result5 += " | ";
+
+            }
+            Debug.Log(result5);
             rotateClockwise90(ref gameObject, ref mask);
+            Debug.Log("turning 1 time!");
+
+            Debug.Log("Po obrocie:");
+
+            String result6 = "";
+            foreach (var l in tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().Areas)
+            {
+                result6 += String.Join(" ", l.edges.Select(item => item.ToString()).ToArray());
+                result6 += " | ";
+
+            }
+            Debug.Log(result6);
+
+            Debug.Log("%%%%%%%%%%%%%%%%%%%%%");
         }
         else if ((tilesOnBoard[gameObjectPosition[0] - 1, gameObjectPosition[1]] == null || tilesOnBoard[gameObjectPosition[0] - 1, gameObjectPosition[1]].GetComponent<Tile>().DownTerrain == gameObject.GetComponent<Tile>().DownTerrain)
             && (tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1] + 1] == null || tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1] + 1].GetComponent<Tile>().LeftTerrain == gameObject.GetComponent<Tile>().LeftTerrain)
             && (tilesOnBoard[gameObjectPosition[0] + 1, gameObjectPosition[1]] == null || tilesOnBoard[gameObjectPosition[0] + 1, gameObjectPosition[1]].GetComponent<Tile>().UpTerrain == gameObject.GetComponent<Tile>().UpTerrain)
             && (tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1] - 1] == null || tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1] - 1].GetComponent<Tile>().RightTerrain == gameObject.GetComponent<Tile>().RightTerrain))
         {
+            Debug.Log("%%%%%%%%%%%%%%%%%%%%%");
+            Debug.Log("przed obrotem:");
+            String result5 = "";
+            foreach (var l in tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().Areas)
+            {
+                result5 += String.Join(" ", l.edges.Select(item => item.ToString()).ToArray());
+                result5 += " | ";
 
+            }
+            Debug.Log(result5);
             rotateClockwise90(ref gameObject, ref mask);
             rotateClockwise90(ref gameObject, ref mask);
+            Debug.Log("turning 2 times!");
+            Debug.Log("Po obrocie:");
+
+            String result6 = "";
+            foreach (var l in tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().Areas)
+            {
+                result6 += String.Join(" ", l.edges.Select(item => item.ToString()).ToArray());
+                result6 += " | ";
+
+            }
+            Debug.Log(result6);
+
+            Debug.Log("%%%%%%%%%%%%%%%%%%%%%");
         }
         else if ((tilesOnBoard[gameObjectPosition[0] - 1, gameObjectPosition[1]] == null || tilesOnBoard[gameObjectPosition[0] - 1, gameObjectPosition[1]].GetComponent<Tile>().DownTerrain == gameObject.GetComponent<Tile>().RightTerrain)
             && (tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1] + 1] == null || tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1] + 1].GetComponent<Tile>().LeftTerrain == gameObject.GetComponent<Tile>().DownTerrain)
             && (tilesOnBoard[gameObjectPosition[0] + 1, gameObjectPosition[1]] == null || tilesOnBoard[gameObjectPosition[0] + 1, gameObjectPosition[1]].GetComponent<Tile>().UpTerrain == gameObject.GetComponent<Tile>().LeftTerrain)
             && (tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1] - 1] == null || tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1] - 1].GetComponent<Tile>().RightTerrain == gameObject.GetComponent<Tile>().UpTerrain))
         {
+            Debug.Log("%%%%%%%%%%%%%%%%%%%%%");
+            Debug.Log("przed obrotem:");
+            String result5 = "";
+            foreach (var l in tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().Areas)
+            {
+                result5 += String.Join(" ", l.edges.Select(item => item.ToString()).ToArray());
+                result5 += " | ";
+
+            }
+            Debug.Log(result5);
             rotateClockwise90(ref gameObject, ref mask);
             rotateClockwise90(ref gameObject, ref mask);
             rotateClockwise90(ref gameObject, ref mask);
+            Debug.Log("turning 3 times!");
+            Debug.Log("Po obrocie:");
+
+            String result6 = "";
+            foreach (var l in tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().Areas)
+            {
+                result6 += String.Join(" ", l.edges.Select(item => item.ToString()).ToArray());
+                result6 += " | ";
+
+            }
+            Debug.Log(result6);
+
+            Debug.Log("%%%%%%%%%%%%%%%%%%%%%");
         }
     }
     public List<int[]> findMatchingEdges(List<int[]> movesList, Tile choosenTile, ref GameObject[,] tilesOnBoard)
