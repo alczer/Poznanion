@@ -17,7 +17,7 @@ public class Area
     public List<int> edges;
     public Player player;
     public terrainTypes terrain;
-    public string color;
+    public int colorIndex;
 };
 public class Tile : MonoBehaviour
 {
@@ -47,8 +47,7 @@ public class Tile : MonoBehaviour
         this.areas = areas1;
     }
     public void Clone(Tile other)
-    { 
-        
+    {         
         this.upTerrain = other.upTerrain;
         this.rightTerrain = other.rightTerrain;
         this.downTerrain = other.downTerrain;
@@ -67,7 +66,7 @@ public class Tile : MonoBehaviour
         }
         for (int h = 0; h < other.Areas.Count; h++)
         {
-            ar[h].color = other.Areas[h].color;
+            ar[h].colorIndex = other.Areas[h].colorIndex;
             ar[h].terrain = other.Areas[h].terrain;
             ar[h].edges = new List<int>();
             for (int y = 0; y < other.Areas[h].edges.Count; y++)

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using System.Linq;
 using System;
+
 public class Test : MonoBehaviour
 {
 
@@ -28,6 +29,10 @@ public class Test : MonoBehaviour
     Color blueColor = hexToColor("0000ff");
     Color greenColor = hexToColor("00ff00");
     Color redColor = hexToColor("ff0000");
+    Color yellow = new Color(1, 1, 0);
+    Color blue = new Color(0, 0, 1);
+    Color green = new Color(0, 1, 0);
+    Color red = new Color(1, 0, 0);
 
     void Update()
     {
