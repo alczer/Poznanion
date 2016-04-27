@@ -13,7 +13,6 @@ public class Game : MonoBehaviour
     GameObject[,] possibleMoves = new GameObject[200, 200];
     int choosenAreaColor = -1;
     GameObject[,] meeples = new GameObject[200, 200];
-
     List<Area> possibleMeeple = new List<Area>();
 
     GameObject gameManager;
@@ -28,11 +27,13 @@ public class Game : MonoBehaviour
     private bool placedMeeple;
     private int[] currentlyPlacedTile;
     private Tile choosenTile;
+
     public GameObject OKButton;
     public GameObject MeepleButton;
     public GameObject Mask;
     public GameObject StandingMeeple;
     public GameObject FarmerMeeple;
+
     private List<GameObject> placedMeepleObject;
     private Area placedMeepleArea;
     private int currentlyPlacedMeeple;
@@ -65,8 +66,6 @@ public class Game : MonoBehaviour
             CM.cameraCheck = false;
         }
         currentlyPlacedMeeple++;
-
-
     }
 
     public void MeepleButtonClicked()
@@ -105,6 +104,7 @@ public class Game : MonoBehaviour
     {
         GM = GameManager.Instance;
     }
+
     void Start()
     {
         currentlyPlacedTile = new int[2];
@@ -122,7 +122,8 @@ public class Game : MonoBehaviour
         currentlyPlacingMeeple = false;
         placedMeeple = false;
         currentlyPlacedMeeple = 0;
-        TM.init();
+
+        TM.init(); // Inicjowanie Tiles
 
     }
 
@@ -228,8 +229,7 @@ public class Game : MonoBehaviour
             {
                 if (TM.tilesList.Count > 0)
                 {
-                    AI();
-                    //przeniosłem na górę do AI
+                    AI(); // Funkcja wyzej tymczasowo
                 }
             }
         }
@@ -270,7 +270,7 @@ public class Game : MonoBehaviour
                 MeepleButton.SetActive(false);
             }
         }
-        else
+        else // USTAWIANIE MEEPLE'A
         {
             myRay = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(myRay, out hit))
@@ -280,34 +280,31 @@ public class Game : MonoBehaviour
                     if (currentlyPlacingMeeple == true)
                     {
                         tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Collider>().enabled = false;
+
                         if (hit.transform.GetComponent<Renderer>().material.mainTexture.name == masks[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Renderer>().material.mainTexture.name)
                         {
-
-
                             Texture2D tex = hit.collider.GetComponent<MeshRenderer>().material.mainTexture as Texture2D;
                             Vector2 pixelUV = hit.textureCoord;
                             float uvX = pixelUV.x * tex.width;
                             float uvY = pixelUV.y * tex.height;
                             Color hitColor = tex.GetPixel((int)uvX, (int)uvY);
                             
-                            Debug.Log(hitColor.r);
-
                             int ColorType = ColorClassify(hitColor.r);
                             Debug.Log(ColorType.ToString() + " - typ koloru");
+                            Debug.Log(hitColor.ToString());
                             
-
-
                             if (possibleMeeple.Any(a => a.colorIndex == ColorType))
                             {
-                                Debug.Log(hitColor.ToString());
                                 if (ColorType == choosenAreaColor)
                                 {
                                     Debug.Log("Usuwam kafelek który już był tutaj!");
 
-
                                     Destroy(meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]]);
+                                    meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]] = null;
+
                                     int element = tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas.FindIndex(a => a.colorIndex == ColorType);
                                     tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas[element].player = null;
+
                                     choosenAreaColor = -1;
                                     placedMeeple = false;
                                 }
@@ -316,8 +313,11 @@ public class Game : MonoBehaviour
                                     if (meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]] != null)
                                     {
                                         Destroy(meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]]);
+                                        meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]] = null;
+
                                         tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas.Find(a => a.colorIndex == ColorType).player = GM.GetCurrentPlayer();
                                         choosenAreaColor = -1;
+                                        
                                         placedMeeple = false;
                                     }
                                     Debug.Log("TAK, tu można postawić meepla!");
@@ -336,16 +336,13 @@ public class Game : MonoBehaviour
                                         meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]].transform.Translate(new Vector3(0, 2, 0));
                                         meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Renderer>().material.color = GM.GetCurrentPlayer().rgbaColor;
                                         tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas.Find(a => a.colorIndex == ColorType).player = GM.GetCurrentPlayer();
-
                                     }
                                 }
                             }
                             else
                             {
                                 Debug.Log("NIE MOŻNA tu postawić meepla!");
-
                             }
-
                         }
                     }
                     else
