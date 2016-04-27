@@ -21,7 +21,4 @@ public class Player{
         this.meeples = 5;
         this.rgbaColor = rgba;
     }
-
-
-
 }

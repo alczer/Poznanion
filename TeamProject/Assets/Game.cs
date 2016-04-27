@@ -27,7 +27,6 @@ public class Game : MonoBehaviour
     private bool placedMeeple;
     private int[] currentlyPlacedTile;
     private Tile choosenTile;
-
     public GameObject OKButton;
     public GameObject MeepleButton;
     public GameObject Mask;
@@ -279,9 +278,9 @@ public class Game : MonoBehaviour
                 {
                     if (currentlyPlacingMeeple == true)
                     {
-                        tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Collider>().enabled = false;
-
-                        if (hit.transform.GetComponent<Renderer>().material.mainTexture.name == masks[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Renderer>().material.mainTexture.name)
+                        tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Collider>().enabled = false;                      
+                        //Debug.Log(hit.transform.GetInstanceID());
+                        if (hit.transform.GetInstanceID() == masks[currentlyPlacedTile[0], currentlyPlacedTile[1]].transform.GetInstanceID())
                         {
                             Texture2D tex = hit.collider.GetComponent<MeshRenderer>().material.mainTexture as Texture2D;
                             Vector2 pixelUV = hit.textureCoord;
@@ -290,8 +289,8 @@ public class Game : MonoBehaviour
                             Color hitColor = tex.GetPixel((int)uvX, (int)uvY);
                             
                             int ColorType = ColorClassify(hitColor.r);
-                            Debug.Log(ColorType.ToString() + " - typ koloru");
-                            Debug.Log(hitColor.ToString());
+                            //Debug.Log(ColorType.ToString() + " - typ koloru");
+                            //Debug.Log(hitColor.ToString());
                             
                             if (possibleMeeple.Any(a => a.colorIndex == ColorType))
                             {
@@ -314,8 +313,11 @@ public class Game : MonoBehaviour
                                     {
                                         Destroy(meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]]);
                                         meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]] = null;
+                                        tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas.ForEach(p => p.player = null);
+                                        tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas.Find(a => a.colorIndex == ColorType).player = new Player(GM.GetCurrentPlayer().name, GM.GetCurrentPlayer().color, GM.GetCurrentPlayer().rgbaColor);
 
-                                        tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas.Find(a => a.colorIndex == ColorType).player = GM.GetCurrentPlayer();
+                                        
+                                       
                                         choosenAreaColor = -1;
                                         
                                         placedMeeple = false;
@@ -328,14 +330,17 @@ public class Game : MonoBehaviour
                                         meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]] = Instantiate(FarmerMeeple, hit.point, Quaternion.identity) as GameObject;
                                         meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]].transform.Rotate(new Vector3(-90, 0, 0));
                                         meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Renderer>().material.color = GM.GetCurrentPlayer().rgbaColor;
-                                        tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas.Find(a => a.colorIndex == ColorType).player = GM.GetCurrentPlayer();
+                                        tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas.Find(a => a.colorIndex == ColorType).player = new Player(GM.GetCurrentPlayer().name, GM.GetCurrentPlayer().color, GM.GetCurrentPlayer().rgbaColor);
+                                           
+                                       
                                     }
                                     else
                                     {
                                         meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]] = Instantiate(StandingMeeple, hit.point, Quaternion.identity) as GameObject;
                                         meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]].transform.Translate(new Vector3(0, 2, 0));
                                         meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Renderer>().material.color = GM.GetCurrentPlayer().rgbaColor;
-                                        tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas.Find(a => a.colorIndex == ColorType).player = GM.GetCurrentPlayer();
+                                        tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas.Find(a => a.colorIndex == ColorType).player = new Player(GM.GetCurrentPlayer().name, GM.GetCurrentPlayer().color, GM.GetCurrentPlayer().rgbaColor);
+                                        
                                     }
                                 }
                             }
