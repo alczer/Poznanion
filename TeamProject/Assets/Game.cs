@@ -313,7 +313,10 @@ public class Game : MonoBehaviour
                                     {
                                         Destroy(meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]]);
                                         meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]] = null;
-                                        tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas.ForEach(p => p.player = null);
+                                        for (int index = 0; index < tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas.Count; index++)
+                                        {
+                                            tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas[index].player = null;
+                                        }
                                         tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas.Find(a => a.colorIndex == ColorType).player = new Player(GM.GetCurrentPlayer().name, GM.GetCurrentPlayer().color, GM.GetCurrentPlayer().rgbaColor);
 
                                         
