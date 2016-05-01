@@ -309,11 +309,14 @@ public class Game : MonoBehaviour
                             //Debug.Log(ColorType.ToString() + " - typ koloru");
                             //Debug.Log(hitColor.ToString());
 
-                            List<int> ed = tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas.Find(a => a.colorIndex == ColorType).edges;
-                                 string resulthahahah = String.Join(" ", ed.Select(item => item.ToString()).ToArray());
-                                Debug.Log("Wykrywam obszar o krawędziach: "+resulthahahah);
                             
-                            
+                            if (tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas.Find(a => a.colorIndex == ColorType) != null)
+                            {
+                                List<int> ed = tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas.Find(a => a.colorIndex == ColorType).edges;
+                                string resulthahahah = String.Join(" ", ed.Select(item => item.ToString()).ToArray());
+                                Debug.Log("Wykrywam obszar o krawędziach: " + resulthahahah);
+
+                            }
                             
                             if (possibleMeeple.Any(a => a.colorIndex == ColorType))
                             {
