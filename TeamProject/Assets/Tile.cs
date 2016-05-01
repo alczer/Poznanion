@@ -31,8 +31,9 @@ public class Tile : MonoBehaviour
     private float yPosition;
     private int typeCount; //how many tiles of this type exist    
     private int turn; //0 = 0 degrees, 1 = 90 degrees, 2 = 180 degrees, 3 = 270 degrees
+    private bool plus;
     private List<Area> areas = new List<Area>();
-    public void Init(terrainTypes up, terrainTypes right, terrainTypes down, terrainTypes left, float x, float y, Material m, Material mask1, int count, int turn1, List<Area> areas1)
+    public void Init(terrainTypes up, terrainTypes right, terrainTypes down, terrainTypes left, float x, float y, Material m, Material mask1, int count, int turn1, bool plus, List<Area> areas1)
     {
         this.upTerrain = up;
         this.rightTerrain = right;
@@ -45,6 +46,7 @@ public class Tile : MonoBehaviour
         this.typeCount = count;
         this.turn = turn1;
         this.areas = areas1;
+        this.plus = plus;
     }
 
     public void Clone(Tile other)
@@ -57,7 +59,8 @@ public class Tile : MonoBehaviour
         this.mask = other.mask;
         this.xPosition = other.xPosition;
         this.yPosition = other.yPosition;
-        
+        this.plus = other.plus;
+
         //turn = other.turn;
         List<Area> ar = new List<Area>();
         for (int k = 0; k < other.Areas.Count; k++)
@@ -117,6 +120,11 @@ public class Tile : MonoBehaviour
     {
         get { return this.turn; }
         set { this.turn = value; }
+    }
+    public bool Plus
+    {
+        get { return this.plus; }
+        set { this.plus = value; }
     }
     public List<Area> Areas
     {
