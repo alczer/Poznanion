@@ -46,6 +46,7 @@ public class Tile : MonoBehaviour
         this.turn = turn1;
         this.areas = areas1;
     }
+
     public void Clone(Tile other)
     {         
         this.upTerrain = other.upTerrain;

@@ -41,6 +41,9 @@ public class Game : MonoBehaviour
     public GameObject objectToinstantiate;
     public int currentNbrTiles;
 
+    int i;
+
+
     public void ButtonClicked()
     {
         currentlyPlacingMeeple = false;
@@ -65,6 +68,14 @@ public class Game : MonoBehaviour
             CM.cameraCheck = false;
         }
         currentlyPlacedMeeple++;
+
+        TM.tilesList[i].TypeCount--;
+        if (TM.tilesList[i].TypeCount == 0)
+        {
+            TM.tilesList.RemoveAt(i);
+        }
+
+
     }
 
     public void MeepleButtonClicked()
@@ -236,7 +247,7 @@ public class Game : MonoBehaviour
         {
             if (TM.tilesList.Count > 0)
             {
-                int i;
+                //int i;
                 int j = 0;
                 List<int[]> possiblePositions;
                 do
@@ -248,11 +259,17 @@ public class Game : MonoBehaviour
                     j++;
                 } while (possiblePositions.Count == 0 && j < 10);
                 NextTileImage.GetComponent<Image>().material = choosenTile.Material;
+
+
+                /*
                 TM.tilesList[i].TypeCount--;
                 if (TM.tilesList[i].TypeCount == 0)
                 {
                     TM.tilesList.RemoveAt(i);
                 }
+                */
+
+
                 currentlyPlacingTile = true;
                 playername.text = GM.GetCurrentPlayer().name;
                 possiblePositions = TM.findMatchingEdges(TM.findSourrounding(ref tilesOnBoard), choosenTile, ref tilesOnBoard);
@@ -291,6 +308,12 @@ public class Game : MonoBehaviour
                             int ColorType = ColorClassify(hitColor.r);
                             //Debug.Log(ColorType.ToString() + " - typ koloru");
                             //Debug.Log(hitColor.ToString());
+
+                            List<int> ed = tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas.Find(a => a.colorIndex == ColorType).edges;
+                                 string resulthahahah = String.Join(" ", ed.Select(item => item.ToString()).ToArray());
+                                Debug.Log("Wykrywam obszar o krawędziach: "+resulthahahah);
+                            
+                            
                             
                             if (possibleMeeple.Any(a => a.colorIndex == ColorType))
                             {
@@ -320,7 +343,7 @@ public class Game : MonoBehaviour
                                         tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas.Find(a => a.colorIndex == ColorType).player = new Player(GM.GetCurrentPlayer().name, GM.GetCurrentPlayer().color, GM.GetCurrentPlayer().rgbaColor);
 
                                         
-                                       
+
                                         choosenAreaColor = -1;
                                         
                                         placedMeeple = false;
@@ -396,10 +419,14 @@ public class Game : MonoBehaviour
                                     Destroy(masks[currentlyPlacedTile[0], currentlyPlacedTile[1]]);
                                     tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]] = null;
                                     masks[currentlyPlacedTile[0], currentlyPlacedTile[1]] = null;
+
+                                    //choosenTile.Clone(TM.tilesList[i]);
                                 }
                                 OKButton.SetActive(true);
                                 MeepleButton.SetActive(true);
                                 Debug.Log("#################################");
+
+                                choosenTile.Clone(TM.tilesList[i]);
                                 tilesOnBoard[arrayIndex[0], arrayIndex[1]] = Instantiate(objectToinstantiate, position, Quaternion.identity) as GameObject; // instatiate a prefab on the position where the ray hits the floor. 
                                 masks[arrayIndex[0], arrayIndex[1]] = Instantiate(Mask, position, Quaternion.identity) as GameObject;
 
@@ -410,7 +437,6 @@ public class Game : MonoBehaviour
                                 {
                                     result9 += String.Join(" ", l.edges.Select(item => item.ToString()).ToArray());
                                     result9 += " | ";
-
                                 }
                                 Debug.Log(result9);
 
