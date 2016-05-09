@@ -49,7 +49,6 @@
      <Compile Include="Assets\CameraManager.cs" />
      <Compile Include="Assets\Game.cs" />
      <Compile Include="Assets\GameManager.cs" />
-     <Compile Include="Assets\MoveCamera.cs" />
      <Compile Include="Assets\Player.cs" />
      <Compile Include="Assets\PlayersManager.cs" />
      <Compile Include="Assets\RaycastCheck.cs" />
