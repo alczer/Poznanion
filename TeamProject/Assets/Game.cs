@@ -84,7 +84,7 @@ public class Game : MonoBehaviour
         possibleMeeple = TM.possibleMeepleAreas(ref tilesOnBoard, currentlyPlacedTile[0], currentlyPlacedTile[1]);
         string koordynaty = "Jesteśmy na klocku x: " + currentlyPlacedTile[0] + " y: " + currentlyPlacedTile[1];
         Debug.Log(koordynaty);
-        Debug.Log("--------------------------dla kliknięcia----------------------------------------------");
+        Debug.Log("--------------------------dla kliknięcia----------------------------------------");
         String result1 = "";
         foreach (var l in tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas)
         {
@@ -105,7 +105,7 @@ public class Game : MonoBehaviour
             Debug.Log(result);
 
         }
-        Debug.Log("-------------------------------------------------------------------------------------");
+        Debug.Log("--------------------------------------------------------------------------------");
 
         MeepleButton.SetActive(false);
     }
@@ -344,9 +344,7 @@ public class Game : MonoBehaviour
                                             tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas[index].player = null;
                                         }
                                         tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas.Find(a => a.colorIndex == ColorType).player = new Player(GM.GetCurrentPlayer().name, GM.GetCurrentPlayer().color, GM.GetCurrentPlayer().rgbaColor);
-
                                         
-
                                         choosenAreaColor = -1;
                                         
                                         placedMeeple = false;
@@ -461,7 +459,6 @@ public class Game : MonoBehaviour
                                 masks[arrayIndex[0], arrayIndex[1]].GetComponent<Renderer>().material = choosenTile.Mask;
                                 currentlyPlacedTile = arrayIndex;
                                 CM.CheckCamera(arrayIndex);
-
                             }
                         }
                     }
