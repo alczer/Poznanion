@@ -72,8 +72,8 @@ public class TilesManager : MonoBehaviour
     }
     public void placeTile(ref GameObject tile, ref GameObject mask, int x, int y, ref GameObject[,] tilesOnBoard, ref GameObject[,] masks)
     {
-        tilesOnBoard[x, y] = Instantiate(tile, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
-        masks[x, y] = Instantiate(mask, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
+        tilesOnBoard[x, y] = Instantiate(tile, new Vector3(0, (float)0.1, 0), Quaternion.identity) as GameObject;
+        masks[x, y] = Instantiate(mask, new Vector3(0, (float)0.1, 0), Quaternion.identity) as GameObject;
     }
 
     public int[] getArrayPosition(float x, float z)

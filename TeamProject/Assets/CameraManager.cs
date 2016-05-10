@@ -38,7 +38,7 @@ public class CameraManager : MonoBehaviour {
 
     // distance
     public float cameraDistanceMax = 90f;
-    public float cameraDistanceMin = 30f;
+    public float cameraDistanceMin = 24f;
 
     // movelimit increase value
     public float moveIncrease = 10f;

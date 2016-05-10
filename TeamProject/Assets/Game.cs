@@ -152,7 +152,7 @@ public class Game : MonoBehaviour
             j++;
         } while (possiblePositions.Count == 0 && j < 10);
 
-        NextTileImage.GetComponent<Image>().material = choosenTile.Material;
+        NextTileImage.GetComponent<Image>().material.mainTexture = choosenTile.Material.mainTexture;
         rolled = UnityEngine.Random.Range(0, possiblePositions.Count);
 
         TM.tilesList[i].TypeCount--;
@@ -174,7 +174,7 @@ public class Game : MonoBehaviour
 
                 if (k == rolled)
                 {
-                    tilesOnBoard[arrPosition[0], arrPosition[1]] = Instantiate(objectToinstantiate, new Vector3(position[0], (float)0.1, position[1]), Quaternion.identity) as GameObject; // instatiate a prefab on the position where the ray hits the floor.                         
+                    tilesOnBoard[arrPosition[0], arrPosition[1]] = Instantiate(objectToinstantiate, new Vector3(position[0], 0, position[1]), Quaternion.identity) as GameObject; // instatiate a prefab on the position where the ray hits the floor.                         
                     Tile tile = tilesOnBoard[arrPosition[0], arrPosition[1]].AddComponent<Tile>();
                     tile.Init(choosenTile.UpTerrain, choosenTile.RightTerrain, choosenTile.DownTerrain, choosenTile.LeftTerrain, position[0], position[1], choosenTile.Material, choosenTile.Mask, choosenTile.TypeCount, choosenTile.Turn, choosenTile.Plus, choosenTile.Areas);
                     masks[arrPosition[0], arrPosition[1]] = Instantiate(Mask, new Vector3(position[0], (float)0.1, position[1]), Quaternion.identity) as GameObject;
@@ -258,7 +258,7 @@ public class Game : MonoBehaviour
                     possiblePositions = TM.findMatchingEdges(TM.findSourrounding(ref tilesOnBoard), choosenTile, ref tilesOnBoard);
                     j++;
                 } while (possiblePositions.Count == 0 && j < 10);
-                NextTileImage.GetComponent<Image>().material = choosenTile.Material;
+                NextTileImage.GetComponent<Image>().material.mainTexture = choosenTile.Material.mainTexture;
 
 
                 /*
@@ -355,6 +355,7 @@ public class Game : MonoBehaviour
                                     if (possibleMeeple.Find(a => a.colorIndex == ColorType).terrain == terrainTypes.grass)
                                     {
                                         meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]] = Instantiate(FarmerMeeple, hit.point, Quaternion.identity) as GameObject;
+                                        meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]].transform.Translate(new Vector3(0, (float)0.44, 0));
                                         meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]].transform.Rotate(new Vector3(-90, 0, 0));
                                         meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Renderer>().material.color = GM.GetCurrentPlayer().rgbaColor;
                                         tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas.Find(a => a.colorIndex == ColorType).player = new Player(GM.GetCurrentPlayer().name, GM.GetCurrentPlayer().color, GM.GetCurrentPlayer().rgbaColor);
@@ -364,7 +365,7 @@ public class Game : MonoBehaviour
                                     else
                                     {
                                         meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]] = Instantiate(StandingMeeple, hit.point, Quaternion.identity) as GameObject;
-                                        meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]].transform.Translate(new Vector3(0, 2, 0));
+                                        meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]].transform.Translate(new Vector3(0, (float)2.13, 0));
                                         meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Renderer>().material.color = GM.GetCurrentPlayer().rgbaColor;
                                         tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas.Find(a => a.colorIndex == ColorType).player = new Player(GM.GetCurrentPlayer().name, GM.GetCurrentPlayer().color, GM.GetCurrentPlayer().rgbaColor);
                                         
