@@ -81,6 +81,15 @@ public class Game : MonoBehaviour
     {
         if (currentlyPlacingMeeple == true)
         {
+            for (int row = 0; row < possibleMoves.GetLength(0); row++)
+            {
+                for (int col = 0; col < possibleMoves.GetLength(1); col++)
+                {
+                    if (possibleMoves[row, col] != null)
+
+                        possibleMoves[row, col].GetComponent<Renderer>().enabled = true;
+                }
+            }
             OKButton.SetActive(false);
             MeepleButton.SetActive(false);
             currentlyPlacingMeeple = false;
@@ -107,6 +116,15 @@ public class Game : MonoBehaviour
         }
         else
         {
+            for (int row = 0; row < possibleMoves.GetLength(0); row++)
+            {
+                for (int col = 0; col < possibleMoves.GetLength(1); col++)
+                {
+                    if (possibleMoves[row, col] != null)
+
+                        possibleMoves[row, col].GetComponent<Renderer>().enabled = false;
+                }
+            }
             currentlyPlacingMeeple = true;
             possibleMeeple = TM.possibleMeepleAreas(ref tilesOnBoard, currentlyPlacedTile[0], currentlyPlacedTile[1]);
             string koordynaty = "Jesteśmy na klocku x: " + currentlyPlacedTile[0] + " y: " + currentlyPlacedTile[1];
@@ -134,8 +152,6 @@ public class Game : MonoBehaviour
             }
             Debug.Log("--------------------------------------------------------------------------------");
         }
-       
-
         //MeepleButton.SetActive(false);
     }
 
