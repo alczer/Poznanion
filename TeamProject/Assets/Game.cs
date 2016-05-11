@@ -75,14 +75,14 @@ public class Game : MonoBehaviour
         {
             TM.tilesList.RemoveAt(i);
         }
-
-
     }
 
     public void MeepleButtonClicked()
     {
         if (currentlyPlacingMeeple == true)
         {
+            OKButton.SetActive(false);
+            MeepleButton.SetActive(false);
             currentlyPlacingMeeple = false;
 
             Destroy(meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]]);
@@ -163,7 +163,6 @@ public class Game : MonoBehaviour
         currentlyPlacedMeeple = 0;
 
         TM.init(); // Inicjowanie Tiles
-
     }
 
     void AI()
