@@ -12,6 +12,7 @@ public class Game : MonoBehaviour
     GameObject[,] masks = new GameObject[200, 200];
     GameObject[,] possibleMoves = new GameObject[200, 200];
     int choosenAreaColor = -1;
+    int ColorType = -1;
     GameObject[,] meeples = new GameObject[200, 200];
     List<Area> possibleMeeple = new List<Area>();
 
@@ -80,34 +81,62 @@ public class Game : MonoBehaviour
 
     public void MeepleButtonClicked()
     {
-        currentlyPlacingMeeple = true;
-        possibleMeeple = TM.possibleMeepleAreas(ref tilesOnBoard, currentlyPlacedTile[0], currentlyPlacedTile[1]);
-        string koordynaty = "Jesteśmy na klocku x: " + currentlyPlacedTile[0] + " y: " + currentlyPlacedTile[1];
-        Debug.Log(koordynaty);
-        Debug.Log("--------------------------dla kliknięcia----------------------------------------");
-        String result1 = "";
-        foreach (var l in tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas)
+        if (currentlyPlacingMeeple == true)
         {
-           result1 += String.Join(" ", l.edges.Select(item => item.ToString()).ToArray());
-            result1 += " | ";
-            
+            currentlyPlacingMeeple = false;
+
+            Destroy(meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]]);
+            meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]] = null;
+            for (int index = 0; index < tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas.Count; index++)
+            {
+                tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas[index].player = null;
+            }
+            tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas.Find(a => a.colorIndex == ColorType).player = new Player(GM.GetCurrentPlayer().name, GM.GetCurrentPlayer().color, GM.GetCurrentPlayer().rgbaColor);
+            choosenAreaColor = -1;
+
+            if (currentlyPlacedTile != null)
+            {
+                Destroy(tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]]);
+                Destroy(masks[currentlyPlacedTile[0], currentlyPlacedTile[1]]);
+                tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]] = null;
+                masks[currentlyPlacedTile[0], currentlyPlacedTile[1]] = null;
+
+                //choosenTile.Clone(TM.tilesList[i]);
+            }
+            placedMeeple = false;
         }
-        Debug.Log("Istniejące obszary:");
-        Debug.Log(result1);
-
-        Debug.Log("--------------------------możliwe:----------------------------------------------");
-
-        foreach (var list in possibleMeeple)
+        else
         {
+            currentlyPlacingMeeple = true;
+            possibleMeeple = TM.possibleMeepleAreas(ref tilesOnBoard, currentlyPlacedTile[0], currentlyPlacedTile[1]);
+            string koordynaty = "Jesteśmy na klocku x: " + currentlyPlacedTile[0] + " y: " + currentlyPlacedTile[1];
+            Debug.Log(koordynaty);
+            Debug.Log("--------------------------dla kliknięcia----------------------------------------");
+            String result1 = "";
+            foreach (var l in tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas)
+            {
+                result1 += String.Join(" ", l.edges.Select(item => item.ToString()).ToArray());
+                result1 += " | ";
 
-            String result = String.Join(" ", list.edges.Select(item => item.ToString()).ToArray());
-            Debug.Log("Możliwy obszar:");
-            Debug.Log(result);
+            }
+            Debug.Log("Istniejące obszary:");
+            Debug.Log(result1);
 
+            Debug.Log("--------------------------możliwe:----------------------------------------------");
+
+            foreach (var list in possibleMeeple)
+            {
+
+                String result = String.Join(" ", list.edges.Select(item => item.ToString()).ToArray());
+                Debug.Log("Możliwy obszar:");
+                Debug.Log(result);
+
+            }
+            Debug.Log("--------------------------------------------------------------------------------");
         }
-        Debug.Log("--------------------------------------------------------------------------------");
+       
 
-        MeepleButton.SetActive(false);
+        //MeepleButton.SetActive(false);
     }
 
     void Awake()
@@ -152,7 +181,7 @@ public class Game : MonoBehaviour
             j++;
         } while (possiblePositions.Count == 0 && j < 10);
 
-        NextTileImage.GetComponent<Image>().material.mainTexture = choosenTile.Material.mainTexture;
+        NextTileImage.GetComponent<Image>().material = choosenTile.Material;
         rolled = UnityEngine.Random.Range(0, possiblePositions.Count);
 
         TM.tilesList[i].TypeCount--;
@@ -258,8 +287,8 @@ public class Game : MonoBehaviour
                     possiblePositions = TM.findMatchingEdges(TM.findSourrounding(ref tilesOnBoard), choosenTile, ref tilesOnBoard);
                     j++;
                 } while (possiblePositions.Count == 0 && j < 10);
-                NextTileImage.GetComponent<Image>().material.mainTexture = choosenTile.Material.mainTexture;
 
+                NextTileImage.GetComponent<Image>().material = choosenTile.Material;
 
                 /*
                 TM.tilesList[i].TypeCount--;
@@ -305,7 +334,7 @@ public class Game : MonoBehaviour
                             float uvY = pixelUV.y * tex.height;
                             Color hitColor = tex.GetPixel((int)uvX, (int)uvY);
                             
-                            int ColorType = ColorClassify(hitColor.r);
+                            ColorType = ColorClassify(hitColor.r);
                             //Debug.Log(ColorType.ToString() + " - typ koloru");
                             //Debug.Log(hitColor.ToString());
 
