@@ -3,38 +3,30 @@ using System.Collections;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Linq;
+using System.Net.Sockets;
+using UnityEngine.UI;
+using System;
+using System.Collections.Generic;
 
 public class NetworkManager : MonoBehaviour {
 
+    public string localIP;
+    public GameObject Testtext;
+    private Text IP;
+
+
 	// Use this for initialization
 	void Start () {
-        Debug.Log(GetLocalIPv4(NetworkInterfaceType.Ethernet).FirstOrDefault());
-    }
-
-    internal static string GetLocalIPv4(NetworkInterfaceType _type)
-    {
-        string output = "";
-        foreach (NetworkInterface item in NetworkInterface.GetAllNetworkInterfaces())
+        using (Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, 0))
         {
-            if (item.NetworkInterfaceType == _type && item.OperationalStatus == OperationalStatus.Up)
-            {
-                IPInterfaceProperties adapterProperties = item.GetIPProperties();
-
-                if (adapterProperties.GatewayAddresses.FirstOrDefault() != null)
-                {
-                    foreach (UnicastIPAddressInformation ip in adapterProperties.UnicastAddresses)
-                    {
-                        if (ip.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
-                        {
-                            output = ip.Address.ToString();
-                        }
-                    }
-                }
-            }
+            socket.Connect("192.168.0.77", 65530);
+            IPEndPoint endPoint = socket.LocalEndPoint as IPEndPoint;
+            localIP = endPoint.Address.ToString();
         }
-
-        return output;
+        Debug.Log(localIP);
+        Testtext.GetComponent<Text>().text = localIP;
     }
+
 
     // Update is called once per frame
     void Update () {

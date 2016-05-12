@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 
 // Game States
-public enum GameState { MAIN_MENU, ADD_PLAYER_MENU, PAUSED, GAME, CREDITS, HELP }
+public enum GameState { MAIN_MENU, ADD_PLAYER_MENU, PAUSED, GAME, LOBBY, LANGAME, CREDITS, HELP }
 
 public delegate void OnStateChangeHandler();
 
@@ -65,6 +65,11 @@ public class GameManager : MonoBehaviour
             case GameState.ADD_PLAYER_MENU:
                 SceneManager.UnloadScene("menu");
                 SceneManager.LoadScene("addPlayer");
+                break;
+            case GameState.LOBBY:
+                SceneManager.LoadScene("lanLobby");
+                break;
+            case GameState.LANGAME:
                 break;
             case GameState.CREDITS:
                 break;

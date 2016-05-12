@@ -100,8 +100,13 @@ public class Game : MonoBehaviour
             {
                 tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas[index].player = null;
             }
-            tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas.Find(a => a.colorIndex == ColorType).player = new Player(GM.GetCurrentPlayer().name, GM.GetCurrentPlayer().color, GM.GetCurrentPlayer().rgbaColor);
-            choosenAreaColor = -1;
+
+            // tutaj trzeba poprawic bo czasem jest null
+            if (choosenAreaColor != -1)
+            {
+                tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas.Find(a => a.colorIndex == ColorType).player = new Player(GM.GetCurrentPlayer().name, GM.GetCurrentPlayer().color, GM.GetCurrentPlayer().rgbaColor);
+                choosenAreaColor = -1;
+            }
 
             if (currentlyPlacedTile != null)
             {

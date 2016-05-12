@@ -132,6 +132,11 @@ public class UIManager : MonoBehaviour
         GM.SetGameState(GameState.MAIN_MENU);
         Debug.Log(GM.gameState);
     }
+    public void GoToLAN()
+    {
+        GM.SetGameState(GameState.LOBBY);
+        Debug.Log(GM.gameState);
+    }
     public void GoToAddPlayerMenu()
     {
         GM.SetGameState(GameState.ADD_PLAYER_MENU);
