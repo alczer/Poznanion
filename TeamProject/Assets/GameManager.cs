@@ -2,6 +2,8 @@
 using System.Collections;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
+using System;
+using System.Linq;
 
 // Game States
 public enum GameState { MAIN_MENU, ADD_PLAYER_MENU, PAUSED, GAME, LOBBY, LANGAME, CREDITS, HELP }
@@ -38,6 +40,29 @@ public class GameManager : MonoBehaviour
     {
         return playersList[currentPlayer];
     }
+
+    public Player GetRedPlayerCopy()
+    {
+        return playersList.Find(a => a.color == PlayerColor.RED);
+    }
+    public Player GetGreenPlayerCopy()
+    {
+        return playersList.Find(a => a.color == PlayerColor.GREEN);
+    }
+    public Player GetBluePlayerCopy()
+    {
+        return playersList.Find(a => a.color == PlayerColor.BLUE);
+    }
+
+    public Player GetYellowPlayerCopy()
+    {
+        return playersList.Find(a => a.color == PlayerColor.YELLOW);
+    }
+
+    public Player GetBlackPlayerCopy()
+    {
+        return playersList.Find(a => a.color == PlayerColor.BLACK);
+    }
     public void NextPlayer()
     {
         if (currentPlayer == playersList.Count - 1)
@@ -49,7 +74,13 @@ public class GameManager : MonoBehaviour
             currentPlayer++;
         }
     }
-
+    public void AddScore(PlayerColor color, int score)
+    {
+        Debug.Log("liczba graczy: " + playersList.Count);
+        Debug.Log("Lista graczy : " + String.Join(" ", playersList.Select(item => item.color.ToString()).ToArray())); //////////////////////
+        Debug.Log("Lista graczy : " + String.Join(" ", playersList.Select(item => item.name.ToString()).ToArray())); //////////////////////
+        playersList.Find(a => a.color == color).ChangeScore(score);
+    }
     public void SetGameState(GameState state)
     {
         this.gameState = state;

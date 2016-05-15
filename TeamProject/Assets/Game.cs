@@ -15,10 +15,15 @@ public class Game : MonoBehaviour
     int ColorType = -1;
     GameObject[,] meeples = new GameObject[200, 200];
     List<Area> possibleMeeple = new List<Area>();
-
+    public Text redPlayerScore;
+    public Text bluePlayerScore;
+    public Text greenPlayerScore;
+    public Text yellowPlayerScore;
+    public Text blackPlayerScore;
     GameObject gameManager;
     public CameraManager CM;
     public TilesManager TM;
+    public PointsCounter PC;
     GameManager GM;
     public GameObject Selected;
     public GameObject NextTileImage;
@@ -42,11 +47,17 @@ public class Game : MonoBehaviour
     public GameObject objectToinstantiate;
     public int currentNbrTiles;
 
+
+
     int i;
 
 
     public void ButtonClicked()
     {
+        Debug.Log("Położono" + currentlyPlacedTile[0] + " " + currentlyPlacedTile[1]);
+        Debug.Log("ZARAZ LICZE PUNKTY");
+        PC.countPointsAfterMove(ref tilesOnBoard, currentlyPlacedTile[0], currentlyPlacedTile[1], ref meeples);
+        Debug.Log("PUNKTY GRACZA:" + GM.GetCurrentPlayer().points);
         currentlyPlacingMeeple = false;
         currentlyPlacingTile = false;
         currentlyPlacedTile = null;
@@ -75,6 +86,12 @@ public class Game : MonoBehaviour
         {
             TM.tilesList.RemoveAt(i);
         }
+
+        redPlayerScore.text = GM.GetRedPlayerCopy().points.ToString();
+        greenPlayerScore.text = GM.GetGreenPlayerCopy().points.ToString();
+        bluePlayerScore.text = GM.GetBluePlayerCopy().points.ToString();
+        yellowPlayerScore.text = GM.GetYellowPlayerCopy().points.ToString();
+        blackPlayerScore.text = GM.GetBlackPlayerCopy().points.ToString();
     }
 
     public void MeepleButtonClicked()
