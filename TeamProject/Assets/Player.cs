@@ -21,4 +21,12 @@ public class Player{
         this.meeples = 5;
         this.rgbaColor = rgba;
     }
+
+    public void ChangeScore(int score)
+    {
+        this.points += score;
+
+    }
+
+
 }

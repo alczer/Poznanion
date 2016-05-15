@@ -1,0 +1,127 @@
+Initialize engine version: 5.3.3f1 (910d71450a97)
+GfxDevice: creating device client; threaded=1
+Direct3D:
+    Version:  Direct3D 11.0 [level 11.0]
+    Renderer: NVIDIA GeForce GTX 970 (ID=0x13c2)
+    Vendor:   NVIDIA
+    VRAM:     3072 MB
+Begin MonoManager ReloadAssembly
+Platform assembly: D:\Projekty\unity\TeamProjectGame\TeamProject\pozn_Data\Managed\UnityEngine.dll (this message is harmless)
+Loading D:\Projekty\unity\TeamProjectGame\TeamProject\pozn_Data\Managed\UnityEngine.dll into Unity Child Domain
+Platform assembly: D:\Projekty\unity\TeamProjectGame\TeamProject\pozn_Data\Managed\Assembly-CSharp-firstpass.dll (this message is harmless)
+Loading D:\Projekty\unity\TeamProjectGame\TeamProject\pozn_Data\Managed\Assembly-CSharp-firstpass.dll into Unity Child Domain
+Platform assembly: D:\Projekty\unity\TeamProjectGame\TeamProject\pozn_Data\Managed\Assembly-CSharp.dll (this message is harmless)
+Loading D:\Projekty\unity\TeamProjectGame\TeamProject\pozn_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
+Platform assembly: D:\Projekty\unity\TeamProjectGame\TeamProject\pozn_Data\Managed\UnityEngine.UI.dll (this message is harmless)
+Loading D:\Projekty\unity\TeamProjectGame\TeamProject\pozn_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
+Platform assembly: D:\Projekty\unity\TeamProjectGame\TeamProject\pozn_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
+Loading D:\Projekty\unity\TeamProjectGame\TeamProject\pozn_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
+- Completed reload, in  0.037 seconds
+Platform assembly: D:\Projekty\unity\TeamProjectGame\TeamProject\pozn_Data\Managed\System.Core.dll (this message is harmless)
+Platform assembly: D:\Projekty\unity\TeamProjectGame\TeamProject\pozn_Data\Managed\System.dll (this message is harmless)
+desktop: 3440x1440 60Hz; virtual: 3440x1440 at 0,0
+<RI> Initializing input.
+<RI> Input initialized.
+<RI> Initialized touch support.
+UnloadTime: 0.425813 ms
+Setting up 2 worker threads for Enlighten.
+  Thread -> id: 1d78 -> priority: 1 
+  Thread -> id: 30ec -> priority: 1 
+Unloading the last scene Assets/menu.unity(build index: 0), is not supported. Please use SceneManager.LoadScene()/EditorSceneManager.OpenScene() to switch to another scene.
+ 
+(Filename:  Line: 127)
+
+CHANGED STATE!
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
+ADD_PLAYER_MENU
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
+Unloading 5 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 3.052658 ms
+
+Unloading 15 unused Assets to reduce memory usage. Loaded Objects now: 391.
+Total: 0.384000 ms (FindLiveObjects: 0.026168 ms CreateObjectMapping: 0.020764 ms MarkObjects: 0.321137 ms  DeleteObjects: 0.015360 ms)
+
+aktywny player
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
+Unloading the last scene Assets/addPlayer.unity(build index: 1), is not supported. Please use SceneManager.LoadScene()/EditorSceneManager.OpenScene() to switch to another scene.
+ 
+(Filename:  Line: 127)
+
+CHANGED STATE!
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
+CHANGED STATE!
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
+GAME
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
+Unloading 5 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 1.383253 ms
+
+Unloading 21 unused Assets to reduce memory usage. Loaded Objects now: 419.
+Total: 1.092551 ms (FindLiveObjects: 0.040960 ms CreateObjectMapping: 0.012800 ms MarkObjects: 1.011484 ms  DeleteObjects: 0.026453 ms)
+
+Położono101 100
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
+ZARAZ LICZE PUNKTY
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
+PUNKTY GRACZA:0
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
+--------------------------możliwe:----------------------------------------------
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
+Położono100 101
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
+ZARAZ LICZE PUNKTY
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
+PUNKTY GRACZA:0
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
+CHANGED STATE!
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
+CHANGED STATE!
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
+CHANGED STATE!
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
+MAIN_MENU
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
+Unloading 3 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 8.880074 ms
+
+Unloading 140 unused Assets to reduce memory usage. Loaded Objects now: 268.
+Total: 0.369493 ms (FindLiveObjects: 0.033564 ms CreateObjectMapping: 0.012515 ms MarkObjects: 0.205653 ms  DeleteObjects: 0.117191 ms)
+
+Quit!
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+

@@ -1,0 +1,295 @@
+Initialize engine version: 5.3.3f1 (910d71450a97)
+GfxDevice: creating device client; threaded=1
+Direct3D:
+    Version:  Direct3D 11.0 [level 11.0]
+    Renderer: NVIDIA GeForce GTX 970 (ID=0x13c2)
+    Vendor:   NVIDIA
+    VRAM:     3072 MB
+Begin MonoManager ReloadAssembly
+Platform assembly: D:\Projekty\unity\TeamProjectGame\TeamProject\carc1_Data\Managed\UnityEngine.dll (this message is harmless)
+Loading D:\Projekty\unity\TeamProjectGame\TeamProject\carc1_Data\Managed\UnityEngine.dll into Unity Child Domain
+Platform assembly: D:\Projekty\unity\TeamProjectGame\TeamProject\carc1_Data\Managed\Assembly-CSharp-firstpass.dll (this message is harmless)
+Loading D:\Projekty\unity\TeamProjectGame\TeamProject\carc1_Data\Managed\Assembly-CSharp-firstpass.dll into Unity Child Domain
+Platform assembly: D:\Projekty\unity\TeamProjectGame\TeamProject\carc1_Data\Managed\Assembly-CSharp.dll (this message is harmless)
+Loading D:\Projekty\unity\TeamProjectGame\TeamProject\carc1_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
+Platform assembly: D:\Projekty\unity\TeamProjectGame\TeamProject\carc1_Data\Managed\UnityEngine.UI.dll (this message is harmless)
+Loading D:\Projekty\unity\TeamProjectGame\TeamProject\carc1_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
+Platform assembly: D:\Projekty\unity\TeamProjectGame\TeamProject\carc1_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
+Loading D:\Projekty\unity\TeamProjectGame\TeamProject\carc1_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
+Platform assembly: D:\Projekty\unity\TeamProjectGame\TeamProject\carc1_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
+Loading D:\Projekty\unity\TeamProjectGame\TeamProject\carc1_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
+Platform assembly: D:\Projekty\unity\TeamProjectGame\TeamProject\carc1_Data\Managed\UnityEngine.UI.dll (this message is harmless)
+Loading D:\Projekty\unity\TeamProjectGame\TeamProject\carc1_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
+- Completed reload, in  0.044 seconds
+Platform assembly: D:\Projekty\unity\TeamProjectGame\TeamProject\carc1_Data\Managed\System.Core.dll (this message is harmless)
+Platform assembly: D:\Projekty\unity\TeamProjectGame\TeamProject\carc1_Data\Managed\System.dll (this message is harmless)
+desktop: 3440x1440 60Hz; virtual: 3440x1440 at 0,0
+<RI> Initializing input.
+<RI> Input initialized.
+<RI> Initialized touch support.
+UnloadTime: 0.501190 ms
+Setting up 2 worker threads for Enlighten.
+  Thread -> id: 2600 -> priority: 1 
+  Thread -> id: 1ac4 -> priority: 1 
+Unloading the last scene Assets/menu.unity(build index: 0), is not supported. Please use SceneManager.LoadScene()/EditorSceneManager.OpenScene() to switch to another scene.
+ 
+(Filename:  Line: 127)
+
+CHANGED STATE!
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
+ADD_PLAYER_MENU
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
+Unloading 5 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 3.329988 ms
+
+Unloading 17 unused Assets to reduce memory usage. Loaded Objects now: 390.
+Total: 0.378026 ms (FindLiveObjects: 0.023893 ms CreateObjectMapping: 0.013937 ms MarkObjects: 0.319146 ms  DeleteObjects: 0.020479 ms)
+
+aktywny player
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
+aktywny player
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
+aktywny player
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
+aktywny player
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
+Unloading the last scene Assets/addPlayer.unity(build index: 1), is not supported. Please use SceneManager.LoadScene()/EditorSceneManager.OpenScene() to switch to another scene.
+ 
+(Filename:  Line: 127)
+
+CHANGED STATE!
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
+CHANGED STATE!
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
+GAME
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
+Unloading 5 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 1.438149 ms
+
+Unloading 22 unused Assets to reduce memory usage. Loaded Objects now: 417.
+Total: 0.988443 ms (FindLiveObjects: 0.032426 ms CreateObjectMapping: 0.013368 ms MarkObjects: 0.915625 ms  DeleteObjects: 0.026168 ms)
+
+DPI =96
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
+DPI =96
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
+#################################
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
+choosen tile:
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
+0 1 2 3 4 5 6 7 8 9 10 11 12 | 
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
+%%%%%%%%%%%%%%%%%%%%%
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
+przed obrotem:
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
+0 1 2 3 4 5 6 7 8 9 10 11 12 | 
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
+UP: castle RIGH: castle DOWN: castle LEFT: castle
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
+turning 1 time!
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
+Po obrocie:
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
+0 4 5 6 7 8 9 10 11 12 1 2 3 | 
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
+UP: castle RIGH: castle DOWN: castle LEFT: castle
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
+%%%%%%%%%%%%%%%%%%%%%
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
+0 4 5 6 7 8 9 10 11 12 1 2 3 | 
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
+%%%%%%%%%%%%%%%%%%%%%
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
+przed obrotem:
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
+0 4 5 6 7 8 9 10 11 12 1 2 3 | 
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
+UP: castle RIGH: castle DOWN: castle LEFT: castle
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
+turning 1 time!
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
+Po obrocie:
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
+0 7 8 9 10 11 12 1 2 3 4 5 6 | 
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
+UP: castle RIGH: castle DOWN: castle LEFT: castle
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
+%%%%%%%%%%%%%%%%%%%%%
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
+0 7 8 9 10 11 12 1 2 3 4 5 6 | 
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
+%%%%%%%%%%%%%%%%%%%%%
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
+przed obrotem:
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
+0 7 8 9 10 11 12 1 2 3 4 5 6 | 
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
+UP: castle RIGH: castle DOWN: castle LEFT: castle
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
+turning 1 time!
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
+Po obrocie:
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
+0 10 11 12 1 2 3 4 5 6 7 8 9 | 
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
+UP: castle RIGH: castle DOWN: castle LEFT: castle
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
+%%%%%%%%%%%%%%%%%%%%%
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
+0 10 11 12 1 2 3 4 5 6 7 8 9 | 
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
+%%%%%%%%%%%%%%%%%%%%%
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
+przed obrotem:
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
+0 10 11 12 1 2 3 4 5 6 7 8 9 | 
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
+UP: castle RIGH: castle DOWN: castle LEFT: castle
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
+turning 1 time!
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
+Po obrocie:
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
+0 1 2 3 4 5 6 7 8 9 10 11 12 | 
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
+UP: castle RIGH: castle DOWN: castle LEFT: castle
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
+%%%%%%%%%%%%%%%%%%%%%
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
+0 1 2 3 4 5 6 7 8 9 10 11 12 | 
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
+CHANGED STATE!
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
+CHANGED STATE!
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
+CHANGED STATE!
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
+MAIN_MENU
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+
+Unloading 3 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 0.532195 ms
+
+Unloading 139 unused Assets to reduce memory usage. Loaded Objects now: 255.
+Total: 1.314416 ms (FindLiveObjects: 0.040959 ms CreateObjectMapping: 0.033848 ms MarkObjects: 0.262826 ms  DeleteObjects: 0.975074 ms)
+
+Quit!
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 37)
+

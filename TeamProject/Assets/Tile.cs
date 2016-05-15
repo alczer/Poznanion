@@ -31,7 +31,7 @@ public class Tile : MonoBehaviour
     private float yPosition;
     private int typeCount; //how many tiles of this type exist    
     private int turn; //0 = 0 degrees, 1 = 90 degrees, 2 = 180 degrees, 3 = 270 degrees
-    private bool plus;
+    private bool plus; //should be in AREA not here!!
     private List<Area> areas = new List<Area>();
     public void Init(terrainTypes up, terrainTypes right, terrainTypes down, terrainTypes left, float x, float y, Material m, Material mask1, int count, int turn1, bool plus, List<Area> areas1)
     {

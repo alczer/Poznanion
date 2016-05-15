@@ -81,7 +81,7 @@ public class CameraManager : MonoBehaviour {
     //
     void Start()
     {
-        Debug.Log("DPI =" + Screen.dpi);
+        //Debug.Log("DPI =" + Screen.dpi);
         
         //check if our current system info equals a desktop
         if (SystemInfo.deviceType == DeviceType.Desktop)

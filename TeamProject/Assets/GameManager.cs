@@ -49,7 +49,10 @@ public class GameManager : MonoBehaviour
             currentPlayer++;
         }
     }
-
+    public void AddScore(PlayerColor color, int score)
+    {
+        playersList.Find(a => a.color == color).ChangeScore(score);
+    }
     public void SetGameState(GameState state)
     {
         this.gameState = state;

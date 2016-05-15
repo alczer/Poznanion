@@ -180,10 +180,10 @@ public class TilesManager : MonoBehaviour
         }
         foreach (var n in neighbours)
         {
-            Debug.Log("Klocek sąsiad to : " + n.x + " " + n.y);
-            Debug.Log("Obszar klokcka sąsiada to : " + String.Join(" ", n.area.edges.Select(item => item.ToString()).ToArray()));
+            //Debug.Log("Klocek sąsiad to : " + n.x + " " + n.y);
+           // Debug.Log("Obszar klokcka sąsiada to : " + String.Join(" ", n.area.edges.Select(item => item.ToString()).ToArray()));
         }
-        Debug.Log("---");
+        //Debug.Log("---");
         //Debug.Log("wielkość listy:"+neighbours.Count);
         return neighbours;
     }
@@ -275,8 +275,8 @@ public class TilesManager : MonoBehaviour
             && (tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1] - 1] == null || tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1] - 1].GetComponent<Tile>().RightTerrain == gameObject.GetComponent<Tile>().DownTerrain))
         {
 
-            Debug.Log("%%%%%%%%%%%%%%%%%%%%%");
-            Debug.Log("przed obrotem:");
+            //Debug.Log("%%%%%%%%%%%%%%%%%%%%%");
+           // Debug.Log("przed obrotem:");
             String result5 = "";
             foreach (var l in tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().Areas)
             {
@@ -284,17 +284,17 @@ public class TilesManager : MonoBehaviour
                 result5 += " | ";
 
             }
-            Debug.Log(result5);
-            Debug.Log("UP: "+tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().UpTerrain.ToString() +
-            " RIGH: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().RightTerrain.ToString() +
-            " DOWN: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().DownTerrain.ToString() +
-            " LEFT: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().LeftTerrain.ToString());
+           // Debug.Log(result5);
+          //  Debug.Log("UP: "+tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().UpTerrain.ToString() +
+          //  " RIGH: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().RightTerrain.ToString() +
+          //  " DOWN: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().DownTerrain.ToString() +
+          //  " LEFT: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().LeftTerrain.ToString());
 
 
             rotateClockwise90(ref gameObject, ref mask);
-            Debug.Log("turning 1 time!");
+          //  Debug.Log("turning 1 time!");
 
-            Debug.Log("Po obrocie:");
+          //  Debug.Log("Po obrocie:");
 
             String result6 = "";
             foreach (var l in tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().Areas)
@@ -303,20 +303,20 @@ public class TilesManager : MonoBehaviour
                 result6 += " | ";
 
             }
-            Debug.Log(result6);
-            Debug.Log("UP: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().UpTerrain.ToString() +
-           " RIGH: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().RightTerrain.ToString() +
-           " DOWN: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().DownTerrain.ToString() +
-           " LEFT: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().LeftTerrain.ToString());
-            Debug.Log("%%%%%%%%%%%%%%%%%%%%%");
+           // Debug.Log(result6);
+          //  Debug.Log("UP: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().UpTerrain.ToString() +
+         //  " RIGH: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().RightTerrain.ToString() +
+         //  " DOWN: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().DownTerrain.ToString() +
+         //  " LEFT: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().LeftTerrain.ToString());
+          //  Debug.Log("%%%%%%%%%%%%%%%%%%%%%");
         }
         else if ((tilesOnBoard[gameObjectPosition[0] - 1, gameObjectPosition[1]] == null || tilesOnBoard[gameObjectPosition[0] - 1, gameObjectPosition[1]].GetComponent<Tile>().DownTerrain == gameObject.GetComponent<Tile>().DownTerrain)
             && (tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1] + 1] == null || tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1] + 1].GetComponent<Tile>().LeftTerrain == gameObject.GetComponent<Tile>().LeftTerrain)
             && (tilesOnBoard[gameObjectPosition[0] + 1, gameObjectPosition[1]] == null || tilesOnBoard[gameObjectPosition[0] + 1, gameObjectPosition[1]].GetComponent<Tile>().UpTerrain == gameObject.GetComponent<Tile>().UpTerrain)
             && (tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1] - 1] == null || tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1] - 1].GetComponent<Tile>().RightTerrain == gameObject.GetComponent<Tile>().RightTerrain))
         {
-            Debug.Log("%%%%%%%%%%%%%%%%%%%%%");
-            Debug.Log("przed obrotem:");
+         //   Debug.Log("%%%%%%%%%%%%%%%%%%%%%");
+         //   Debug.Log("przed obrotem:");
             String result5 = "";
             foreach (var l in tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().Areas)
             {
@@ -324,15 +324,15 @@ public class TilesManager : MonoBehaviour
                 result5 += " | ";
 
             }
-            Debug.Log(result5);
-            Debug.Log("UP: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().UpTerrain.ToString() +
-           " RIGH: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().RightTerrain.ToString() +
-           " DOWN: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().DownTerrain.ToString() +
-           " LEFT: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().LeftTerrain.ToString());
+           // Debug.Log(result5);
+          //  Debug.Log("UP: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().UpTerrain.ToString() +
+          // " RIGH: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().RightTerrain.ToString() +
+          // " DOWN: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().DownTerrain.ToString() +
+          // " LEFT: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().LeftTerrain.ToString());
             rotateClockwise90(ref gameObject, ref mask);
             rotateClockwise90(ref gameObject, ref mask);
-            Debug.Log("turning 2 times!");
-            Debug.Log("Po obrocie:");
+           // Debug.Log("turning 2 times!");
+           // Debug.Log("Po obrocie:");
 
             String result6 = "";
             foreach (var l in tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().Areas)
@@ -341,20 +341,20 @@ public class TilesManager : MonoBehaviour
                 result6 += " | ";
 
             }
-            Debug.Log(result6);
-            Debug.Log("UP: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().UpTerrain.ToString() +
-           " RIGH: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().RightTerrain.ToString() +
-           " DOWN: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().DownTerrain.ToString() +
-           " LEFT: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().LeftTerrain.ToString());
-            Debug.Log("%%%%%%%%%%%%%%%%%%%%%");
+          //  Debug.Log(result6);
+         //   Debug.Log("UP: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().UpTerrain.ToString() +
+         //  " RIGH: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().RightTerrain.ToString() +
+         //  " DOWN: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().DownTerrain.ToString() +
+         //  " LEFT: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().LeftTerrain.ToString());
+          //  Debug.Log("%%%%%%%%%%%%%%%%%%%%%");
         }
         else if ((tilesOnBoard[gameObjectPosition[0] - 1, gameObjectPosition[1]] == null || tilesOnBoard[gameObjectPosition[0] - 1, gameObjectPosition[1]].GetComponent<Tile>().DownTerrain == gameObject.GetComponent<Tile>().RightTerrain)
             && (tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1] + 1] == null || tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1] + 1].GetComponent<Tile>().LeftTerrain == gameObject.GetComponent<Tile>().DownTerrain)
             && (tilesOnBoard[gameObjectPosition[0] + 1, gameObjectPosition[1]] == null || tilesOnBoard[gameObjectPosition[0] + 1, gameObjectPosition[1]].GetComponent<Tile>().UpTerrain == gameObject.GetComponent<Tile>().LeftTerrain)
             && (tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1] - 1] == null || tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1] - 1].GetComponent<Tile>().RightTerrain == gameObject.GetComponent<Tile>().UpTerrain))
         {
-            Debug.Log("%%%%%%%%%%%%%%%%%%%%%");
-            Debug.Log("przed obrotem:");
+           // Debug.Log("%%%%%%%%%%%%%%%%%%%%%");
+           // Debug.Log("przed obrotem:");
             String result5 = "";
             foreach (var l in tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().Areas)
             {
@@ -362,16 +362,16 @@ public class TilesManager : MonoBehaviour
                 result5 += " | ";
 
             }
-            Debug.Log(result5);
-            Debug.Log("UP: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().UpTerrain.ToString() +
-           " RIGH: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().RightTerrain.ToString() +
-           " DOWN: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().DownTerrain.ToString() +
-           " LEFT: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().LeftTerrain.ToString());
+          //  Debug.Log(result5);
+           // Debug.Log("UP: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().UpTerrain.ToString() +
+         //  " RIGH: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().RightTerrain.ToString() +
+         //  " DOWN: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().DownTerrain.ToString() +
+         //  " LEFT: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().LeftTerrain.ToString());
             rotateClockwise90(ref gameObject, ref mask);
             rotateClockwise90(ref gameObject, ref mask);
             rotateClockwise90(ref gameObject, ref mask);
-            Debug.Log("turning 3 times!");
-            Debug.Log("Po obrocie:");
+         //   Debug.Log("turning 3 times!");
+         //   Debug.Log("Po obrocie:");
 
             String result6 = "";
             foreach (var l in tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().Areas)
@@ -380,12 +380,12 @@ public class TilesManager : MonoBehaviour
                 result6 += " | ";
 
             }
-            Debug.Log(result6);
-            Debug.Log("UP: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().UpTerrain.ToString() +
-           " RIGH: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().RightTerrain.ToString() +
-           " DOWN: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().DownTerrain.ToString() +
-           " LEFT: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().LeftTerrain.ToString());
-            Debug.Log("%%%%%%%%%%%%%%%%%%%%%");
+       //     Debug.Log(result6);
+        //    Debug.Log("UP: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().UpTerrain.ToString() +
+        //   " RIGH: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().RightTerrain.ToString() +
+        //   " DOWN: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().DownTerrain.ToString() +
+       //    " LEFT: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().LeftTerrain.ToString());
+         //   Debug.Log("%%%%%%%%%%%%%%%%%%%%%");
         }
     }
     public List<int[]> findMatchingEdges(List<int[]> movesList, Tile choosenTile, ref GameObject[,] tilesOnBoard)
@@ -464,6 +464,142 @@ public class TilesManager : MonoBehaviour
     }
     public void init()
     {
+        //CRFR
+        addTileToList(terrainTypes.castle, terrainTypes.road, terrainTypes.grass, terrainTypes.road, 0, 0, CRFR, CRFR_Mask, 3, 0, false, new List<Area>() {
+            new Area { edges = new List<int>() {1,2,3} ,terrain = terrainTypes.castle, colorIndex = 1},
+            new Area { edges = new List<int>() {4,12}, terrain = terrainTypes.grass, colorIndex = 2},
+            new Area { edges = new List<int>() {5,11}, terrain = terrainTypes.road, colorIndex = 3},
+            new Area { edges = new List<int>() {6,7,8,9,10}, terrain = terrainTypes.grass, colorIndex = 4}});
+        //CFFF
+        addTileToList(terrainTypes.castle, terrainTypes.grass, terrainTypes.grass, terrainTypes.grass, 0, 0, CFFF, CFFF_Mask, 5, 0, false, new List<Area>() {
+            new Area { edges = new List<int>() {1,2,3}, terrain = terrainTypes.castle, colorIndex = 1},
+            new Area { edges = new List<int>() {4,5,6,7,8,9,10,11,12}, terrain = terrainTypes.grass, colorIndex = 2}});
+        //CFFC
+        addTileToList(terrainTypes.castle, terrainTypes.grass, terrainTypes.grass, terrainTypes.castle, 0, 0, CFFC, CFFC_Mask, 3, 0, false, new List<Area>() {
+            new Area { edges = new List<int>() {1,2,3,10,11,12}, terrain = terrainTypes.castle, colorIndex = 1},
+            new Area { edges = new List<int>() {4,5,6,7,8,9}, terrain = terrainTypes.grass, colorIndex = 2}});
+        //CFFC_2
+        addTileToList(terrainTypes.castle, terrainTypes.grass, terrainTypes.grass, terrainTypes.castle, 0, 0, CFFC_2, CFFC_2_Mask, 2, 0, false, new List<Area>() {
+            new Area { edges = new List<int>() {1,2,3}, terrain = terrainTypes.castle, colorIndex = 1},
+            new Area { edges = new List<int>() {4,5,6,7,8,9}, terrain = terrainTypes.grass, colorIndex = 2},
+            new Area { edges = new List<int>() {10,11,12}, terrain = terrainTypes.castle, colorIndex = 3}});
+        //CFFC_P
+        addTileToList(terrainTypes.castle, terrainTypes.grass, terrainTypes.grass, terrainTypes.castle, 0, 0, CFFC_P, CFFC_Mask, 2, 0, true, new List<Area>() {
+            new Area { edges = new List<int>() {1,2,3,10,11,12}, terrain = terrainTypes.castle, colorIndex = 1},
+            new Area { edges = new List<int>() {4,5,6,7,8,9}, terrain = terrainTypes.grass, colorIndex = 2}});
+        //CCFC
+        addTileToList(terrainTypes.castle, terrainTypes.castle, terrainTypes.grass, terrainTypes.castle, 0, 0, CCFC, CCFC_Mask, 3, 0, false, new List<Area>() {
+            new Area { edges = new List<int>() {1,2,3,4,5,6,10,11,12}, terrain = terrainTypes.castle, colorIndex = 1},
+            new Area { edges = new List<int>() {7,8,9}, terrain = terrainTypes.grass, colorIndex = 2}});
+        //CCFC_P
+        addTileToList(terrainTypes.castle, terrainTypes.castle, terrainTypes.grass, terrainTypes.castle, 0, 0, CCFC_P, CCFC_Mask, 1, 0, true, new List<Area>() {
+            new Area { edges = new List<int>() { 1, 2, 3, 4, 5, 6, 10, 11, 12 }, terrain = terrainTypes.castle, colorIndex = 1},
+            new Area { edges = new List<int>() {7,8,9}, terrain = terrainTypes.grass, colorIndex = 2}});
+        //CCRC
+        addTileToList(terrainTypes.castle, terrainTypes.castle, terrainTypes.road, terrainTypes.castle, 0, 0, CCRC, CCRC_Mask, 1, 0, false, new List<Area>() {
+            new Area { edges = new List<int>() {1,2,3,4,5,6,10,11,12}, terrain = terrainTypes.castle, colorIndex = 1},
+            new Area { edges = new List<int>() {7}, terrain = terrainTypes.grass, colorIndex = 2},
+            new Area { edges = new List<int>() {8}, terrain = terrainTypes.road, colorIndex = 3},
+            new Area { edges = new List<int>() {9}, terrain = terrainTypes.grass, colorIndex = 4}});
+        //CCRC_P
+        addTileToList(terrainTypes.castle, terrainTypes.castle, terrainTypes.road, terrainTypes.castle, 0, 0, CCRC_P, CCRC_Mask, 2, 0, true, new List<Area>() {
+            new Area { edges = new List<int>() {1,2,3,4,5,6,10,11,12}, terrain = terrainTypes.castle, colorIndex = 1},
+            new Area { edges = new List<int>() {7}, terrain = terrainTypes.grass, colorIndex = 2},
+            new Area { edges = new List<int>() {8}, terrain = terrainTypes.road, colorIndex = 3},
+            new Area { edges = new List<int>() {9}, terrain = terrainTypes.grass, colorIndex = 4}});
+        //CCCC_P
+        addTileToList(terrainTypes.castle, terrainTypes.castle, terrainTypes.castle, terrainTypes.castle, 0, 0, CCCC_P, CCCC_Mask, 1, 0, true, new List<Area>() {
+            new Area { edges = new List<int>() {1,2,3,4,5,6,7,8,9,10,11,12}, terrain = terrainTypes.castle, colorIndex = 1}});
+        //CRRC
+        addTileToList(terrainTypes.castle, terrainTypes.road, terrainTypes.road, terrainTypes.castle, 0, 0, CRRC, CRRC_Mask, 3, 0, false, new List<Area>() {
+            new Area { edges = new List<int>() {1,2,3,10,11,12}, terrain = terrainTypes.castle, colorIndex = 1},
+            new Area { edges = new List<int>() {4,9}, terrain = terrainTypes.grass, colorIndex = 2},
+            new Area { edges = new List<int>() {5,8}, terrain = terrainTypes.road, colorIndex = 3},
+            new Area { edges = new List<int>() {7,6}, terrain = terrainTypes.grass, colorIndex = 4}});
+        //CRRC_P
+        addTileToList(terrainTypes.castle, terrainTypes.road, terrainTypes.road, terrainTypes.castle, 0, 0, CRRC_P, CRRC_Mask, 2, 0, true, new List<Area>() {
+            new Area { edges = new List<int>() {1,2,3,10,11,12}, terrain = terrainTypes.castle, colorIndex = 1},
+            new Area { edges = new List<int>() {4,9}, terrain = terrainTypes.grass, colorIndex = 2},
+            new Area { edges = new List<int>() {5,8}, terrain = terrainTypes.road, colorIndex = 3},
+            new Area { edges = new List<int>() {7,6}, terrain = terrainTypes.grass, colorIndex = 4}});
+        //FCFC
+        addTileToList(terrainTypes.grass, terrainTypes.castle, terrainTypes.grass, terrainTypes.castle, 0, 0, FCFC, FCFC_Mask, 1, 0, false, new List<Area>() {
+            new Area { edges = new List<int>() {1,2,3}, terrain = terrainTypes.grass, colorIndex = 1},
+            new Area { edges = new List<int>() {4,5,6,10,11,12}, terrain = terrainTypes.castle, colorIndex = 2},
+            new Area { edges = new List<int>() {7,8,9}, terrain = terrainTypes.grass, colorIndex = 3}});
+        //FCFC_P
+        addTileToList(terrainTypes.grass, terrainTypes.castle, terrainTypes.grass, terrainTypes.castle, 0, 0, FCFC_P, FCFC_Mask, 2, 0, true, new List<Area>() {
+            new Area { edges = new List<int>() {1,2,3}, terrain = terrainTypes.grass, colorIndex = 1},
+            new Area { edges = new List<int>() {4,5,6,10,11,12}, terrain = terrainTypes.castle, colorIndex = 2},
+            new Area { edges = new List<int>() {7,8,9}, terrain = terrainTypes.grass, colorIndex = 3}});
+        //CFCF_2
+        addTileToList(terrainTypes.castle, terrainTypes.grass, terrainTypes.castle, terrainTypes.grass, 0, 0, CFCF_2, CFCF_2_Mask, 3, 0, false, new List<Area>() {
+            new Area { edges = new List<int>() {1,2,3}, terrain = terrainTypes.castle, colorIndex = 1},
+            new Area { edges = new List<int>() {4,5,6,10,11,12}, terrain = terrainTypes.grass, colorIndex = 2},
+            new Area { edges = new List<int>() {7,8,9}, terrain = terrainTypes.castle, colorIndex = 3}});
+        //CRRF
+        addTileToList(terrainTypes.castle, terrainTypes.road, terrainTypes.road, terrainTypes.grass, 0, 0, CRRF, CRRF_Mask, 3, 0, false, new List<Area>() {
+            new Area { edges = new List<int>() {1,2,3}, terrain = terrainTypes.castle, colorIndex = 1},
+            new Area { edges = new List<int>() {4,9,10,11,12}, terrain = terrainTypes.grass, colorIndex = 2},
+            new Area { edges = new List<int>() {5,8}, terrain = terrainTypes.road, colorIndex = 3},
+            new Area { edges = new List<int>() {7,6}, terrain = terrainTypes.grass, colorIndex = 4}});
+        //CFRR
+        addTileToList(terrainTypes.castle, terrainTypes.grass, terrainTypes.road, terrainTypes.road, 0, 0, CFRR, CFRR_Mask, 3, 0, false, new List<Area>() {
+            new Area { edges = new List<int>() {1,2,3}, terrain = terrainTypes.castle, colorIndex = 1},
+            new Area { edges = new List<int>() {4,5,6,7,12}, terrain = terrainTypes.grass, colorIndex = 2},
+            new Area { edges = new List<int>() {8,11}, terrain = terrainTypes.road, colorIndex = 3},
+            new Area { edges = new List<int>() {9,10}, terrain = terrainTypes.grass, colorIndex = 4}});
+        //CRRR
+        addTileToList(terrainTypes.castle, terrainTypes.road, terrainTypes.road, terrainTypes.road, 0, 0, CRRR, CRRR_Mask, 3, 0, false, new List<Area>() {
+            new Area { edges = new List<int>() {1,2,3}, terrain = terrainTypes.castle, colorIndex = 1},
+            new Area { edges = new List<int>() {4,12}, terrain = terrainTypes.grass, colorIndex = 2},
+            new Area { edges = new List<int>() {5}, terrain = terrainTypes.road, colorIndex = 3},
+            new Area { edges = new List<int>() {7,6}, terrain = terrainTypes.grass, colorIndex = 4},
+            new Area { edges = new List<int>() {8}, terrain = terrainTypes.road, colorIndex = 5},
+            new Area { edges = new List<int>() {9,10}, terrain = terrainTypes.grass, colorIndex = 6},
+            new Area { edges = new List<int>() {11}, terrain = terrainTypes.road, colorIndex = 7},
+            new Area { edges = new List<int>() {0}, terrain = terrainTypes.intersection, colorIndex = -1}});
+        //FRFR
+        addTileToList(terrainTypes.grass, terrainTypes.road, terrainTypes.grass, terrainTypes.road, 0, 0, FRFR, FRFR_Mask, 8, 0, false, new List<Area>() {
+            new Area { edges = new List<int>() {1,2,3,4,12}, terrain = terrainTypes.grass, colorIndex = 1},
+            new Area { edges = new List<int>() {5, 11}, terrain = terrainTypes.road, colorIndex = 2},
+            new Area { edges = new List<int>() {6,7,8,9,10}, terrain = terrainTypes.grass, colorIndex = 3}});
+        //FFRR
+        addTileToList(terrainTypes.grass, terrainTypes.grass, terrainTypes.road, terrainTypes.road, 0, 0, FFRR, FFRR_Mask, 9, 0, false, new List<Area>() {
+            new Area { edges = new List<int>() {1,2,3,4,5,6,7,12}, terrain = terrainTypes.grass, colorIndex = 1},
+            new Area { edges = new List<int>() {8,11}, terrain = terrainTypes.road, colorIndex = 2},
+            new Area { edges = new List<int>() {9,10}, terrain = terrainTypes.grass, colorIndex = 3}});
+        //FRRR
+        addTileToList(terrainTypes.grass, terrainTypes.road, terrainTypes.road, terrainTypes.road, 0, 0, FRRR, FRRR_Mask, 4, 0, false, new List<Area>() {
+            new Area { edges = new List<int>() {1,2,3,4,12}, terrain = terrainTypes.grass, colorIndex = 1},
+            new Area { edges = new List<int>() {5}, terrain = terrainTypes.road, colorIndex = 2},
+            new Area { edges = new List<int>() {7,6}, terrain = terrainTypes.grass, colorIndex = 3},
+            new Area { edges = new List<int>() {8}, terrain = terrainTypes.road, colorIndex = 4},
+            new Area { edges = new List<int>() {9,10}, terrain = terrainTypes.grass, colorIndex = 5},
+            new Area { edges = new List<int>() {11}, terrain = terrainTypes.road, colorIndex = 6},
+            new Area { edges = new List<int>() {0}, terrain = terrainTypes.intersection, colorIndex = -1}});
+        //RRRR
+        addTileToList(terrainTypes.road, terrainTypes.road, terrainTypes.road, terrainTypes.road, 0, 0, RRRR, RRRR_Mask, 1, 0, false, new List<Area>() {
+            new Area { edges = new List<int>() {12,1}, terrain = terrainTypes.grass, colorIndex = 1},
+            new Area { edges = new List<int>() {2}, terrain = terrainTypes.road, colorIndex = 2},
+            new Area { edges = new List<int>() {3,4} ,terrain = terrainTypes.grass, colorIndex = 3},
+            new Area { edges = new List<int>() {5}, terrain = terrainTypes.road, colorIndex = 4},
+            new Area { edges = new List<int>() {6,7}, terrain = terrainTypes.grass, colorIndex = 5},
+            new Area { edges = new List<int>() {8}, terrain = terrainTypes.road, colorIndex = 6},
+            new Area { edges = new List<int>() {9,10}, terrain = terrainTypes.grass, colorIndex = 7},
+            new Area { edges = new List<int>() {11}, terrain = terrainTypes.road, colorIndex = 8},
+            new Area { edges = new List<int>() {0}, terrain = terrainTypes.intersection, colorIndex = -1}});
+        //FFRF_M
+        addTileToList(terrainTypes.grass, terrainTypes.grass, terrainTypes.road, terrainTypes.grass, 0, 0, FFRF_M, FFRF_M_Mask, 2, 0, false, new List<Area>() {
+            new Area { edges = new List<int>() {1,2,3,4,5,6,7,8,9,10,11,12}, terrain = terrainTypes.grass, colorIndex = 1},
+            new Area { edges = new List<int>() {8}, terrain = terrainTypes.road, colorIndex = 2 },
+            new Area { edges = new List<int>() {0}, terrain = terrainTypes.monastery, colorIndex = 3}});
+        //FFFF_M
+        addTileToList(terrainTypes.grass, terrainTypes.grass, terrainTypes.grass, terrainTypes.grass, 0, 0, FFFF_M, FFFF_M_Mask, 4, 0, false, new List<Area>() {
+            new Area { edges = new List<int>() {1,2,3,4,5,6,7,8,9,10,11,12}, terrain = terrainTypes.grass, colorIndex = 1},
+            new Area { edges = new List<int>() {0}, terrain = terrainTypes.monastery, colorIndex = 2}});
+
+        /*
         //CRFR
         addTileToList(terrainTypes.castle, terrainTypes.road, terrainTypes.grass, terrainTypes.road, 0, 0, CRFR, CRFR_Mask, 3, 0, false, new List<Area>() { 
             new Area { edges = new List<int>() {1,2,3} ,terrain = terrainTypes.castle, colorIndex = 1},
@@ -598,6 +734,7 @@ public class TilesManager : MonoBehaviour
         addTileToList(terrainTypes.grass, terrainTypes.grass, terrainTypes.grass, terrainTypes.grass, 0, 0, FFFF_M, FFFF_M_Mask, 4, 0, false, new List<Area>() {
             new Area { edges = new List<int>() {1,2,3,4,5,6,7,8,9,10,11,12}, terrain = terrainTypes.grass, colorIndex = 1},
             new Area { edges = new List<int>() {0}, terrain = terrainTypes.monastery, colorIndex = 2}});
+            */
     }
 
 
