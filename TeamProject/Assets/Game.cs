@@ -188,95 +188,114 @@ public class Game : MonoBehaviour
 
     void AI()
     {
-        int i;
-        int j = 0;
-        int rolled = 0;
-
-        List<int[]> possiblePositions;
-        do
+        if (currentlyPlacingTile == false)
         {
-            i = UnityEngine.Random.Range(0, TM.tilesList.Count);
-            choosenTile.Clone(TM.tilesList[i]);
-            possiblePositions = TM.findMatchingEdges(TM.findSourrounding(ref tilesOnBoard), choosenTile, ref tilesOnBoard);
-            j++;
-        } while (possiblePositions.Count == 0 && j < 10);
-
-        NextTileImage.GetComponent<Image>().material = choosenTile.Material;
-        rolled = UnityEngine.Random.Range(0, possiblePositions.Count);
-
-        TM.tilesList[i].TypeCount--;
-        if (TM.tilesList[i].TypeCount == 0)
-        {
-            TM.tilesList.RemoveAt(i);
-        }
-        currentlyPlacingTile = true;
-        playername.text = GM.GetCurrentPlayer().name;
-
-        for (int k = 0; k < possiblePositions.Count; k++)
-        {
-            int[] arrPosition = possiblePositions[k];
-
-            float[] position = TM.getCoordinates(arrPosition[0], arrPosition[1]);
-            if (possibleMoves[arrPosition[0], arrPosition[1]] == null)
+            if (TM.tilesList.Count > 0)
             {
-                //possibleMoves[arrPosition[0], arrPosition[1]] = Instantiate(Selected, new Vector3(position[0], (float)0.1, position[1]), Quaternion.identity) as GameObject;
+                int i;
+                int j = 0;
+                int rolled = 0;
 
-                if (k == rolled)
+                List<int[]> possiblePositions;
+                do
                 {
-                    tilesOnBoard[arrPosition[0], arrPosition[1]] = Instantiate(objectToinstantiate, new Vector3(position[0], 0, position[1]), Quaternion.identity) as GameObject; // instatiate a prefab on the position where the ray hits the floor.                         
-                    Tile tile = tilesOnBoard[arrPosition[0], arrPosition[1]].AddComponent<Tile>();
-                    tile.Init(choosenTile.UpTerrain, choosenTile.RightTerrain, choosenTile.DownTerrain, choosenTile.LeftTerrain, position[0], position[1], choosenTile.Material, choosenTile.Mask, choosenTile.TypeCount, choosenTile.Turn, choosenTile.Plus, choosenTile.Areas);
-                    masks[arrPosition[0], arrPosition[1]] = Instantiate(Mask, new Vector3(position[0], (float)0.1, position[1]), Quaternion.identity) as GameObject;
-                    TM.rotateFirstMatchingRotation(ref tilesOnBoard[arrPosition[0], arrPosition[1]], ref masks[arrPosition[0], arrPosition[1]], arrPosition, ref tilesOnBoard);
+                    i = UnityEngine.Random.Range(0, TM.tilesList.Count);
+                    choosenTile.Clone(TM.tilesList[i]);
+                    possiblePositions = TM.findMatchingEdges(TM.findSourrounding(ref tilesOnBoard), choosenTile, ref tilesOnBoard);
+                    j++;
+                } while (possiblePositions.Count == 0 && j < 10);
 
-                    tilesOnBoard[arrPosition[0], arrPosition[1]].GetComponent<Renderer>().material = choosenTile.Material;
-                    masks[arrPosition[0], arrPosition[1]].GetComponent<Renderer>().material = choosenTile.Mask;
+                NextTileImage.GetComponent<Image>().material = choosenTile.Material;
+                rolled = UnityEngine.Random.Range(0, possiblePositions.Count);
 
-                    currentlyPlacedTile = arrPosition;
-                    CM.CheckCamera(arrPosition);
+                TM.tilesList[i].TypeCount--;
+                if (TM.tilesList[i].TypeCount == 0)
+                {
+                    TM.tilesList.RemoveAt(i);
                 }
+                currentlyPlacingTile = true;
+                playername.text = GM.GetCurrentPlayer().name;
+
+                for (int k = 0; k < possiblePositions.Count; k++)
+                {
+                    int[] arrPosition = possiblePositions[k];
+
+                    float[] position = TM.getCoordinates(arrPosition[0], arrPosition[1]);
+                    if (possibleMoves[arrPosition[0], arrPosition[1]] == null)
+                    {
+                        //possibleMoves[arrPosition[0], arrPosition[1]] = Instantiate(Selected, new Vector3(position[0], (float)0.1, position[1]), Quaternion.identity) as GameObject;
+
+                        if (k == rolled)
+                        {
+                            tilesOnBoard[arrPosition[0], arrPosition[1]] = Instantiate(objectToinstantiate, new Vector3(position[0], 0, position[1]), Quaternion.identity) as GameObject; // instatiate a prefab on the position where the ray hits the floor.                         
+                            Tile tile = tilesOnBoard[arrPosition[0], arrPosition[1]].AddComponent<Tile>();
+                            tile.Init(choosenTile.UpTerrain, choosenTile.RightTerrain, choosenTile.DownTerrain, choosenTile.LeftTerrain, position[0], position[1], choosenTile.Material, choosenTile.Mask, choosenTile.TypeCount, choosenTile.Turn, choosenTile.Plus, choosenTile.Areas);
+                            masks[arrPosition[0], arrPosition[1]] = Instantiate(Mask, new Vector3(position[0], (float)0.1, position[1]), Quaternion.identity) as GameObject;
+                            TM.rotateFirstMatchingRotation(ref tilesOnBoard[arrPosition[0], arrPosition[1]], ref masks[arrPosition[0], arrPosition[1]], arrPosition, ref tilesOnBoard);
+
+                            tilesOnBoard[arrPosition[0], arrPosition[1]].GetComponent<Renderer>().material = choosenTile.Material;
+                            masks[arrPosition[0], arrPosition[1]].GetComponent<Renderer>().material = choosenTile.Mask;
+
+                            currentlyPlacedTile = arrPosition;
+                            CM.CheckCamera(arrPosition);
+                        }
+                    }
+                }
+                OKButton.SetActive(true);
+                MeepleButton.SetActive(true);
             }
         }
-        OKButton.SetActive(true);
-    }
+        // MEEEPLEEE
+        if (currentlyPlacingMeeple == true)
+        {
+            // roll position
+            int rolledPosition = UnityEngine.Random.Range(0, possibleMeeple.Count);
+            int selectedPosition = possibleMeeple[rolledPosition].meeplePlacementIndex;
+            currentlyPlacingMeeple = false;
+            
+        
+            tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Collider>().enabled = false;
+            if (tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas.Find(a => a.meeplePlacementIndex == selectedPosition) != null)
+            {
+                int ed = tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas.Find(a => a.meeplePlacementIndex == selectedPosition).meeplePlacementIndex;
+                
+                Debug.Log("Wykrywam obszar o indeksie: " + ed + "  //selected position: " + selectedPosition);
 
-    int ColorClassify(float R)
-    {
-        int x = 0;
-        if (R <= 0.066f)
-        {
-            return 1;
+            }
+            if (possibleMeeple.Any(a => a.meeplePlacementIndex == selectedPosition))
+            {
+               
+                Debug.Log("TAK, tu można postawić meepla!");
+
+                if (possibleMeeple.Find(a => a.meeplePlacementIndex == selectedPosition).terrain == terrainTypes.grass)
+                {
+                    meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]] = Instantiate(FarmerMeeple, TM.GetMeeplePosition(selectedPosition, TM.getCoordinates(currentlyPlacedTile[0], currentlyPlacedTile[1])), Quaternion.identity) as GameObject;
+                    meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]].transform.Translate(new Vector3(0, (float)0.44, 0));
+                    meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]].transform.Rotate(new Vector3(0, 0, 90));
+                    meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Renderer>().material.color = GM.GetCurrentPlayer().rgbaColor;
+                    tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas.Find(a => a.meeplePlacementIndex == selectedPosition).player = new Player(GM.GetCurrentPlayer().name, GM.GetCurrentPlayer().color, GM.GetCurrentPlayer().rgbaColor);
+
+                    placedMeeple = true;
+                }
+                else
+                {
+                    meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]] = Instantiate(StandingMeeple, TM.GetMeeplePosition(selectedPosition, TM.getCoordinates(currentlyPlacedTile[0], currentlyPlacedTile[1])), Quaternion.identity) as GameObject;
+                    meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]].transform.Translate(new Vector3(0, (float)2.13, 0));
+                    meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]].transform.Rotate(new Vector3(0, 90, 0));
+                    meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Renderer>().material.color = GM.GetCurrentPlayer().rgbaColor;
+                    tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas.Find(a => a.meeplePlacementIndex == selectedPosition).player = new Player(GM.GetCurrentPlayer().name, GM.GetCurrentPlayer().color, GM.GetCurrentPlayer().rgbaColor);
+
+                    placedMeeple = true;
+                }
+            }
+            else
+            {
+                Debug.Log("NIE MOŻNA tu postawić meepla!");
+            }
         }
-        if (R <= 0.133f)
-        {
-            return 2;
-        }
-        if (R <= 0.200f)
-        {
-            return 3;
-        }
-        if (R <= 0.266f)
-        {
-            return 4;
-        }
-        if (R <= 0.333f)
-        {
-            return 5;
-        }
-        if (R <= 0.400f)
-        {
-            return 6;
-        }
-        if (R <= 0.466f)
-        {
-            return 7;
-        }
-        if (R <= 0.533f)
-        {
-            return 8;
-        }
-        return x;
     }
+    
+    
 
     // Update is called once per frame
     void Update()
@@ -284,13 +303,8 @@ public class Game : MonoBehaviour
         // Sprawdzamy czy to komputer
         if (GM.GetCurrentPlayer().type == PlayerType.AI)
         {
-            if (currentlyPlacingTile == false)
-            {
-                if (TM.tilesList.Count > 0)
-                {
-                    AI(); // Funkcja wyzej tymczasowo
-                }
-            }
+            AI(); // Funkcja wyzej tymczasowo
+                
         }
         else if (currentlyPlacingTile == false)
         {
@@ -352,9 +366,9 @@ public class Game : MonoBehaviour
                             Vector2 pixelUV = hit.textureCoord;
                             float uvX = pixelUV.x * tex.width;
                             float uvY = pixelUV.y * tex.height;
+
                             Color hitColor = tex.GetPixel((int)uvX, (int)uvY);
-                            
-                            ColorType = ColorClassify(hitColor.r);
+                            ColorType = TM.ColorClassify(hitColor.r);
                             //Debug.Log(ColorType.ToString() + " - typ koloru");
                             //Debug.Log(hitColor.ToString());
 
@@ -371,7 +385,7 @@ public class Game : MonoBehaviour
                             {
                                 if (ColorType == choosenAreaColor)
                                 {
-                                    Debug.Log("Usuwam kafelek który już był tutaj!");
+                                    Debug.Log("Usuwam meeple który już był tutaj!");
 
                                     Destroy(meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]]);
                                     meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]] = null;
@@ -400,12 +414,16 @@ public class Game : MonoBehaviour
                                     }
                                     Debug.Log("TAK, tu można postawić meepla!");
                                     choosenAreaColor = possibleMeeple.Find(a => a.colorIndex == ColorType).colorIndex;
+                                    int selectedPosition = possibleMeeple.Find(a => a.colorIndex == ColorType).meeplePlacementIndex;
+                                    Debug.Log(selectedPosition);
                                     placedMeeple = true;
                                     if (possibleMeeple.Find(a => a.colorIndex == ColorType).terrain == terrainTypes.grass)
                                     {
+                                        //meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]] = Instantiate(FarmerMeeple, TM.GetMeeplePosition(selectedPosition, TM.getCoordinates(currentlyPlacedTile[0], currentlyPlacedTile[1])), Quaternion.identity) as GameObject;
                                         meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]] = Instantiate(FarmerMeeple, hit.point, Quaternion.identity) as GameObject;
+
                                         meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]].transform.Translate(new Vector3(0, (float)0.44, 0));
-                                        meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]].transform.Rotate(new Vector3(-90, 0, 0));
+                                        meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]].transform.Rotate(new Vector3(0, 0, 90));
                                         meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Renderer>().material.color = GM.GetCurrentPlayer().rgbaColor;
                                         tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas.Find(a => a.colorIndex == ColorType).player = new Player(GM.GetCurrentPlayer().name, GM.GetCurrentPlayer().color, GM.GetCurrentPlayer().rgbaColor);
                                            
@@ -413,8 +431,11 @@ public class Game : MonoBehaviour
                                     }
                                     else
                                     {
+                                        //meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]] = Instantiate(StandingMeeple, TM.GetMeeplePosition(selectedPosition, TM.getCoordinates(currentlyPlacedTile[0], currentlyPlacedTile[1])), Quaternion.identity) as GameObject;
                                         meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]] = Instantiate(StandingMeeple, hit.point, Quaternion.identity) as GameObject;
+
                                         meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]].transform.Translate(new Vector3(0, (float)2.13, 0));
+                                        meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]].transform.Rotate(new Vector3(0, 90, 0));
                                         meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Renderer>().material.color = GM.GetCurrentPlayer().rgbaColor;
                                         tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas.Find(a => a.colorIndex == ColorType).player = new Player(GM.GetCurrentPlayer().name, GM.GetCurrentPlayer().color, GM.GetCurrentPlayer().rgbaColor);
                                         
