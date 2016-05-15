@@ -230,15 +230,30 @@ public class PointsCounter : MonoBehaviour {
 					if(result.points == (2 * POINTS_FOR_CASTLE_TILE)) result.points = POINTS_FOR_CASTLE_TILE;
                     foreach (var player in RemoveMeeplesAndPickWinner(ref board, result.meeplesPositions, ref meeples))
                     {
-                        Debug.Log("########");
-                        Debug.Log("player: " + player);
-                        Debug.Log("POints: " + result.points);
-                        Debug.Log("player enuym: " + (PlayerColor)player);
+
+                        Debug.Log("POints castle: " + result.points);
                         GM.AddScore((PlayerColor)player, result.points);
                       
                     }                
 				}
-			break;	
+			break;
+            case terrainTypes.road:
+                result = countRoads(ref board, x, y, result, ref checkedAreas, area);
+                if (result.meeplesPositions.Count == 0)
+                {
+                    //do nothing
+                }
+                else
+                {
+                    foreach (var player in RemoveMeeplesAndPickWinner(ref board, result.meeplesPositions, ref meeples))
+                    {
+                        Debug.Log("POints road: " + result.points);
+                        GM.AddScore((PlayerColor)player, result.points);
+
+                    }
+                }
+
+                break;
 		}
 		
 	}
@@ -273,10 +288,11 @@ public class PointsCounter : MonoBehaviour {
 		}
 		return maxList;
 	}
-    public ReturnPoints countCastle(ref GameObject[,] board, int x, int y, ReturnPoints accumulator, ref List<AreaTupleTwo> checkedAreas, Area area)
+
+    public ReturnPoints countRoads(ref GameObject[,] board, int x, int y, ReturnPoints accumulator, ref List<AreaTupleTwo> checkedAreas, Area area)
     {
         AreaTupleTwo currentTuple = new AreaTupleTwo(x, y, area.edges, true);
-        if (checkedAreas.Any(opt => opt.x ==currentTuple.x && opt.y == currentTuple.y && Enumerable.SequenceEqual(opt.area.OrderBy(t => t), currentTuple.area.OrderBy(t => t))))
+        if (checkedAreas.Any(opt => opt.x == currentTuple.x && opt.y == currentTuple.y && Enumerable.SequenceEqual(opt.area.OrderBy(t => t), currentTuple.area.OrderBy(t => t))))
         {
 
             Debug.Log("Odwiedzony:" + x + " " + y + " Akumulator: " + accumulator.points + " więc exit.");
@@ -286,23 +302,15 @@ public class PointsCounter : MonoBehaviour {
         Debug.Log("Dodajemy nowy:" + x + " " + y + " Otrzymany akumulator: " + accumulator.points);
         Debug.Log("Wszystkie odwiedzone:");
         //wypisz checkedAreas
-        foreach(var jararar in checkedAreas)
+        foreach (var jararar in checkedAreas)
         {
             Debug.Log("x: " + jararar.x + " y: " + jararar.y + " Area: edges: " + String.Join(" ", jararar.area.Select(item => item.ToString()).ToArray()));
         }
         if (board[x, y].GetComponent<Tile>().Areas.Exists(a => a.player != null))
             accumulator.meeplesPositions.Add(new Index(x, y));
-        if (board[x, y].GetComponent<Tile>().Plus)
-            accumulator.points += POINTS_FOR_CASTLE_SHIELD;
-        accumulator.points += POINTS_FOR_CASTLE_TILE;
+        accumulator.points += POINTS_FOR_ROAD_FIELD;
 
         List<AreaTuple> an = areaNeighbours(ref board, x, y, area.edges);
-        /*
-        foreach ()
-        {
-
-        }
-        */
         Debug.Log("Sprawdzamy sąsiadów!");
         foreach (var neighbour in an)
         {
@@ -324,11 +332,62 @@ public class PointsCounter : MonoBehaviour {
         return accumulator;
     }
 
+    public ReturnPoints countCastle(ref GameObject[,] board, int x, int y, ReturnPoints accumulator, ref List<AreaTupleTwo> checkedAreas, Area area)
+    {
+        AreaTupleTwo currentTuple = new AreaTupleTwo(x, y, area.edges, true);
+        if (checkedAreas.Any(opt => opt.x ==currentTuple.x && opt.y == currentTuple.y && Enumerable.SequenceEqual(opt.area.OrderBy(t => t), currentTuple.area.OrderBy(t => t))))
+        {
+
+            //Debug.Log("Odwiedzony:" + x + " " + y + " Akumulator: " + accumulator.points + " więc exit.");
+            return accumulator;
+        }
+        checkedAreas.Add(currentTuple);
+       // Debug.Log("Dodajemy nowy:" + x + " " + y + " Otrzymany akumulator: " + accumulator.points);
+       // Debug.Log("Wszystkie odwiedzone:");
+        //wypisz checkedAreas
+        foreach(var jararar in checkedAreas)
+        {
+        //    Debug.Log("x: " + jararar.x + " y: " + jararar.y + " Area: edges: " + String.Join(" ", jararar.area.Select(item => item.ToString()).ToArray()));
+        }
+        if (board[x, y].GetComponent<Tile>().Areas.Exists(a => a.player != null))
+            accumulator.meeplesPositions.Add(new Index(x, y));
+        if (board[x, y].GetComponent<Tile>().Plus)
+            accumulator.points += POINTS_FOR_CASTLE_SHIELD;
+        accumulator.points += POINTS_FOR_CASTLE_TILE;
+
+        List<AreaTuple> an = areaNeighbours(ref board, x, y, area.edges);
+        /*
+        foreach ()
+        {
+
+        }
+        */
+       // Debug.Log("Sprawdzamy sąsiadów!");
+        foreach (var neighbour in an)
+        {
+        //    Debug.Log("Sprawdzamy sąsiada: " + neighbour.x + " " + neighbour.y);
+            if (board[neighbour.x, neighbour.y] == null)
+            {
+           //     Debug.Log("Ten: " + neighbour.x + " " + neighbour.y + " to null, wiec exit");
+                return new ReturnPoints(0, new List<Index>());
+            }
+            accumulator = countCastle(ref board, neighbour.x, neighbour.y, accumulator, ref checkedAreas, neighbour.area);
+            if (accumulator.points == 0)
+            {
+            //    Debug.Log("Sąsiad: " + neighbour.x + " " + neighbour.y + " zwrócił nulla, więc my: " + x + " " + y + "  też!");
+                return accumulator;
+            }
+          //  Debug.Log("Po sprawdzeniu sąsiada: " + neighbour.x + " " + neighbour.y + " akumulator to: " + accumulator.points);
+        }
+      //  Debug.Log("Sąsiedzi sprawdzeni, zwracamy akumulator: " + accumulator.points + "!");
+        return accumulator;
+    }
+
     /*
 	public ReturnPoints countFarm(ref GameObject[,] board, int x, int y, ReturnPoints accumulator, visited, zamkiVisited)
 	{
-		AreaTuple currentTuple = new AreaTuple (x, y, area, true);
-		if(checkedAreas.Contains(currentTuple))
+		AreaTupleTwo currentTuple = new AreaTupleTwo (x, y, area, true);
+		if(checkedAreas.Contains(currentTuple))//poprawic sprawdzanie
 			return accumulator;
 		if(board[x,y].GetComponent<Tile>().Areas.Exists(a => a.player != null))
 			accumulator.meeplesPositions.Add(Index(x,y));
@@ -353,5 +412,6 @@ public class PointsCounter : MonoBehaviour {
 				return ReturnPoints(0,empty);
 		}
 	}
-	*/
+    */
+	
 }

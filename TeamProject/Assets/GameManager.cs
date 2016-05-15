@@ -81,6 +81,12 @@ public class GameManager : MonoBehaviour
         Debug.Log("Lista graczy : " + String.Join(" ", playersList.Select(item => item.name.ToString()).ToArray())); //////////////////////
         playersList.Find(a => a.color == color).ChangeScore(score);
     }
+
+    public List<Player> GetPlayerListCopy()
+    {
+        return playersList;
+    }
+    
     public void SetGameState(GameState state)
     {
         this.gameState = state;

@@ -54,10 +54,10 @@ public class Game : MonoBehaviour
 
     public void ButtonClicked()
     {
-        Debug.Log("Położono" + currentlyPlacedTile[0] + " " + currentlyPlacedTile[1]);
-        Debug.Log("ZARAZ LICZE PUNKTY");
+       // Debug.Log("Położono" + currentlyPlacedTile[0] + " " + currentlyPlacedTile[1]);
+       // Debug.Log("ZARAZ LICZE PUNKTY");
         PC.countPointsAfterMove(ref tilesOnBoard, currentlyPlacedTile[0], currentlyPlacedTile[1], ref meeples);
-        Debug.Log("PUNKTY GRACZA:" + GM.GetCurrentPlayer().points);
+      //  Debug.Log("PUNKTY GRACZA:" + GM.GetCurrentPlayer().points);
         currentlyPlacingMeeple = false;
         currentlyPlacingTile = false;
         currentlyPlacedTile = null;
@@ -86,12 +86,28 @@ public class Game : MonoBehaviour
         {
             TM.tilesList.RemoveAt(i);
         }
-
-        redPlayerScore.text = GM.GetRedPlayerCopy().points.ToString();
-        greenPlayerScore.text = GM.GetGreenPlayerCopy().points.ToString();
-        bluePlayerScore.text = GM.GetBluePlayerCopy().points.ToString();
-        yellowPlayerScore.text = GM.GetYellowPlayerCopy().points.ToString();
-        blackPlayerScore.text = GM.GetBlackPlayerCopy().points.ToString();
+        List<Player> players = GM.GetPlayerListCopy();
+        if (players.Any(it => it.color == PlayerColor.RED))
+        {
+            redPlayerScore.text = GM.GetRedPlayerCopy().points.ToString();
+        }
+        if (players.Any(it => it.color == PlayerColor.GREEN))
+        {
+            greenPlayerScore.text = GM.GetGreenPlayerCopy().points.ToString();
+        }
+        if (players.Any(it => it.color == PlayerColor.BLUE))
+        {
+            bluePlayerScore.text = GM.GetBluePlayerCopy().points.ToString();
+        }
+        if (players.Any(it => it.color == PlayerColor.YELLOW))
+        {
+            yellowPlayerScore.text = GM.GetYellowPlayerCopy().points.ToString();
+        }
+        if (players.Any(it => it.color == PlayerColor.BLACK))
+        {
+            blackPlayerScore.text = GM.GetBlackPlayerCopy().points.ToString();
+        }
+          
     }
 
     public void MeepleButtonClicked()
