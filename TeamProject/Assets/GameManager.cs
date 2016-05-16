@@ -4,6 +4,8 @@ using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using System;
 using System.Linq;
+using UnityEngine.Advertisements;
+using System.Collections;
 
 // Game States
 public enum GameState { MAIN_MENU, ADD_PLAYER_MENU, PAUSED, GAME, LOBBY, LANGAME, CREDITS, HELP }
@@ -12,6 +14,8 @@ public delegate void OnStateChangeHandler();
 
 public class GameManager : MonoBehaviour
 {
+    public string zoneId;
+
     public List<Player> playersList = new List<Player>();
     private int currentPlayer = 0;
     protected GameManager() { }
@@ -127,5 +131,26 @@ public class GameManager : MonoBehaviour
     public void OnApplicationQuit()
     {
         GameManager.instance = null;
+    }
+
+    public void ShowAdPlacement()
+    {
+        Advertisement.debugLevel = Advertisement.DebugLevel.Debug;
+        if(Advertisement.testMode)
+        {
+            Debug.Log("test");
+        }
+        if (Advertisement.IsReady())
+        {
+            Advertisement.Show();
+        }
+        //if (string.IsNullOrEmpty(zoneId)) zoneId = null;
+
+        //ShowOptions options = new ShowOptions();
+        //options.resultCallback = HandleShowResult;
+        //if (Advertisement.IsReady())
+        //{
+        //    Advertisement.Show(zoneId, options);
+        //}
     }
 }

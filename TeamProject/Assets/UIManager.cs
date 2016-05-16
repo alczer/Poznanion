@@ -15,6 +15,7 @@ enum PlayerOptions
 public class UIManager : MonoBehaviour
 {
     GameManager GM;
+    Ads ADS;
     PlayerOptions playerOptionsRed;
     PlayerOptions playerOptionsGreen;
     PlayerOptions playerOptionsBlue;
@@ -41,6 +42,7 @@ public class UIManager : MonoBehaviour
     {
         GM = GameManager.Instance;
         
+
         GM.OnStateChange += HandleOnStateChange;
         playerOptionsRed = PlayerOptions.PLAYER_PLAYER;
         playerOptionsGreen = PlayerOptions.PLAYER_EMPTY;
@@ -50,6 +52,7 @@ public class UIManager : MonoBehaviour
     }
     public void StartGame()
     {
+        
         GM.playersList = new List<Player>();
         if (RedInput.activeSelf == true)
         {
@@ -134,13 +137,19 @@ public class UIManager : MonoBehaviour
     }
     public void GoToLAN()
     {
+        GM.ShowAdPlacement();
         GM.SetGameState(GameState.LOBBY);
         Debug.Log(GM.gameState);
     }
     public void GoToAddPlayerMenu()
     {
+        //GM.ShowAdPlacement();
         GM.SetGameState(GameState.ADD_PLAYER_MENU);
         Debug.Log(GM.gameState);
+    }
+    public void GoToSettings()
+    {
+        GM.ShowAdPlacement();
     }
     private void HandlePlayerOptions(PlayerOptions options,ref GameObject frame,ref GameObject input, ref GameObject AI)
     {

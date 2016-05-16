@@ -321,7 +321,17 @@ public class Game : MonoBehaviour
             }
             if (possibleMeeple.Any(a => a.meeplePlacementIndex == selectedPosition))
             {
-               
+                if (meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]] != null)
+                {
+                    Destroy(meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]]);
+                    meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]] = null;
+                    for (int index = 0; index < tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas.Count; index++)
+                    {
+                        tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas[index].player = null;
+                    }
+                    tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas.Find(a => a.meeplePlacementIndex == selectedPosition).player = new Player(GM.GetCurrentPlayer().name, GM.GetCurrentPlayer().color, GM.GetCurrentPlayer().rgbaColor);
+                    placedMeeple = false;
+                }
                 Debug.Log("TAK, tu można postawić meepla!");
 
                 if (possibleMeeple.Find(a => a.meeplePlacementIndex == selectedPosition).terrain == terrainTypes.grass)
