@@ -54,8 +54,16 @@ public class Game : MonoBehaviour
 
     public void ButtonClicked()
     {
-       // Debug.Log("Położono" + currentlyPlacedTile[0] + " " + currentlyPlacedTile[1]);
-       // Debug.Log("ZARAZ LICZE PUNKTY");
+        if(tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas.Any(m => m.player != null))
+        {
+            String result = "TU STAWIAMY MEEPLA"+String.Join(" ", tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas.Find(m => m.player != null).edges.Select(item => item.ToString()).ToArray());
+            Debug.Log(result);
+
+        }
+        
+
+        // Debug.Log("Położono" + currentlyPlacedTile[0] + " " + currentlyPlacedTile[1]);
+        // Debug.Log("ZARAZ LICZE PUNKTY");
         PC.countPointsAfterMove(ref tilesOnBoard, currentlyPlacedTile[0], currentlyPlacedTile[1], ref meeples);
       //  Debug.Log("PUNKTY GRACZA:" + GM.GetCurrentPlayer().points);
         currentlyPlacingMeeple = false;
@@ -107,6 +115,7 @@ public class Game : MonoBehaviour
         {
             blackPlayerScore.text = GM.GetBlackPlayerCopy().points.ToString();
         }
+
           
     }
 

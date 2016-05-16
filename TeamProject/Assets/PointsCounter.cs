@@ -83,7 +83,6 @@ public class AreaTupleTwo
         this.x = xx;
         this.y = yy;
         this.initialized = init;
-
     }
 
 
@@ -205,11 +204,10 @@ public class PointsCounter : MonoBehaviour {
 		}
         Debug.Log("Liczę dla monastery");
         for (int i = -1; i < 2; ++i)
-			for(int j = -1; j < 2; ++j)
-				if(board[x + i, y + j]!=null && board[x+i,y+j].GetComponent<Tile>().Areas.Exists(a => a.terrain == terrainTypes.monastery))
-					countMonasteryPoints(new int[]{x+i,y+j},ref board, ref meeples);
-
-	}
+            for (int j = -1; j < 2; ++j)
+                if (board[x + i, y + j] != null && board[x + i, y + j].GetComponent<Tile>().Areas.Exists(a => a.terrain == terrainTypes.monastery))
+                    countMonasteryPoints(new int[] { x + i, y + j }, ref board, ref meeples);
+    }
 		
 	public void CountAreaPoints(ref GameObject[,] board, int x, int y, Area area, ref GameObject[,] meeples)
 	{
@@ -266,6 +264,7 @@ public class PointsCounter : MonoBehaviour {
 		foreach (Index index in meeplesPositions)
 		{
 			players [(int)board [index.x, index.y].GetComponent<Tile> ().Areas.Find (a => a.player != null).player.color]++;
+            board[index.x, index.y].GetComponent<Tile>().Areas.Find(aa => aa.player != null).player = null;
 			Destroy(meeples[index.x, index.y]);
 		}
 
@@ -291,10 +290,11 @@ public class PointsCounter : MonoBehaviour {
 
     public ReturnPoints countRoads(ref GameObject[,] board, int x, int y, ReturnPoints accumulator, ref List<AreaTupleTwo> checkedAreas, Area area)
     {
+        Debug.Log("--------------------------------------------------------------------------- liczymy dla drogi");
+
         AreaTupleTwo currentTuple = new AreaTupleTwo(x, y, area.edges, true);
         if (checkedAreas.Any(opt => opt.x == currentTuple.x && opt.y == currentTuple.y && Enumerable.SequenceEqual(opt.area.OrderBy(t => t), currentTuple.area.OrderBy(t => t))))
         {
-
             Debug.Log("Odwiedzony:" + x + " " + y + " Akumulator: " + accumulator.points + " więc exit.");
             return accumulator;
         }
@@ -306,7 +306,7 @@ public class PointsCounter : MonoBehaviour {
         {
             Debug.Log("x: " + jararar.x + " y: " + jararar.y + " Area: edges: " + String.Join(" ", jararar.area.Select(item => item.ToString()).ToArray()));
         }
-        if (board[x, y].GetComponent<Tile>().Areas.Exists(a => a.player != null))
+        if (board[x, y].GetComponent<Tile>().Areas.Exists(a => a.player != null && a.terrain==terrainTypes.road && Enumerable.SequenceEqual(a.edges.OrderBy(t => t), currentTuple.area.OrderBy(t => t))))
             accumulator.meeplesPositions.Add(new Index(x, y));
         accumulator.points += POINTS_FOR_ROAD_FIELD;
 
@@ -320,7 +320,7 @@ public class PointsCounter : MonoBehaviour {
                 Debug.Log("Ten: " + neighbour.x + " " + neighbour.y + " to null, wiec exit");
                 return new ReturnPoints(0, new List<Index>());
             }
-            accumulator = countCastle(ref board, neighbour.x, neighbour.y, accumulator, ref checkedAreas, neighbour.area);
+            accumulator = countRoads(ref board, neighbour.x, neighbour.y, accumulator, ref checkedAreas, neighbour.area);
             if (accumulator.points == 0)
             {
                 Debug.Log("Sąsiad: " + neighbour.x + " " + neighbour.y + " zwrócił nulla, więc my: " + x + " " + y + "  też!");
@@ -349,7 +349,7 @@ public class PointsCounter : MonoBehaviour {
         {
         //    Debug.Log("x: " + jararar.x + " y: " + jararar.y + " Area: edges: " + String.Join(" ", jararar.area.Select(item => item.ToString()).ToArray()));
         }
-        if (board[x, y].GetComponent<Tile>().Areas.Exists(a => a.player != null))
+        if (board[x, y].GetComponent<Tile>().Areas.Exists(a => a.player != null && a.terrain==terrainTypes.castle && Enumerable.SequenceEqual(a.edges.OrderBy(t => t), currentTuple.area.OrderBy(t => t))))
             accumulator.meeplesPositions.Add(new Index(x, y));
         if (board[x, y].GetComponent<Tile>().Plus)
             accumulator.points += POINTS_FOR_CASTLE_SHIELD;

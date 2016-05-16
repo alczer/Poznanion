@@ -717,7 +717,7 @@ public class TilesManager : MonoBehaviour
             new Area { edges = new List<int>() {0}, terrain = terrainTypes.intersection, colorIndex = -1, meeplePlacementIndex = -1}});
         //FFRF_M
         addTileToList(terrainTypes.grass, terrainTypes.grass, terrainTypes.road, terrainTypes.grass, 0, 0, FFRF_M, FFRF_M_Mask, 2, 0, false, new List<Area>() {
-            new Area { edges = new List<int>() {1,2,3,4,5,6,7,8,9,10,11,12}, terrain = terrainTypes.grass, colorIndex = 1, meeplePlacementIndex = 21},
+            new Area { edges = new List<int>() {1,2,3,4,5,6,7,9,10,11,12}, terrain = terrainTypes.grass, colorIndex = 1, meeplePlacementIndex = 21},
             new Area { edges = new List<int>() {8}, terrain = terrainTypes.road, colorIndex = 2, meeplePlacementIndex = 23},
             new Area { edges = new List<int>() {0}, terrain = terrainTypes.monastery, colorIndex = 3, meeplePlacementIndex = 0}});
         //FFFF_M
