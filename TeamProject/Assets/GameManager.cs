@@ -82,6 +82,11 @@ public class GameManager : MonoBehaviour
         playersList.Find(a => a.color == color).ChangeScore(score);
     }
 
+    public void ReturnMeeple(PlayerColor color)
+    {
+        playersList.Find(a => a.color == color).meeples++;
+    }
+
     public List<Player> GetPlayerListCopy()
     {
         return playersList;

@@ -20,6 +20,8 @@ public class Game : MonoBehaviour
     public Text greenPlayerScore;
     public Text yellowPlayerScore;
     public Text blackPlayerScore;
+    public Text meepleButtonText;
+
     GameObject gameManager;
     public CameraManager CM;
     public TilesManager TM;
@@ -54,18 +56,23 @@ public class Game : MonoBehaviour
 
     public void ButtonClicked()
     {
+        // count meeples
+        if (placedMeeple == true)
+        {
+            GM.GetCurrentPlayer().meeples--;
+            placedMeeple = false;
+        }
+        
         if(tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas.Any(m => m.player != null))
         {
             String result = "TU STAWIAMY MEEPLA"+String.Join(" ", tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas.Find(m => m.player != null).edges.Select(item => item.ToString()).ToArray());
             Debug.Log(result);
 
         }
-        
-
         // Debug.Log("Położono" + currentlyPlacedTile[0] + " " + currentlyPlacedTile[1]);
         // Debug.Log("ZARAZ LICZE PUNKTY");
         PC.countPointsAfterMove(ref tilesOnBoard, currentlyPlacedTile[0], currentlyPlacedTile[1], ref meeples);
-      //  Debug.Log("PUNKTY GRACZA:" + GM.GetCurrentPlayer().points);
+        // Debug.Log("PUNKTY GRACZA:" + GM.GetCurrentPlayer().points);
         currentlyPlacingMeeple = false;
         currentlyPlacingTile = false;
         currentlyPlacedTile = null;
@@ -94,6 +101,8 @@ public class Game : MonoBehaviour
         {
             TM.tilesList.RemoveAt(i);
         }
+
+        // Score text
         List<Player> players = GM.GetPlayerListCopy();
         if (players.Any(it => it.color == PlayerColor.RED))
         {
@@ -116,90 +125,96 @@ public class Game : MonoBehaviour
             blackPlayerScore.text = GM.GetBlackPlayerCopy().points.ToString();
         }
 
+        // Meeple count text
+        meepleButtonText.text = GM.GetCurrentPlayer().meeples.ToString();
+
           
     }
 
     public void MeepleButtonClicked()
     {
-        if (currentlyPlacingMeeple == true)
+        if (GM.GetCurrentPlayer().meeples > 0 )
         {
-            for (int row = 0; row < possibleMoves.GetLength(0); row++)
+            if (currentlyPlacingMeeple == true)
             {
-                for (int col = 0; col < possibleMoves.GetLength(1); col++)
+                for (int row = 0; row < possibleMoves.GetLength(0); row++)
                 {
-                    if (possibleMoves[row, col] != null)
+                    for (int col = 0; col < possibleMoves.GetLength(1); col++)
+                    {
+                        if (possibleMoves[row, col] != null)
 
-                        possibleMoves[row, col].GetComponent<Renderer>().enabled = true;
+                            possibleMoves[row, col].GetComponent<Renderer>().enabled = true;
+                    }
                 }
-            }
-            OKButton.SetActive(false);
-            MeepleButton.SetActive(false);
-            currentlyPlacingMeeple = false;
+                OKButton.SetActive(false);
+                MeepleButton.SetActive(false);
+                currentlyPlacingMeeple = false;
 
-            Destroy(meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]]);
-            meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]] = null;
-            for (int index = 0; index < tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas.Count; index++)
-            {
-                tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas[index].player = null;
-            }
-
-            // tutaj trzeba poprawic bo czasem jest null
-            if (choosenAreaColor != -1)
-            {
-                tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas.Find(a => a.colorIndex == ColorType).player = new Player(GM.GetCurrentPlayer().name, GM.GetCurrentPlayer().color, GM.GetCurrentPlayer().rgbaColor);
-                choosenAreaColor = -1;
-            }
-
-            if (currentlyPlacedTile != null)
-            {
-                Destroy(tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]]);
-                Destroy(masks[currentlyPlacedTile[0], currentlyPlacedTile[1]]);
-                tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]] = null;
-                masks[currentlyPlacedTile[0], currentlyPlacedTile[1]] = null;
-
-                //choosenTile.Clone(TM.tilesList[i]);
-            }
-            placedMeeple = false;
-        }
-        else
-        {
-            for (int row = 0; row < possibleMoves.GetLength(0); row++)
-            {
-                for (int col = 0; col < possibleMoves.GetLength(1); col++)
+                Destroy(meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]]);
+                meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]] = null;
+                for (int index = 0; index < tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas.Count; index++)
                 {
-                    if (possibleMoves[row, col] != null)
-
-                        possibleMoves[row, col].GetComponent<Renderer>().enabled = false;
+                    tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas[index].player = null;
                 }
+
+                // tutaj trzeba poprawic bo czasem jest null
+                if (choosenAreaColor != -1)
+                {
+                    tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas.Find(a => a.colorIndex == ColorType).player = new Player(GM.GetCurrentPlayer().name, GM.GetCurrentPlayer().color, GM.GetCurrentPlayer().rgbaColor);
+                    choosenAreaColor = -1;
+                }
+
+                if (currentlyPlacedTile != null)
+                {
+                    Destroy(tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]]);
+                    Destroy(masks[currentlyPlacedTile[0], currentlyPlacedTile[1]]);
+                    tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]] = null;
+                    masks[currentlyPlacedTile[0], currentlyPlacedTile[1]] = null;
+
+                    //choosenTile.Clone(TM.tilesList[i]);
+                }
+                placedMeeple = false;
             }
-            currentlyPlacingMeeple = true;
-            possibleMeeple = TM.possibleMeepleAreas(ref tilesOnBoard, currentlyPlacedTile[0], currentlyPlacedTile[1]);
-            string koordynaty = "Jesteśmy na klocku x: " + currentlyPlacedTile[0] + " y: " + currentlyPlacedTile[1];
-            Debug.Log(koordynaty);
-            Debug.Log("--------------------------dla kliknięcia----------------------------------------");
-            String result1 = "";
-            foreach (var l in tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas)
+            else
             {
-                result1 += String.Join(" ", l.edges.Select(item => item.ToString()).ToArray());
-                result1 += " | ";
+                for (int row = 0; row < possibleMoves.GetLength(0); row++)
+                {
+                    for (int col = 0; col < possibleMoves.GetLength(1); col++)
+                    {
+                        if (possibleMoves[row, col] != null)
+
+                            possibleMoves[row, col].GetComponent<Renderer>().enabled = false;
+                    }
+                }
+                currentlyPlacingMeeple = true;
+                possibleMeeple = TM.possibleMeepleAreas(ref tilesOnBoard, currentlyPlacedTile[0], currentlyPlacedTile[1]);
+                //    string koordynaty = "Jesteśmy na klocku x: " + currentlyPlacedTile[0] + " y: " + currentlyPlacedTile[1];
+                //    Debug.Log(koordynaty);
+                //    Debug.Log("--------------------------dla kliknięcia----------------------------------------");
+                //    String result1 = "";
+                //    foreach (var l in tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas)
+                //    {
+                //        result1 += String.Join(" ", l.edges.Select(item => item.ToString()).ToArray());
+                //        result1 += " | ";
+
+                //    }
+                //    Debug.Log("Istniejące obszary:");
+                //    Debug.Log(result1);
+
+                //    Debug.Log("--------------------------możliwe:----------------------------------------------");
+
+                //    foreach (var list in possibleMeeple)
+                //    {
+
+                //        String result = String.Join(" ", list.edges.Select(item => item.ToString()).ToArray());
+                //        Debug.Log("Możliwy obszar:");
+                //        Debug.Log(result);
 
             }
-            Debug.Log("Istniejące obszary:");
-            Debug.Log(result1);
-
-            Debug.Log("--------------------------możliwe:----------------------------------------------");
-
-            foreach (var list in possibleMeeple)
-            {
-
-                String result = String.Join(" ", list.edges.Select(item => item.ToString()).ToArray());
-                Debug.Log("Możliwy obszar:");
-                Debug.Log(result);
-
-            }
-            Debug.Log("--------------------------------------------------------------------------------");
+            //    Debug.Log("--------------------------------------------------------------------------------");
+            //}
+            //MeepleButton.SetActive(false);
         }
-        //MeepleButton.SetActive(false);
     }
 
     void Awake()

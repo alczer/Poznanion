@@ -96,7 +96,7 @@ public class AreaTupleTwo
 public class PointsCounter : MonoBehaviour {
 	private const int POINTS_FOR_CASTLE_WHEN_FIELD = 2;
 	private const int POINTS_FOR_CASTLE_TILE = 2;
-	private const int POINTS_FOR_CASTLE_SHIELD = 1;
+	private const int POINTS_FOR_CASTLE_SHIELD = 2;
 	private const int POINTS_FOR_ROAD_FIELD = 1;
 	private const int POINTS_FOR_MONASTERY_FIELD = 1;
     GameManager GM;
@@ -150,9 +150,8 @@ public class PointsCounter : MonoBehaviour {
 					break;
 				}
 			}
-
             //neighbour.initialized = true;
-//            Debug.Log("Obszar klokcka sąsiada to : " + String.Join(" ", neighbour.area.edges.Select(item => item.ToString()).ToArray()));
+            //Debug.Log("Obszar klokcka sąsiada to : " + String.Join(" ", neighbour.area.edges.Select(item => item.ToString()).ToArray()));
 		}
 
         
@@ -168,12 +167,12 @@ public class PointsCounter : MonoBehaviour {
 			AreaTuple neighbour = areaNeighbour(ref board, x, y, edge);
 			neighbours.Add(neighbour);
 		}
-		foreach (var n in neighbours)
-		{
-//            Debug.Log("Dla "+x+" "+y+" Klocek sąsiad to : " + n.x + " " + n.y);
-	//		Debug.Log("Obszar klokcka sąsiada to : " + String.Join(" ", n.area.edges.Select(item => item.ToString()).ToArray()));
-		}
-//		Debug.Log("---");
+        //foreach (var n in neighbours)
+        //{
+        //    Debug.Log("Dla "+x+" "+y+" Klocek sąsiad to : " + n.x + " " + n.y);
+        //    Debug.Log("Obszar klokcka sąsiada to : " + String.Join(" ", n.area.edges.Select(item => item.ToString()).ToArray()));
+        //}
+        //Debug.Log("---");
 		//Debug.Log("wielkość listy:"+neighbours.Count);
 		return neighbours;
 	}
@@ -188,12 +187,11 @@ public class PointsCounter : MonoBehaviour {
 					return;
 
         GM.AddScore(board[coord[0], coord[1]].GetComponent<Tile>().Areas.Find(a => a.player != null).player.color, 9);
-       // board[coord[0], coord[1]].GetComponent<Tile>().Areas.Find (a => a.player != null).player.points += 9;
+        // board[coord[0], coord[1]].GetComponent<Tile>().Areas.Find (a => a.player != null).player.points += 9;
 		board [coord[0], coord[1]].GetComponent<Tile>().Areas.Find (a => a.player != null).player = null;
 		Destroy(meeples[coord [0], coord [1]]);
-
-
 	}
+
 	public void countPointsAfterMove(ref GameObject[,] board, int x, int y, ref GameObject[,] meeples)
 	{
         Debug.Log("Jestem w counterze");
@@ -229,7 +227,7 @@ public class PointsCounter : MonoBehaviour {
                     foreach (var player in RemoveMeeplesAndPickWinner(ref board, result.meeplesPositions, ref meeples))
                     {
 
-                        Debug.Log("POints castle: " + result.points);
+                        Debug.Log("Points castle: " + result.points);
                         GM.AddScore((PlayerColor)player, result.points);
                       
                     }                
@@ -245,7 +243,7 @@ public class PointsCounter : MonoBehaviour {
                 {
                     foreach (var player in RemoveMeeplesAndPickWinner(ref board, result.meeplesPositions, ref meeples))
                     {
-                        Debug.Log("POints road: " + result.points);
+                        Debug.Log("Points road: " + result.points);
                         GM.AddScore((PlayerColor)player, result.points);
 
                     }
@@ -264,6 +262,9 @@ public class PointsCounter : MonoBehaviour {
 		foreach (Index index in meeplesPositions)
 		{
 			players [(int)board [index.x, index.y].GetComponent<Tile> ().Areas.Find (a => a.player != null).player.color]++;
+            
+            // return meeple to player
+            GM.ReturnMeeple(board [index.x, index.y].GetComponent<Tile> ().Areas.Find (a => a.player != null).player.color);
             board[index.x, index.y].GetComponent<Tile>().Areas.Find(aa => aa.player != null).player = null;
 			Destroy(meeples[index.x, index.y]);
 		}
