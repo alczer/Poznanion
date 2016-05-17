@@ -188,8 +188,10 @@ public class PointsCounter : MonoBehaviour {
 
         GM.AddScore(board[coord[0], coord[1]].GetComponent<Tile>().Areas.Find(a => a.player != null).player.color, 9);
         // board[coord[0], coord[1]].GetComponent<Tile>().Areas.Find (a => a.player != null).player.points += 9;
-		board [coord[0], coord[1]].GetComponent<Tile>().Areas.Find (a => a.player != null).player = null;
-		Destroy(meeples[coord [0], coord [1]]);
+
+        GM.ReturnMeeple(board[coord[0], coord[1]].GetComponent<Tile>().Areas.Find(a => a.player != null).player.color);
+        board [coord[0], coord[1]].GetComponent<Tile>().Areas.Find (a => a.player != null).player = null;
+        Destroy(meeples[coord [0], coord [1]]);
 	}
 
 	public void countPointsAfterMove(ref GameObject[,] board, int x, int y, ref GameObject[,] meeples)
