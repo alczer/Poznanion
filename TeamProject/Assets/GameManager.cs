@@ -80,9 +80,9 @@ public class GameManager : MonoBehaviour
     }
     public void AddScore(PlayerColor color, int score)
     {
-        Debug.Log("liczba graczy: " + playersList.Count);
-        Debug.Log("Lista graczy : " + String.Join(" ", playersList.Select(item => item.color.ToString()).ToArray())); //////////////////////
-        Debug.Log("Lista graczy : " + String.Join(" ", playersList.Select(item => item.name.ToString()).ToArray())); //////////////////////
+        //Debug.Log("liczba graczy: " + playersList.Count);
+        //Debug.Log("Lista graczy : " + String.Join(" ", playersList.Select(item => item.color.ToString()).ToArray())); //////////////////////
+        //Debug.Log("Lista graczy : " + String.Join(" ", playersList.Select(item => item.name.ToString()).ToArray())); //////////////////////
         playersList.Find(a => a.color == color).ChangeScore(score);
     }
 

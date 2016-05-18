@@ -180,10 +180,10 @@ public class TilesManager : MonoBehaviour
         }
         foreach (var n in neighbours)
         {
-            Debug.Log("Klocek sąsiad to : " + n.x + " " + n.y);
-            Debug.Log("Obszar klokcka sąsiada to : " + String.Join(" ", n.area.edges.Select(item => item.ToString()).ToArray()));
+         //   Debug.Log("Klocek sąsiad to : " + n.x + " " + n.y);
+        //    Debug.Log("Obszar klokcka sąsiada to : " + String.Join(" ", n.area.edges.Select(item => item.ToString()).ToArray()));
         }
-        Debug.Log("---");
+      //  Debug.Log("---");
         //Debug.Log("wielkość listy:"+neighbours.Count);
         return neighbours;
     }
@@ -287,8 +287,8 @@ public class TilesManager : MonoBehaviour
             && (tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1] - 1] == null || tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1] - 1].GetComponent<Tile>().RightTerrain == gameObject.GetComponent<Tile>().DownTerrain))
         {
 
-            Debug.Log("%%%%%%%%%%%%%%%%%%%%%");
-            Debug.Log("przed obrotem:");
+          //  Debug.Log("%%%%%%%%%%%%%%%%%%%%%");
+         //   Debug.Log("przed obrotem:");
             String result5 = "";
             foreach (var l in tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().Areas)
             {
@@ -296,17 +296,17 @@ public class TilesManager : MonoBehaviour
                 result5 += " | ";
 
             }
-            Debug.Log(result5);
-            Debug.Log("UP: "+tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().UpTerrain.ToString() +
-            " RIGH: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().RightTerrain.ToString() +
-            " DOWN: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().DownTerrain.ToString() +
-            " LEFT: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().LeftTerrain.ToString());
+         //   Debug.Log(result5);
+        //    Debug.Log("UP: "+tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().UpTerrain.ToString() +
+        //    " RIGH: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().RightTerrain.ToString() +
+        //    " DOWN: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().DownTerrain.ToString() +
+         //   " LEFT: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().LeftTerrain.ToString());
 
 
             rotateClockwise90(ref gameObject, ref mask);
-            Debug.Log("turning 1 time!");
+          //  Debug.Log("turning 1 time!");
 
-            Debug.Log("Po obrocie:");
+         //   Debug.Log("Po obrocie:");
 
             String result6 = "";
             foreach (var l in tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().Areas)
@@ -315,20 +315,20 @@ public class TilesManager : MonoBehaviour
                 result6 += " | ";
 
             }
-            Debug.Log(result6);
-            Debug.Log("UP: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().UpTerrain.ToString() +
-           " RIGH: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().RightTerrain.ToString() +
-           " DOWN: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().DownTerrain.ToString() +
-           " LEFT: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().LeftTerrain.ToString());
-            Debug.Log("%%%%%%%%%%%%%%%%%%%%%");
+          //  Debug.Log(result6);
+        //    Debug.Log("UP: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().UpTerrain.ToString() +
+        //   " RIGH: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().RightTerrain.ToString() +
+        //   " DOWN: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().DownTerrain.ToString() +
+        //   " LEFT: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().LeftTerrain.ToString());
+        //    Debug.Log("%%%%%%%%%%%%%%%%%%%%%");
         }
         else if ((tilesOnBoard[gameObjectPosition[0] - 1, gameObjectPosition[1]] == null || tilesOnBoard[gameObjectPosition[0] - 1, gameObjectPosition[1]].GetComponent<Tile>().DownTerrain == gameObject.GetComponent<Tile>().DownTerrain)
             && (tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1] + 1] == null || tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1] + 1].GetComponent<Tile>().LeftTerrain == gameObject.GetComponent<Tile>().LeftTerrain)
             && (tilesOnBoard[gameObjectPosition[0] + 1, gameObjectPosition[1]] == null || tilesOnBoard[gameObjectPosition[0] + 1, gameObjectPosition[1]].GetComponent<Tile>().UpTerrain == gameObject.GetComponent<Tile>().UpTerrain)
             && (tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1] - 1] == null || tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1] - 1].GetComponent<Tile>().RightTerrain == gameObject.GetComponent<Tile>().RightTerrain))
         {
-            Debug.Log("%%%%%%%%%%%%%%%%%%%%%");
-            Debug.Log("przed obrotem:");
+         //   Debug.Log("%%%%%%%%%%%%%%%%%%%%%");
+         //   Debug.Log("przed obrotem:");
             String result5 = "";
             foreach (var l in tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().Areas)
             {
@@ -336,15 +336,15 @@ public class TilesManager : MonoBehaviour
                 result5 += " | ";
 
             }
-            Debug.Log(result5);
-            Debug.Log("UP: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().UpTerrain.ToString() +
-           " RIGH: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().RightTerrain.ToString() +
-           " DOWN: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().DownTerrain.ToString() +
-           " LEFT: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().LeftTerrain.ToString());
+        //    Debug.Log(result5);
+         //   Debug.Log("UP: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().UpTerrain.ToString() +
+         //  " RIGH: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().RightTerrain.ToString() +
+         //  " DOWN: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().DownTerrain.ToString() +
+         //  " LEFT: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().LeftTerrain.ToString());
             rotateClockwise90(ref gameObject, ref mask);
             rotateClockwise90(ref gameObject, ref mask);
-            Debug.Log("turning 2 times!");
-            Debug.Log("Po obrocie:");
+         //   Debug.Log("turning 2 times!");
+         //   Debug.Log("Po obrocie:");
 
             String result6 = "";
             foreach (var l in tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().Areas)
@@ -353,20 +353,20 @@ public class TilesManager : MonoBehaviour
                 result6 += " | ";
 
             }
-            Debug.Log(result6);
-            Debug.Log("UP: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().UpTerrain.ToString() +
-           " RIGH: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().RightTerrain.ToString() +
-           " DOWN: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().DownTerrain.ToString() +
-           " LEFT: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().LeftTerrain.ToString());
-            Debug.Log("%%%%%%%%%%%%%%%%%%%%%");
+        //    Debug.Log(result6);
+        //    Debug.Log("UP: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().UpTerrain.ToString() +
+         //  " RIGH: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().RightTerrain.ToString() +
+         //  " DOWN: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().DownTerrain.ToString() +
+         //  " LEFT: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().LeftTerrain.ToString());
+         //   Debug.Log("%%%%%%%%%%%%%%%%%%%%%");
         }
         else if ((tilesOnBoard[gameObjectPosition[0] - 1, gameObjectPosition[1]] == null || tilesOnBoard[gameObjectPosition[0] - 1, gameObjectPosition[1]].GetComponent<Tile>().DownTerrain == gameObject.GetComponent<Tile>().RightTerrain)
             && (tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1] + 1] == null || tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1] + 1].GetComponent<Tile>().LeftTerrain == gameObject.GetComponent<Tile>().DownTerrain)
             && (tilesOnBoard[gameObjectPosition[0] + 1, gameObjectPosition[1]] == null || tilesOnBoard[gameObjectPosition[0] + 1, gameObjectPosition[1]].GetComponent<Tile>().UpTerrain == gameObject.GetComponent<Tile>().LeftTerrain)
             && (tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1] - 1] == null || tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1] - 1].GetComponent<Tile>().RightTerrain == gameObject.GetComponent<Tile>().UpTerrain))
         {
-            Debug.Log("%%%%%%%%%%%%%%%%%%%%%");
-            Debug.Log("przed obrotem:");
+         //   Debug.Log("%%%%%%%%%%%%%%%%%%%%%");
+         //   Debug.Log("przed obrotem:");
             String result5 = "";
             foreach (var l in tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().Areas)
             {
@@ -374,16 +374,16 @@ public class TilesManager : MonoBehaviour
                 result5 += " | ";
 
             }
-            Debug.Log(result5);
-            Debug.Log("UP: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().UpTerrain.ToString() +
-           " RIGH: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().RightTerrain.ToString() +
-           " DOWN: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().DownTerrain.ToString() +
-           " LEFT: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().LeftTerrain.ToString());
+        //    Debug.Log(result5);
+        //    Debug.Log("UP: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().UpTerrain.ToString() +
+        //   " RIGH: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().RightTerrain.ToString() +
+        //   " DOWN: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().DownTerrain.ToString() +
+        //   " LEFT: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().LeftTerrain.ToString());
             rotateClockwise90(ref gameObject, ref mask);
             rotateClockwise90(ref gameObject, ref mask);
             rotateClockwise90(ref gameObject, ref mask);
-            Debug.Log("turning 3 times!");
-            Debug.Log("Po obrocie:");
+         //   Debug.Log("turning 3 times!");
+         //   Debug.Log("Po obrocie:");
 
             String result6 = "";
             foreach (var l in tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().Areas)
@@ -392,12 +392,12 @@ public class TilesManager : MonoBehaviour
                 result6 += " | ";
 
             }
-            Debug.Log(result6);
-            Debug.Log("UP: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().UpTerrain.ToString() +
-           " RIGH: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().RightTerrain.ToString() +
-           " DOWN: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().DownTerrain.ToString() +
-           " LEFT: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().LeftTerrain.ToString());
-            Debug.Log("%%%%%%%%%%%%%%%%%%%%%");
+        //    Debug.Log(result6);
+        //    Debug.Log("UP: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().UpTerrain.ToString() +
+        //   " RIGH: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().RightTerrain.ToString() +
+        //   " DOWN: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().DownTerrain.ToString() +
+         //  " LEFT: " + tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1]].GetComponent<Tile>().LeftTerrain.ToString());
+        //    Debug.Log("%%%%%%%%%%%%%%%%%%%%%");
         }
     }
 

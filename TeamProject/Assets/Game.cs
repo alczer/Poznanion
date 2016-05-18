@@ -66,7 +66,7 @@ public class Game : MonoBehaviour
         if(tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas.Any(m => m.player != null))
         {
             String result = "TU STAWIAMY MEEPLA"+String.Join(" ", tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas.Find(m => m.player != null).edges.Select(item => item.ToString()).ToArray());
-            Debug.Log(result);
+         //   Debug.Log(result);
 
         }
         // Debug.Log("Położono" + currentlyPlacedTile[0] + " " + currentlyPlacedTile[1]);
@@ -128,7 +128,7 @@ public class Game : MonoBehaviour
         // Meeple count text
         meepleButtonText.text = GM.GetCurrentPlayer().meeples.ToString();
 
-          
+        Debug.Log("#########################################");
     }
 
     public void MeepleButtonClicked()
@@ -316,7 +316,7 @@ public class Game : MonoBehaviour
             {
                 int ed = tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas.Find(a => a.meeplePlacementIndex == selectedPosition).meeplePlacementIndex;
                 
-                Debug.Log("Wykrywam obszar o indeksie: " + ed + "  //selected position: " + selectedPosition);
+              //  Debug.Log("Wykrywam obszar o indeksie: " + ed + "  //selected position: " + selectedPosition);
 
             }
             if (possibleMeeple.Any(a => a.meeplePlacementIndex == selectedPosition))
@@ -332,7 +332,7 @@ public class Game : MonoBehaviour
                     tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas.Find(a => a.meeplePlacementIndex == selectedPosition).player = new Player(GM.GetCurrentPlayer().name, GM.GetCurrentPlayer().color, GM.GetCurrentPlayer().rgbaColor);
                     placedMeeple = false;
                 }
-                Debug.Log("TAK, tu można postawić meepla!");
+            //    Debug.Log("TAK, tu można postawić meepla!");
 
                 if (possibleMeeple.Find(a => a.meeplePlacementIndex == selectedPosition).terrain == terrainTypes.grass)
                 {
@@ -357,7 +357,7 @@ public class Game : MonoBehaviour
             }
             else
             {
-                Debug.Log("NIE MOŻNA tu postawić meepla!");
+             //   Debug.Log("NIE MOŻNA tu postawić meepla!");
             }
         }
     }
@@ -444,7 +444,7 @@ public class Game : MonoBehaviour
                             {
                                 List<int> ed = tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas.Find(a => a.colorIndex == ColorType).edges;
                                 string resulthahahah = String.Join(" ", ed.Select(item => item.ToString()).ToArray());
-                                Debug.Log("Wykrywam obszar o krawędziach: " + resulthahahah);
+                             //   Debug.Log("Wykrywam obszar o krawędziach: " + resulthahahah);
 
                             }
                             
@@ -452,7 +452,7 @@ public class Game : MonoBehaviour
                             {
                                 if (ColorType == choosenAreaColor)
                                 {
-                                    Debug.Log("Usuwam meeple który już był tutaj!");
+                                 //   Debug.Log("Usuwam meeple który już był tutaj!");
 
                                     Destroy(meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]]);
                                     meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]] = null;
@@ -479,10 +479,10 @@ public class Game : MonoBehaviour
                                         
                                         placedMeeple = false;
                                     }
-                                    Debug.Log("TAK, tu można postawić meepla!");
+                                 //   Debug.Log("TAK, tu można postawić meepla!");
                                     choosenAreaColor = possibleMeeple.Find(a => a.colorIndex == ColorType).colorIndex;
                                     int selectedPosition = possibleMeeple.Find(a => a.colorIndex == ColorType).meeplePlacementIndex;
-                                    Debug.Log(selectedPosition);
+                                 //   Debug.Log(selectedPosition);
                                     placedMeeple = true;
                                     if (possibleMeeple.Find(a => a.colorIndex == ColorType).terrain == terrainTypes.grass)
                                     {
@@ -511,7 +511,7 @@ public class Game : MonoBehaviour
                             }
                             else
                             {
-                                Debug.Log("NIE MOŻNA tu postawić meepla!");
+                             //   Debug.Log("NIE MOŻNA tu postawić meepla!");
                             }
                         }
                     }
@@ -539,13 +539,13 @@ public class Game : MonoBehaviour
                                         result3 += String.Join(" ", l.edges.Select(item => item.ToString()).ToArray());
                                         result3 += " | ";
                                     }
-                                    Debug.Log(result3);
+                                  //  Debug.Log(result3);
                                     //rotateClockwise90(ref tilesOnBoard[arrayIndex[0], arrayIndex[1]]);              
                                 }
                             }
                             else
                             {
-                                Debug.Log("A tile is already at this position");
+                               // Debug.Log("A tile is already at this position");
                             }
                         }
                         else if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject() == false)
@@ -563,21 +563,21 @@ public class Game : MonoBehaviour
                                 }
                                 OKButton.SetActive(true);
                                 MeepleButton.SetActive(true);
-                                Debug.Log("#################################");
+                              //  Debug.Log("#################################");
 
                                 choosenTile.Clone(TM.tilesList[i]);
                                 tilesOnBoard[arrayIndex[0], arrayIndex[1]] = Instantiate(objectToinstantiate, position, Quaternion.identity) as GameObject; // instatiate a prefab on the position where the ray hits the floor. 
                                 masks[arrayIndex[0], arrayIndex[1]] = Instantiate(Mask, position, Quaternion.identity) as GameObject;
 
                                 Tile tile = tilesOnBoard[arrayIndex[0], arrayIndex[1]].AddComponent<Tile>();
-                                Debug.Log("choosen tile:");
+                            //    Debug.Log("choosen tile:");
                                 String result9 = "";
                                 foreach (var l in choosenTile.Areas)
                                 {
                                     result9 += String.Join(" ", l.edges.Select(item => item.ToString()).ToArray());
                                     result9 += " | ";
                                 }
-                                Debug.Log(result9);
+                             //   Debug.Log(result9);
 
 
                                 tile.Init(choosenTile.UpTerrain, choosenTile.RightTerrain, choosenTile.DownTerrain, choosenTile.LeftTerrain, position.x, position.z, choosenTile.Material, choosenTile.Mask, choosenTile.TypeCount, choosenTile.Turn, choosenTile.Plus, choosenTile.Areas);
@@ -590,7 +590,7 @@ public class Game : MonoBehaviour
                                     result4 += " | ";
 
                                 }
-                                Debug.Log(result4);
+                         //       Debug.Log(result4);
 
 
                                 tilesOnBoard[arrayIndex[0], arrayIndex[1]].GetComponent<Renderer>().material = choosenTile.Material;
