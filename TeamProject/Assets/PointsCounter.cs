@@ -236,7 +236,14 @@ public class PointsCounter : MonoBehaviour {
                 if (board[x + i, y + j] != null && board[x + i, y + j].GetComponent<Tile>().Areas.Exists(a => a.terrain == terrainTypes.monastery))
                     countMonasteryPoints(new int[] { x + i, y + j }, ref board, ref meeples);
     }
-		
+    //public List<int> neighbourEdgesOnTile(List<int> areaEdges)
+    //{
+
+
+
+
+
+    //}
 	public void CountAreaPoints(ref GameObject[,] board, int x, int y, Area area, ref GameObject[,] meeples)
 	{
         
@@ -390,7 +397,7 @@ public class PointsCounter : MonoBehaviour {
 
     public ReturnPoints countGrass(ref GameObject[,] board, int x, int y, ReturnPoints accumulator, ref List<AreaTupleTwo> checkedAreas,ref List<AreaTupleTwo> checkedCastles, Area area)
     {
-
+        Debug.Log("Jestem na trawie w :" + x + " " + y+" "+ String.Join(" ", area.edges.Select(item => item.ToString()).ToArray()));
 
         AreaTupleTwo currentTuple = new AreaTupleTwo(x, y, area.edges, true);
         if (checkedAreas.Any(opt => opt.x == currentTuple.x && opt.y == currentTuple.y && Enumerable.SequenceEqual(opt.area.OrderBy(t => t), currentTuple.area.OrderBy(t => t))))
@@ -401,13 +408,12 @@ public class PointsCounter : MonoBehaviour {
         if (board[x, y].GetComponent<Tile>().Areas.Exists(a => a.player != null && a.terrain == terrainTypes.grass && Enumerable.SequenceEqual(a.edges.OrderBy(t => t), currentTuple.area.OrderBy(t => t))))
         {
             accumulator.meeplesPositions.Add(new Index(x, y));
-            
-            Debug.Log("Znaleziono meepla :"+x + " " + y);
+
+            Debug.Log("Znaleziono meepla :" + x + " " + y);
         }
-            
 
-
-        foreach (var castle in board[x, y].GetComponent<Tile>().Areas.Where(ar => ar.terrain == terrainTypes.castle)) //sprawdzamy każdy zamek na tilu
+        List<int> areaNeighboursOnTile = area.edges.Select(q=> q+1).ToList();
+        foreach (var castle in board[x, y].GetComponent<Tile>().Areas.Where(ar => ar.terrain == terrainTypes.castle && ar.edges.Intersect(areaNeighboursOnTile).ToList().Any())) //sprawdzamy każdy zamek na tilu
         {
             List<AreaTupleTwo> checkedAreasThisCastle = new List<AreaTupleTwo>();
             if (checkedCastles.Any(opt => opt.x == x && opt.y == y && Enumerable.SequenceEqual(opt.area.OrderBy(t => t), castle.edges.OrderBy(t => t))))
@@ -416,6 +422,7 @@ public class PointsCounter : MonoBehaviour {
             }
             else if (checkClosedArea(x,y,ref board,ref checkedCastles,ref checkedAreasThisCastle,castle))
             {
+                Debug.Log("Dodano punkty za zamek: "+x + " " + y+ String.Join(" ", castle.edges.Select(item => item.ToString()).ToArray()));
                 accumulator.points += POINTS_FOR_FINISHED_CASTLE_WHEN_FIELD;
             }
         }
