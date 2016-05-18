@@ -177,14 +177,15 @@ public class PointsCounter : MonoBehaviour {
 		return neighbours;
 	}
 
-    public bool checkClosedArea(int x, int y, ref GameObject[,] board, ref List<AreaTupleTwo> checkedAreas, Area area)
+    public bool checkClosedArea(int x, int y, ref GameObject[,] board, ref List<AreaTupleTwo> checkedAreas, ref List<AreaTupleTwo> checkedGivenAreas, Area area)
     {
         AreaTupleTwo currentTuple = new AreaTupleTwo(x, y, area.edges, true);
-        if (checkedAreas.Any(opt => opt.x == currentTuple.x && opt.y == currentTuple.y && Enumerable.SequenceEqual(opt.area.OrderBy(t => t), currentTuple.area.OrderBy(t => t))))
+        if (checkedGivenAreas.Any(opt => opt.x == currentTuple.x && opt.y == currentTuple.y && Enumerable.SequenceEqual(opt.area.OrderBy(t => t), currentTuple.area.OrderBy(t => t))))
         {
             return true;
         }
         checkedAreas.Add(currentTuple);
+        checkedGivenAreas.Add(currentTuple);
         List<AreaTuple> an = areaNeighbours(ref board, x, y, area.edges);
         foreach (var neighbour in an)
         {
@@ -193,7 +194,7 @@ public class PointsCounter : MonoBehaviour {
                 return false;
             }
 
-            bool returnValue = checkClosedArea(neighbour.x, neighbour.y, ref board, ref checkedAreas, neighbour.area);
+            bool returnValue = checkClosedArea(neighbour.x, neighbour.y, ref board, ref checkedAreas, ref checkedGivenAreas, neighbour.area);
             if (returnValue == false)
             {
                 return false;
@@ -389,9 +390,6 @@ public class PointsCounter : MonoBehaviour {
 
     public ReturnPoints countGrass(ref GameObject[,] board, int x, int y, ReturnPoints accumulator, ref List<AreaTupleTwo> checkedAreas,ref List<AreaTupleTwo> checkedCastles, Area area)
     {
-        //Debug.Log(x);
-        //Debug.Log(y);
-       // Debug.Log(String.Join(" ", area.edges.Select(item => item.ToString()).ToArray()));
 
 
         AreaTupleTwo currentTuple = new AreaTupleTwo(x, y, area.edges, true);
@@ -411,12 +409,12 @@ public class PointsCounter : MonoBehaviour {
 
         foreach (var castle in board[x, y].GetComponent<Tile>().Areas.Where(ar => ar.terrain == terrainTypes.castle)) //sprawdzamy każdy zamek na tilu
         {
-
+            List<AreaTupleTwo> checkedAreasThisCastle = new List<AreaTupleTwo>();
             if (checkedCastles.Any(opt => opt.x == x && opt.y == y && Enumerable.SequenceEqual(opt.area.OrderBy(t => t), castle.edges.OrderBy(t => t))))
             {
                 continue;
             }
-            else if (checkClosedArea(x,y,ref board,ref checkedCastles,castle))
+            else if (checkClosedArea(x,y,ref board,ref checkedCastles,ref checkedAreasThisCastle,castle))
             {
                 accumulator.points += POINTS_FOR_FINISHED_CASTLE_WHEN_FIELD;
             }
