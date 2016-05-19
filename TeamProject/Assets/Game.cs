@@ -30,6 +30,7 @@ public class Game : MonoBehaviour
     public GameObject Selected;
     public GameObject NextTileImage;
     public Text playername;
+    public Text tilesLeftText;
     private bool currentlyPlacingTile;
     private bool currentlyPlacingMeeple;
     private bool placedMeeple;
@@ -48,7 +49,7 @@ public class Game : MonoBehaviour
     RaycastHit hit;
     public GameObject objectToinstantiate;
     public int currentNbrTiles;
-
+    int tilesLeft = 72;
 
 
     int i;
@@ -56,23 +57,28 @@ public class Game : MonoBehaviour
 
     public void ButtonClicked()
     {
-        // count meeples
         if (placedMeeple == true)
         {
             GM.GetCurrentPlayer().meeples--;
             placedMeeple = false;
         }
-        
-        if(tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas.Any(m => m.player != null))
+        if (tilesLeft > 1)
         {
-            String result = "TU STAWIAMY MEEPLA"+String.Join(" ", tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas.Find(m => m.player != null).edges.Select(item => item.ToString()).ToArray());
-         //   Debug.Log(result);
+            PC.countPointsAfterMove(ref tilesOnBoard, currentlyPlacedTile[0], currentlyPlacedTile[1], ref meeples);
+        }
+        else
+        {
+
+            //find all remaining meeples
+
+            //fore each meeple
+
+            //PC.countPointsAfterMove(ref tilesOnBoard, currentlyPlacedTile[0], currentlyPlacedTile[1], ref meeples,true);
+
+            //chceck which meeples in the list dont exist anymore
 
         }
-        // Debug.Log("Położono" + currentlyPlacedTile[0] + " " + currentlyPlacedTile[1]);
-        // Debug.Log("ZARAZ LICZE PUNKTY");
-        PC.countPointsAfterMove(ref tilesOnBoard, currentlyPlacedTile[0], currentlyPlacedTile[1], ref meeples);
-        // Debug.Log("PUNKTY GRACZA:" + GM.GetCurrentPlayer().points);
+        
         currentlyPlacingMeeple = false;
         currentlyPlacingTile = false;
         currentlyPlacedTile = null;
@@ -124,11 +130,9 @@ public class Game : MonoBehaviour
         {
             blackPlayerScore.text = GM.GetBlackPlayerCopy().points.ToString();
         }
-
-        // Meeple count text
         meepleButtonText.text = GM.GetCurrentPlayer().meeples.ToString();
-
-        Debug.Log("#########################################");
+        tilesLeft--;
+        tilesLeftText.text = tilesLeft.ToString();
     }
 
     public void MeepleButtonClicked()
