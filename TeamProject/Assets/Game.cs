@@ -68,15 +68,17 @@ public class Game : MonoBehaviour
         }
         else
         {
-
+            PC.countPointsAfterMove(ref tilesOnBoard, currentlyPlacedTile[0], currentlyPlacedTile[1], ref meeples);
             //find all remaining meeples
-
-            //fore each meeple
-
-            //PC.countPointsAfterMove(ref tilesOnBoard, currentlyPlacedTile[0], currentlyPlacedTile[1], ref meeples,true);
-
-            //chceck which meeples in the list dont exist anymore
-
+            for(int x = 0; x < meeples.GetLength(0); x += 1) {
+                for (int y = 0; y < meeples.GetLength(1); y += 1)
+                {
+                    if (meeples[x,y] != null)
+                    {
+                        PC.countPointsAfterMove(ref tilesOnBoard, x, y, ref meeples, true);
+                    }
+                }
+            }
         }
         
         currentlyPlacingMeeple = false;

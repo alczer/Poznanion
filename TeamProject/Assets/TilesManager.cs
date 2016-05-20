@@ -705,7 +705,7 @@ public class TilesManager : MonoBehaviour
             new Area { edges = new List<int>() {11}, terrain = terrainTypes.road, colorIndex = 6, meeplePlacementIndex = 33},
             new Area { edges = new List<int>() {0}, terrain = terrainTypes.intersection, colorIndex = -1, meeplePlacementIndex = -1}});
         //RRRR
-        addTileToList(terrainTypes.road, terrainTypes.road, terrainTypes.road, terrainTypes.road, 0, 0, RRRR, RRRR_Mask, 20, 0, false, new List<Area>() {
+        addTileToList(terrainTypes.road, terrainTypes.road, terrainTypes.road, terrainTypes.road, 0, 0, RRRR, RRRR_Mask, 1, 0, false, new List<Area>() {
             new Area { edges = new List<int>() {12,1}, terrain = terrainTypes.grass, colorIndex = 1, meeplePlacementIndex = 1},
             new Area { edges = new List<int>() {2}, terrain = terrainTypes.road, colorIndex = 2, meeplePlacementIndex = 3},
             new Area { edges = new List<int>() {3,4} ,terrain = terrainTypes.grass, colorIndex = 3, meeplePlacementIndex = 11},

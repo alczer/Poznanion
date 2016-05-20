@@ -223,7 +223,26 @@ public class PointsCounter : MonoBehaviour {
         GM.ReturnMeeple(board[coord[0], coord[1]].GetComponent<Tile>().Areas.Find(a => a.player != null).player.color);
         board [coord[0], coord[1]].GetComponent<Tile>().Areas.Find (a => a.player != null).player = null;
         Destroy(meeples[coord [0], coord [1]]);
-	}
+        meeples[coord[0], coord[1]] = null;
+
+    }
+
+    public void countMonasteryPointsEnd(int[] coord, ref GameObject[,] board, ref GameObject[,] meeples)
+    {
+        int value = 0;
+        for (int i = -1; i < 2; ++i)
+            for (int j = -1; j < 2; ++j)
+                if (board[coord[0] + i, coord[1] + j] != null)
+                    value++;
+        
+        GM.AddScore(board[coord[0], coord[1]].GetComponent<Tile>().Areas.Find(a => a.player != null).player.color, value);
+
+        GM.ReturnMeeple(board[coord[0], coord[1]].GetComponent<Tile>().Areas.Find(a => a.player != null).player.color);
+        board[coord[0], coord[1]].GetComponent<Tile>().Areas.Find(a => a.player != null).player = null;
+        Destroy(meeples[coord[0], coord[1]]);
+        meeples[coord[0], coord[1]] = null;
+    }
+
     public void countPointsAfterMove(ref GameObject[,] board, int x, int y, ref GameObject[,] meeples, bool endgame = false)
 	{
        // Debug.Log("Jestem w counterze");
@@ -232,27 +251,29 @@ public class PointsCounter : MonoBehaviour {
          //   Debug.Log("Liczę dla roznych obszarów");
             CountAreaPoints(ref board, x, y, area, ref meeples, endgame);
 		}
-    //    Debug.Log("Liczę dla monastery");
-        for (int i = -1; i < 2; ++i)
-            for (int j = -1; j < 2; ++j)
-                if (board[x + i, y + j] != null && board[x + i, y + j].GetComponent<Tile>().Areas.Exists(a => a.terrain == terrainTypes.monastery))
-                    countMonasteryPoints(new int[] { x + i, y + j }, ref board, ref meeples);
+        //    Debug.Log("Liczę dla monastery");
+        if (!endgame)
+        {
+            for (int i = -1; i < 2; ++i)
+                for (int j = -1; j < 2; ++j)
+                    if (board[x + i, y + j] != null && board[x + i, y + j].GetComponent<Tile>().Areas.Exists(a => a.terrain == terrainTypes.monastery))
+                        countMonasteryPoints(new int[] { x + i, y + j }, ref board, ref meeples);
+        }
+        
     }
-    //public List<int> neighbourEdgesOnTile(List<int> areaEdges)
-    //{
 
-
-
-
-
-    //}
 	public void CountAreaPoints(ref GameObject[,] board, int x, int y, Area area, ref GameObject[,] meeples, bool endgame)
 	{
-        
 		List<AreaTupleTwo> checkedAreas = new List<AreaTupleTwo>();
 		ReturnPoints result = new ReturnPoints();
 		switch(area.terrain)
 		{
+            case terrainTypes.monastery:
+                if (endgame)
+                {
+                    countMonasteryPointsEnd(new int[] { x, y }, ref board, ref meeples);
+                }
+                break;
 			case terrainTypes.castle:
                 if (endgame)
                 {
@@ -284,9 +305,7 @@ public class PointsCounter : MonoBehaviour {
                             GM.AddScore((PlayerColor)player, result.points);
                         }
                     }
-
                 }
-			
 			break;
             case terrainTypes.road:
                 if (endgame)
@@ -303,7 +322,6 @@ public class PointsCounter : MonoBehaviour {
                             GM.AddScore((PlayerColor)player, result.points);
                         }
                     }
-
                 }
                 else
                 {
@@ -340,14 +358,11 @@ public class PointsCounter : MonoBehaviour {
                         {
                             Debug.Log("Przyznane punkty za farmę: " + result.points);
                             GM.AddScore((PlayerColor)player, result.points);
-
                         }
                     }
-
                 }
             break;
         }
-
     }
 
 	public List<int> RemoveMeeplesAndPickWinner(ref GameObject[,] board, List<Index> meeplesPositions,ref GameObject[,] meeples)
@@ -363,7 +378,8 @@ public class PointsCounter : MonoBehaviour {
             GM.ReturnMeeple(board [index.x, index.y].GetComponent<Tile> ().Areas.Find (a => a.player != null).player.color);
             board[index.x, index.y].GetComponent<Tile>().Areas.Find(aa => aa.player != null).player = null;
 			Destroy(meeples[index.x, index.y]);
-		}
+            meeples[index.x, index.y] = null;
+        }
 
 		int max_count = players[0];
 		List<int> maxList = new List<int> ();
@@ -540,6 +556,7 @@ public class PointsCounter : MonoBehaviour {
       //  Debug.Log("Sąsiedzi sprawdzeni, zwracamy akumulator: " + accumulator.points + "!");
         return accumulator;
     }
+
     public ReturnPoints countCastleEnd(ref GameObject[,] board, int x, int y, ReturnPoints accumulator, ref List<AreaTupleTwo> checkedAreas, Area area)
     {
         AreaTupleTwo currentTuple = new AreaTupleTwo(x, y, area.edges, true);
@@ -563,35 +580,6 @@ public class PointsCounter : MonoBehaviour {
         }
         return accumulator;
     }
-    /*
-	public ReturnPoints countFarm(ref GameObject[,] board, int x, int y, ReturnPoints accumulator, visited, zamkiVisited)
-	{
-		AreaTupleTwo currentTuple = new AreaTupleTwo (x, y, area, true);
-		if(checkedAreas.Contains(currentTuple))//poprawic sprawdzanie
-			return accumulator;
-		if(board[x,y].GetComponent<Tile>().Areas.Exists(a => a.player != null))
-			accumulator.meeplesPositions.Add(Index(x,y));
-		foreach(zamek in currentTile.zamki)
-			AreaTuple currentZamek = new AreaTuple(x,y,ZamekData,true);
-			if(zamkiVisited.Contains(currentZamek) 
-			{
-				//do nothing
-			}
-			else
-			{
-				ZamekData res = CheckIfCastleFinished(); 
-				if(res.finished)
-				{
-					zamkiVisited.Add(res.fields);
-					accumulator.points += POINTS_FOR_CASTLE_WHEN_FIELD;
-				}
-			}
-		foreach(neighbour in neighbours(board,x,y))
-		{
-			if(!neighbour)
-				return ReturnPoints(0,empty);
-		}
-	}
-    */
+   
 
 }
