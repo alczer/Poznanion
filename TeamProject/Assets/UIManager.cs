@@ -137,7 +137,7 @@ public class UIManager : MonoBehaviour
     }
     public void GoToLAN()
     {
-        GM.ShowAdPlacement();
+        //GM.ShowAdPlacement();
         GM.SetGameState(GameState.LOBBY);
         Debug.Log(GM.gameState);
     }
@@ -149,7 +149,7 @@ public class UIManager : MonoBehaviour
     }
     public void GoToSettings()
     {
-        GM.ShowAdPlacement();
+        //GM.ShowAdPlacement();
     }
     private void HandlePlayerOptions(PlayerOptions options,ref GameObject frame,ref GameObject input, ref GameObject AI)
     {

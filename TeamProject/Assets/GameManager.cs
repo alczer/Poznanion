@@ -133,24 +133,24 @@ public class GameManager : MonoBehaviour
         GameManager.instance = null;
     }
 
-    public void ShowAdPlacement()
-    {
-        Advertisement.debugLevel = Advertisement.DebugLevel.Debug;
-        if(Advertisement.testMode)
-        {
-            Debug.Log("test");
-        }
-        if (Advertisement.IsReady())
-        {
-            Advertisement.Show();
-        }
-        //if (string.IsNullOrEmpty(zoneId)) zoneId = null;
+    //public void ShowAdPlacement()
+    //{
+    //    Advertisement.debugLevel = Advertisement.DebugLevel.Debug;
+    //    if(Advertisement.testMode)
+    //    {
+    //        Debug.Log("test");
+    //    }
+    //    if (Advertisement.IsReady())
+    //    {
+    //        Advertisement.Show();
+    //    }
+    //    //if (string.IsNullOrEmpty(zoneId)) zoneId = null;
 
-        //ShowOptions options = new ShowOptions();
-        //options.resultCallback = HandleShowResult;
-        //if (Advertisement.IsReady())
-        //{
-        //    Advertisement.Show(zoneId, options);
-        //}
-    }
+    //    //ShowOptions options = new ShowOptions();
+    //    //options.resultCallback = HandleShowResult;
+    //    //if (Advertisement.IsReady())
+    //    //{
+    //    //    Advertisement.Show(zoneId, options);
+    //    //}
+    //}
 }

@@ -57,6 +57,9 @@ public class Game : MonoBehaviour
 
     public void ButtonClicked()
     {
+        tilesLeft--;
+        tilesLeftText.text = tilesLeft.ToString();
+
         if (placedMeeple == true)
         {
             GM.GetCurrentPlayer().meeples--;
@@ -133,8 +136,6 @@ public class Game : MonoBehaviour
             blackPlayerScore.text = GM.GetBlackPlayerCopy().points.ToString();
         }
         meepleButtonText.text = GM.GetCurrentPlayer().meeples.ToString();
-        tilesLeft--;
-        tilesLeftText.text = tilesLeft.ToString();
     }
 
     public void MeepleButtonClicked()
@@ -230,6 +231,7 @@ public class Game : MonoBehaviour
 
     void Start()
     {
+        
         currentlyPlacedTile = new int[2];
         currentNbrTiles = 0;
         TM.placeTile(ref objectToinstantiate, ref Mask, 100, 100, ref tilesOnBoard, ref masks);
@@ -247,6 +249,7 @@ public class Game : MonoBehaviour
         currentlyPlacedMeeple = 0;
 
         TM.init(); // Inicjowanie Tiles
+        //tilesLeft = TM.tilesList.Count;
     }
 
     void AI()
