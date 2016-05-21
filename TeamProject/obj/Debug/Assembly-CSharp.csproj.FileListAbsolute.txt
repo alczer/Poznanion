@@ -36,8 +36,9 @@ C:\Users\Qitay\Desktop\TeamProjectGame\TeamProject\Temp\bin\Debug\Unity.UNetWeav
 C:\Users\Qitay\Desktop\TeamProjectGame\TeamProject\Temp\bin\Debug\Unity.CecilTools.dll
 C:\Users\Qitay\Desktop\TeamProjectGame\TeamProject\Temp\bin\Debug\Mono.Cecil.Pdb.dll
 C:\Users\Qitay\Desktop\TeamProjectGame\TeamProject\Temp\bin\Debug\Mono.Cecil.Mdb.dll
-C:\Users\Qitay\Desktop\TeamProjectGame\TeamProject\Temp\bin\Debug\Assembly-CSharp-firstpass.pdb
 C:\Users\Qitay\Desktop\TeamProjectGame\TeamProject\Temp\bin\Debug\UnityEngine.xml
 C:\Users\Qitay\Desktop\TeamProjectGame\TeamProject\Temp\bin\Debug\UnityEditor.xml
 C:\Users\Qitay\Desktop\TeamProjectGame\TeamProject\Temp\bin\Debug\UnityEngine.UI.xml
 C:\Users\Qitay\Desktop\TeamProjectGame\TeamProject\Temp\bin\Debug\UnityEngine.Networking.xml
+C:\Users\Qitay\Desktop\TeamProjectGame\TeamProject\Temp\bin\Debug\UnityEngine.Advertisements.dll
+C:\Users\Qitay\Desktop\TeamProjectGame\TeamProject\Temp\bin\Debug\UnityEngine.Advertisements.xml
