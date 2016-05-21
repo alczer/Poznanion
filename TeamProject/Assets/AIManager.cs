@@ -1,8 +1,79 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 
 public class AIManager : MonoBehaviour {
 
+    class Move
+    {
+        Tile tile;
+        int x;
+        int y;
+        List<int> meeplePosition;
+        float score = 0;
+    };
+
+    //bool terminal()
+    //{
+    //    return true;
+    //}
+
+    //public Move Expectimax(int maxDepth =2)
+    //{
+    //    List<Move> possibleMoves = getPossiblesMoves(...);
+    //    List<Move> selectedMovesList;
+    //    Move bestMove ;
+    //    foreach (var move in possibleMoves)
+    //    {
+    //        move.score = chance(domove(move)...);
+    //        selectedMovesList.Add(move);
+    //    }
+    //    foreach (var move in selectedMovesList)
+    //    {
+    //        if (move.score > bestMove.score)
+    //        {
+    //            bestMove = move;
+    //        }
+    //    }
+    //    return bestMove;
+    //}
+
+    //public float max(int currentDepth, int maxDepth)
+    //{
+    //    if (maxDepth == currentDepth)
+    //    {
+    //        return countCurrentPoints(int zdjetepunkty, board);
+    //    }
+    //    List<Move> possibleMoves = getPossiblesMoves(...);
+    //    float result = 0;
+    //    foreach (var move in possibleMoves)
+    //    {
+    //        float p = probability(move);
+    //        result += p * selectMax(result,chance(domove(move),...))
+    //    }
+    //    return result;
+    //}
+
+    //public float chance()
+    //{
+    //    if (maxDepth == currentDepth)
+    //    {
+    //        return countCurrentPoints(int zdjetepunkty, board);
+    //    }
+    //    List<Move> possibleMoves = getPossiblesMoves(...);
+    //    float result = 8192;
+    //    foreach (var move in possibleMoves)
+    //    {
+    //        float p = probability(move);
+    //        result += p* selectMin(result, max(domove(move),...))
+    //    }
+    //    return result;
+    //}
+
+    //public float probability()
+    //{
+    //    return 1;
+    //}
+    
 	// Use this for initialization
 	void Start () {
 	
@@ -12,4 +83,8 @@ public class AIManager : MonoBehaviour {
 	void Update () {
 	
 	}
+    
+   
+
+
 }
