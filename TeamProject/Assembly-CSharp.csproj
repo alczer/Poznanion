@@ -48,6 +48,8 @@
      <Compile Include="Assets\AIManager.cs" />
      <Compile Include="Assets\Ads.cs" />
      <Compile Include="Assets\CameraManager.cs" />
+     <Compile Include="Assets\FloatingText.cs" />
+     <Compile Include="Assets\FloatingTextController.cs" />
      <Compile Include="Assets\Game.cs" />
      <Compile Include="Assets\GameManager.cs" />
      <Compile Include="Assets\NetworkManager.cs" />

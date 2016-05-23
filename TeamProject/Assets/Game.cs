@@ -11,10 +11,11 @@ public class Game : MonoBehaviour
     GameObject[,] tilesOnBoard = new GameObject[200, 200];
     GameObject[,] masks = new GameObject[200, 200];
     GameObject[,] possibleMoves = new GameObject[200, 200];
+    GameObject[,] meeples = new GameObject[200, 200];
+
+    List<Area> possibleMeeple = new List<Area>();
     int choosenAreaColor = -1;
     int ColorType = -1;
-    GameObject[,] meeples = new GameObject[200, 200];
-    List<Area> possibleMeeple = new List<Area>();
     public Text redPlayerScore;
     public Text bluePlayerScore;
     public Text greenPlayerScore;
@@ -22,10 +23,11 @@ public class Game : MonoBehaviour
     public Text blackPlayerScore;
     public Text meepleButtonText;
 
-    GameObject gameManager;
     public CameraManager CM;
     public TilesManager TM;
     public PointsCounter PC;
+    public AIManager AM;
+
     GameManager GM;
     public GameObject Selected;
     public GameObject NextTileImage;
@@ -36,6 +38,7 @@ public class Game : MonoBehaviour
     private bool placedMeeple;
     private int[] currentlyPlacedTile;
     private Tile choosenTile;
+
     public GameObject OKButton;
     public GameObject MeepleButton;
     public GameObject Mask;
@@ -49,13 +52,12 @@ public class Game : MonoBehaviour
     RaycastHit hit;
     public GameObject objectToinstantiate;
     public int currentNbrTiles;
-    int tilesLeft = 72;
+    int tilesLeft = 71;
+
+    int currentTileIndex;
 
 
-    int i;
-
-
-    public void ButtonClicked()
+    public void AcceptButtonClicked()
     {
         tilesLeft--;
         tilesLeftText.text = tilesLeft.ToString();
@@ -65,7 +67,7 @@ public class Game : MonoBehaviour
             GM.GetCurrentPlayer().meeples--;
             placedMeeple = false;
         }
-        if (tilesLeft > 1)
+        if (tilesLeft > 0)
         {
             PC.countPointsAfterMove(ref tilesOnBoard, currentlyPlacedTile[0], currentlyPlacedTile[1], ref meeples);
         }
@@ -107,12 +109,13 @@ public class Game : MonoBehaviour
         }
         currentlyPlacedMeeple++;
 
-        TM.tilesList[i].TypeCount--;
-        if (TM.tilesList[i].TypeCount == 0)
-        {
-            TM.tilesList.RemoveAt(i);
-        }
 
+
+        TM.tilesList.RemoveAt(currentTileIndex);
+
+        
+        
+            
         // Score text
         List<Player> players = GM.GetPlayerListCopy();
         if (players.Any(it => it.color == PlayerColor.RED))
@@ -236,7 +239,7 @@ public class Game : MonoBehaviour
         currentNbrTiles = 0;
         TM.placeTile(ref objectToinstantiate, ref Mask, 100, 100, ref tilesOnBoard, ref masks);
         Tile startTile = tilesOnBoard[100, 100].AddComponent<Tile>();
-        startTile.Init(terrainTypes.castle, terrainTypes.road, terrainTypes.grass, terrainTypes.road, 0, 0, TM.CRFR, TM.CRFR_Mask, 1, 0, false, new List<Area>() { 
+        startTile.Init(1, terrainTypes.castle, terrainTypes.road, terrainTypes.grass, terrainTypes.road, 0, 0, TM.CRFR, TM.CRFR_Mask, 0, false, new List<Area>() { 
             new Area { edges = new List<int>() {1,2,3} ,terrain = terrainTypes.castle, colorIndex = 1},
             new Area { edges = new List<int>() {4,12}, terrain = terrainTypes.grass, colorIndex = 2},
             new Area { edges = new List<int>() {5, 0, 11}, terrain = terrainTypes.road, colorIndex = 3}, 
@@ -271,14 +274,14 @@ public class Game : MonoBehaviour
                     j++;
                 } while (possiblePositions.Count == 0 && j < 10);
 
+                Double prob = AM.probability(TM.tilesList, choosenTile);
+                Debug.Log("Prawdopodobieństwo wylosowania wylosowanego tile'a: " + prob);
+
                 NextTileImage.GetComponent<Image>().material = choosenTile.Material;
                 rolled = UnityEngine.Random.Range(0, possiblePositions.Count);
 
-                TM.tilesList[i].TypeCount--;
-                if (TM.tilesList[i].TypeCount == 0)
-                {
-                    TM.tilesList.RemoveAt(i);
-                }
+                TM.tilesList.RemoveAt(i);
+                
                 currentlyPlacingTile = true;
                 playername.text = GM.GetCurrentPlayer().name;
 
@@ -295,7 +298,7 @@ public class Game : MonoBehaviour
                         {
                             tilesOnBoard[arrPosition[0], arrPosition[1]] = Instantiate(objectToinstantiate, new Vector3(position[0], 0, position[1]), Quaternion.identity) as GameObject; // instatiate a prefab on the position where the ray hits the floor.                         
                             Tile tile = tilesOnBoard[arrPosition[0], arrPosition[1]].AddComponent<Tile>();
-                            tile.Init(choosenTile.UpTerrain, choosenTile.RightTerrain, choosenTile.DownTerrain, choosenTile.LeftTerrain, position[0], position[1], choosenTile.Material, choosenTile.Mask, choosenTile.TypeCount, choosenTile.Turn, choosenTile.Plus, choosenTile.Areas);
+                            tile.Init(choosenTile.IdNumber, choosenTile.UpTerrain, choosenTile.RightTerrain, choosenTile.DownTerrain, choosenTile.LeftTerrain, position[0], position[1], choosenTile.Material, choosenTile.Mask, choosenTile.Turn, choosenTile.Plus, choosenTile.Areas);
                             masks[arrPosition[0], arrPosition[1]] = Instantiate(Mask, new Vector3(position[0], (float)0.1, position[1]), Quaternion.identity) as GameObject;
                             TM.rotateFirstMatchingRotation(ref tilesOnBoard[arrPosition[0], arrPosition[1]], ref masks[arrPosition[0], arrPosition[1]], arrPosition, ref tilesOnBoard);
 
@@ -376,6 +379,15 @@ public class Game : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // enter test
+        if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
+        {
+            if (OKButton.active)
+            {
+                AcceptButtonClicked();
+            }
+        }
+
         // Sprawdzamy czy to komputer
         if (GM.GetCurrentPlayer().type == PlayerType.AI)
         {
@@ -391,12 +403,15 @@ public class Game : MonoBehaviour
                 List<int[]> possiblePositions;
                 do
                 {
-                    i = UnityEngine.Random.Range(0, TM.tilesList.Count);
+                    currentTileIndex = UnityEngine.Random.Range(0, TM.tilesList.Count);
                     choosenTile = new Tile();
-                    choosenTile.Clone(TM.tilesList[i]);
+                    choosenTile.Clone(TM.tilesList[currentTileIndex]);
                     possiblePositions = TM.findMatchingEdges(TM.findSourrounding(ref tilesOnBoard), choosenTile, ref tilesOnBoard);
                     j++;
                 } while (possiblePositions.Count == 0 && j < 10);
+
+                Double prob = AM.probability(TM.tilesList, choosenTile);
+                Debug.Log("Prawdopodobieństwo wylosowania wylosowanego tile'a: " + prob);
 
                 NextTileImage.GetComponent<Image>().material = choosenTile.Material;
 
@@ -574,7 +589,7 @@ public class Game : MonoBehaviour
                                 MeepleButton.SetActive(true);
                               //  Debug.Log("#################################");
 
-                                choosenTile.Clone(TM.tilesList[i]);
+                                choosenTile.Clone(TM.tilesList[currentTileIndex]);
                                 tilesOnBoard[arrayIndex[0], arrayIndex[1]] = Instantiate(objectToinstantiate, position, Quaternion.identity) as GameObject; // instatiate a prefab on the position where the ray hits the floor. 
                                 masks[arrayIndex[0], arrayIndex[1]] = Instantiate(Mask, position, Quaternion.identity) as GameObject;
 
@@ -589,7 +604,7 @@ public class Game : MonoBehaviour
                              //   Debug.Log(result9);
 
 
-                                tile.Init(choosenTile.UpTerrain, choosenTile.RightTerrain, choosenTile.DownTerrain, choosenTile.LeftTerrain, position.x, position.z, choosenTile.Material, choosenTile.Mask, choosenTile.TypeCount, choosenTile.Turn, choosenTile.Plus, choosenTile.Areas);
+                                tile.Init(choosenTile.IdNumber, choosenTile.UpTerrain, choosenTile.RightTerrain, choosenTile.DownTerrain, choosenTile.LeftTerrain, position.x, position.z, choosenTile.Material, choosenTile.Mask, choosenTile.Turn, choosenTile.Plus, choosenTile.Areas);
                                 TM.rotateFirstMatchingRotation(ref tilesOnBoard[arrayIndex[0], arrayIndex[1]], ref masks[arrayIndex[0], arrayIndex[1]], arrayIndex, ref tilesOnBoard);
 
                                 String result4 = "";

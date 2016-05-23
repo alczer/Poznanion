@@ -69,10 +69,33 @@ public class AIManager : MonoBehaviour {
     //    return result;
     //}
 
-    //public float probability()
-    //{
-    //    return 1;
-    //}
+    public double probability(List<Tile> tilesList, Tile tile)
+    {
+        double result = 0.0;
+        bool check = false;
+        double count = 0;
+        int listSize = tilesList.Count;
+
+        for (int i = 0; i < listSize; i++)
+        {
+            if (tilesList[i].IdNumber == tile.IdNumber)
+            {
+                count++;
+                check = true;
+            }
+            else if (check)
+            {
+                break;
+            }
+        }
+
+        if (count == 0)
+        {
+            return 0;
+        }
+        result = count / listSize;
+        return result;
+    }
     
 	// Use this for initialization
 	void Start () {

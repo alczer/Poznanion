@@ -24,6 +24,7 @@ public class Area
 
 public class Tile : MonoBehaviour
 {
+    private int idNumber;
     private terrainTypes upTerrain;
     private terrainTypes rightTerrain;
     private terrainTypes downTerrain;
@@ -32,12 +33,14 @@ public class Tile : MonoBehaviour
     private Material mask;
     private float xPosition;
     private float yPosition;
-    private int typeCount; //how many tiles of this type exist    
+    //private int typeCount; //how many tiles of this type exist    
     private int turn; //0 = 0 degrees, 1 = 90 degrees, 2 = 180 degrees, 3 = 270 degrees
     private bool plus;
     private List<Area> areas = new List<Area>();
-    public void Init(terrainTypes up, terrainTypes right, terrainTypes down, terrainTypes left, float x, float y, Material m, Material mask1, int count, int turn1, bool plus, List<Area> areas1)
+
+    public void Init(int id, terrainTypes up, terrainTypes right, terrainTypes down, terrainTypes left, float x, float y, Material m, Material mask1, int turn1, bool plus, List<Area> areas1)
     {
+        this.idNumber = id;
         this.upTerrain = up;
         this.rightTerrain = right;
         this.downTerrain = down;
@@ -46,14 +49,15 @@ public class Tile : MonoBehaviour
         this.yPosition = y;
         this.material = m;
         this.mask = mask1;
-        this.typeCount = count;
+        //this.typeCount = count;
         this.turn = turn1;
         this.areas = areas1;
         this.plus = plus;
     }
 
     public void Clone(Tile other)
-    {         
+    {
+        this.idNumber = other.idNumber; 
         this.upTerrain = other.upTerrain;
         this.rightTerrain = other.rightTerrain;
         this.downTerrain = other.downTerrain;
@@ -115,10 +119,15 @@ public class Tile : MonoBehaviour
         get { return this.leftTerrain; }
         set { this.leftTerrain = value; }
     }
-    public int TypeCount
+    //public int TypeCount
+    //{
+    //    get { return this.typeCount; }
+    //    set { this.typeCount = value; }
+    //}
+    public int IdNumber
     {
-        get { return this.typeCount; }
-        set { this.typeCount = value; }
+        get { return this.idNumber; }
+        set { this.idNumber = value; }
     }
     public int Turn
     {

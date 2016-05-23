@@ -63,11 +63,15 @@ public class TilesManager : MonoBehaviour
         public Area area;
         public bool initialized;
     }
-    public void addTileToList(terrainTypes up, terrainTypes right, terrainTypes down, terrainTypes left, float x, float y, Material m, Material mask, int count, int turn, bool plus, List<Area> areas)
+    public void addTileToList(int id, terrainTypes up, terrainTypes right, terrainTypes down, terrainTypes left, float x, float y, Material m, Material mask, int count, int turn, bool plus, List<Area> areas)
     {
         Tile tmp = new Tile();
-        tmp.Init(up, right, down, left, x, y, m, mask, count, turn, plus, areas);
-        tilesList.Add(tmp);
+        tmp.Init(id, up, right, down, left, x, y, m, mask, turn, plus, areas);
+        for (int i = 0; i < count; i++)
+        {
+            tilesList.Add(tmp);
+            Debug.Log(i);
+        }
     }
     public void placeTile(ref GameObject tile, ref GameObject mask, int x, int y, ref GameObject[,] tilesOnBoard, ref GameObject[,] masks)
     {
@@ -591,92 +595,92 @@ public class TilesManager : MonoBehaviour
     public void init() 
     {
         //CRFR
-        addTileToList(terrainTypes.castle, terrainTypes.road, terrainTypes.grass, terrainTypes.road, 0, 0, CRFR, CRFR_Mask, 3, 0, false, new List<Area>() {
+        addTileToList(1, terrainTypes.castle, terrainTypes.road, terrainTypes.grass, terrainTypes.road, 0, 0, CRFR, CRFR_Mask, 3, 0, false, new List<Area>() {
             new Area { edges = new List<int>() {1,2,3} ,terrain = terrainTypes.castle, colorIndex = 1, meeplePlacementIndex = 3},
             new Area { edges = new List<int>() {4,12}, terrain = terrainTypes.grass, colorIndex = 2, meeplePlacementIndex = 5},
             new Area { edges = new List<int>() {5, 11}, terrain = terrainTypes.road, colorIndex = 3, meeplePlacementIndex = 0},
             new Area { edges = new List<int>() {6,7,8,9,10}, terrain = terrainTypes.grass, colorIndex = 4, meeplePlacementIndex = 23}});
         //CFFF
-        addTileToList(terrainTypes.castle, terrainTypes.grass, terrainTypes.grass, terrainTypes.grass, 0, 0, CFFF, CFFF_Mask, 5, 0, false, new List<Area>() {
+        addTileToList(2, terrainTypes.castle, terrainTypes.grass, terrainTypes.grass, terrainTypes.grass, 0, 0, CFFF, CFFF_Mask, 5, 0, false, new List<Area>() {
             new Area { edges = new List<int>() {1,2,3}, terrain = terrainTypes.castle, colorIndex = 1, meeplePlacementIndex = 3},
             new Area { edges = new List<int>() {0,4,5,6,7,8,9,10,11,12}, terrain = terrainTypes.grass, colorIndex = 2, meeplePlacementIndex = 0}});
         //CFFC
-        addTileToList(terrainTypes.castle, terrainTypes.grass, terrainTypes.grass, terrainTypes.castle, 0, 0, CFFC, CFFC_Mask, 3, 0, false, new List<Area>() {
+        addTileToList(3, terrainTypes.castle, terrainTypes.grass, terrainTypes.grass, terrainTypes.castle, 0, 0, CFFC, CFFC_Mask, 3, 0, false, new List<Area>() {
             new Area { edges = new List<int>() {1,2,3,10,11,12}, terrain = terrainTypes.castle, colorIndex = 1, meeplePlacementIndex =1},
             new Area { edges = new List<int>() {0,4,5,6,7,8,9}, terrain = terrainTypes.grass, colorIndex = 2, meeplePlacementIndex = 25}});
         //CFFC_2
-        addTileToList(terrainTypes.castle, terrainTypes.grass, terrainTypes.grass, terrainTypes.castle, 0, 0, CFFC_2, CFFC_2_Mask, 2, 0, false, new List<Area>() {
+        addTileToList(4, terrainTypes.castle, terrainTypes.grass, terrainTypes.grass, terrainTypes.castle, 0, 0, CFFC_2, CFFC_2_Mask, 2, 0, false, new List<Area>() {
             new Area { edges = new List<int>() {1,2,3}, terrain = terrainTypes.castle, colorIndex = 1, meeplePlacementIndex = 3},
             new Area { edges = new List<int>() {0,4,5,6,7,8,9}, terrain = terrainTypes.grass, colorIndex = 2, meeplePlacementIndex = 25},
             new Area { edges = new List<int>() {10,11,12}, terrain = terrainTypes.castle, colorIndex = 3, meeplePlacementIndex = 33}});
         //CFFC_P
-        addTileToList(terrainTypes.castle, terrainTypes.grass, terrainTypes.grass, terrainTypes.castle, 0, 0, CFFC_P, CFFC_Mask, 2, 0, true, new List<Area>() {
+        addTileToList(5, terrainTypes.castle, terrainTypes.grass, terrainTypes.grass, terrainTypes.castle, 0, 0, CFFC_P, CFFC_Mask, 2, 0, true, new List<Area>() {
             new Area { edges = new List<int>() {1,2,3,10,11,12}, terrain = terrainTypes.castle, colorIndex = 1, meeplePlacementIndex =1},
             new Area { edges = new List<int>() {0,4,5,6,7,8,9}, terrain = terrainTypes.grass, colorIndex = 2, meeplePlacementIndex = 25}});
         //CCFC
-        addTileToList(terrainTypes.castle, terrainTypes.castle, terrainTypes.grass, terrainTypes.castle, 0, 0, CCFC, CCFC_Mask, 3, 0, false, new List<Area>() {
+        addTileToList(6, terrainTypes.castle, terrainTypes.castle, terrainTypes.grass, terrainTypes.castle, 0, 0, CCFC, CCFC_Mask, 3, 0, false, new List<Area>() {
             new Area { edges = new List<int>() {0,1,2,3,4,5,6,10,11,12}, terrain = terrainTypes.castle, colorIndex = 1, meeplePlacementIndex = 3},
             new Area { edges = new List<int>() {7,8,9}, terrain = terrainTypes.grass, colorIndex = 2, meeplePlacementIndex = 23}});
         //CCFC_P
-        addTileToList(terrainTypes.castle, terrainTypes.castle, terrainTypes.grass, terrainTypes.castle, 0, 0, CCFC_P, CCFC_Mask, 1, 0, true, new List<Area>() {
+        addTileToList(7, terrainTypes.castle, terrainTypes.castle, terrainTypes.grass, terrainTypes.castle, 0, 0, CCFC_P, CCFC_Mask, 1, 0, true, new List<Area>() {
             new Area { edges = new List<int>() {0,1,2,3,4,5,6,10,11,12}, terrain = terrainTypes.castle, colorIndex = 1, meeplePlacementIndex = 3},
             new Area { edges = new List<int>() {7,8,9}, terrain = terrainTypes.grass, colorIndex = 2, meeplePlacementIndex = 23}});
         //CCRC
-        addTileToList(terrainTypes.castle, terrainTypes.castle, terrainTypes.road, terrainTypes.castle, 0, 0, CCRC, CCRC_Mask, 1, 0, false, new List<Area>() {
+        addTileToList(8, terrainTypes.castle, terrainTypes.castle, terrainTypes.road, terrainTypes.castle, 0, 0, CCRC, CCRC_Mask, 1, 0, false, new List<Area>() {
             new Area { edges = new List<int>() {0,1,2,3,4,5,6,10,11,12}, terrain = terrainTypes.castle, colorIndex = 1, meeplePlacementIndex = 3},
             new Area { edges = new List<int>() {7}, terrain = terrainTypes.grass, colorIndex = 2, meeplePlacementIndex = 22},
             new Area { edges = new List<int>() {8}, terrain = terrainTypes.road, colorIndex = 3, meeplePlacementIndex = 23},
             new Area { edges = new List<int>() {9}, terrain = terrainTypes.grass, colorIndex = 4, meeplePlacementIndex = 24}});
         //CCRC_P
-        addTileToList(terrainTypes.castle, terrainTypes.castle, terrainTypes.road, terrainTypes.castle, 0, 0, CCRC_P, CCRC_Mask, 2, 0, true, new List<Area>() {
+        addTileToList(9, terrainTypes.castle, terrainTypes.castle, terrainTypes.road, terrainTypes.castle, 0, 0, CCRC_P, CCRC_Mask, 2, 0, true, new List<Area>() {
             new Area { edges = new List<int>() {0,1,2,3,4,5,6,10,11,12}, terrain = terrainTypes.castle, colorIndex = 1, meeplePlacementIndex = 3},
             new Area { edges = new List<int>() {7}, terrain = terrainTypes.grass, colorIndex = 2, meeplePlacementIndex = 22},
             new Area { edges = new List<int>() {8}, terrain = terrainTypes.road, colorIndex = 3, meeplePlacementIndex = 23},
             new Area { edges = new List<int>() {9}, terrain = terrainTypes.grass, colorIndex = 4, meeplePlacementIndex = 24}});
         //CCCC_P
-        addTileToList(terrainTypes.castle, terrainTypes.castle, terrainTypes.castle, terrainTypes.castle, 0, 0, CCCC_P, CCCC_Mask, 1, 0, true, new List<Area>() {
+        addTileToList(10, terrainTypes.castle, terrainTypes.castle, terrainTypes.castle, terrainTypes.castle, 0, 0, CCCC_P, CCCC_Mask, 1, 0, true, new List<Area>() {
             new Area { edges = new List<int>() {0,1,2,3,4,5,6,7,8,9,10,11,12}, terrain = terrainTypes.castle, colorIndex = 1, meeplePlacementIndex = 0}});
         //CRRC
-        addTileToList(terrainTypes.castle, terrainTypes.road, terrainTypes.road, terrainTypes.castle, 0, 0, CRRC, CRRC_Mask, 3, 0, false, new List<Area>() {
+        addTileToList(11, terrainTypes.castle, terrainTypes.road, terrainTypes.road, terrainTypes.castle, 0, 0, CRRC, CRRC_Mask, 3, 0, false, new List<Area>() {
             new Area { edges = new List<int>() {1,2,3,10,11,12}, terrain = terrainTypes.castle, colorIndex = 1, meeplePlacementIndex = 1},
             new Area { edges = new List<int>() {0,4,9}, terrain = terrainTypes.grass, colorIndex = 2, meeplePlacementIndex = 0},
             new Area { edges = new List<int>() {5,8}, terrain = terrainTypes.road, colorIndex = 3, meeplePlacementIndex = 25},
             new Area { edges = new List<int>() {7,6}, terrain = terrainTypes.grass, colorIndex = 4, meeplePlacementIndex = 21}});
         //CRRC_P
-        addTileToList(terrainTypes.castle, terrainTypes.road, terrainTypes.road, terrainTypes.castle, 0, 0, CRRC_P, CRRC_Mask, 2, 0, true, new List<Area>() {
+        addTileToList(12, terrainTypes.castle, terrainTypes.road, terrainTypes.road, terrainTypes.castle, 0, 0, CRRC_P, CRRC_Mask, 2, 0, true, new List<Area>() {
             new Area { edges = new List<int>() {1,2,3,10,11,12}, terrain = terrainTypes.castle, colorIndex = 1, meeplePlacementIndex = 1},
             new Area { edges = new List<int>() {0,4,9}, terrain = terrainTypes.grass, colorIndex = 2, meeplePlacementIndex = 0},
             new Area { edges = new List<int>() {5,8}, terrain = terrainTypes.road, colorIndex = 3, meeplePlacementIndex = 25},
             new Area { edges = new List<int>() {7,6}, terrain = terrainTypes.grass, colorIndex = 4, meeplePlacementIndex = 21}});
         //FCFC
-        addTileToList(terrainTypes.grass, terrainTypes.castle, terrainTypes.grass, terrainTypes.castle, 0, 0, FCFC, FCFC_Mask, 1, 0, false, new List<Area>() {
+        addTileToList(13, terrainTypes.grass, terrainTypes.castle, terrainTypes.grass, terrainTypes.castle, 0, 0, FCFC, FCFC_Mask, 1, 0, false, new List<Area>() {
             new Area { edges = new List<int>() {1,2,3}, terrain = terrainTypes.grass, colorIndex = 1, meeplePlacementIndex = 3},
             new Area { edges = new List<int>() {4,5,6,0,10,11,12}, terrain = terrainTypes.castle, colorIndex = 2, meeplePlacementIndex = 0},
             new Area { edges = new List<int>() {7,8,9}, terrain = terrainTypes.grass, colorIndex = 3, meeplePlacementIndex = 23}});
         //FCFC_P
-        addTileToList(terrainTypes.grass, terrainTypes.castle, terrainTypes.grass, terrainTypes.castle, 0, 0, FCFC_P, FCFC_Mask, 2, 0, true, new List<Area>() {
+        addTileToList(14, terrainTypes.grass, terrainTypes.castle, terrainTypes.grass, terrainTypes.castle, 0, 0, FCFC_P, FCFC_Mask, 2, 0, true, new List<Area>() {
             new Area { edges = new List<int>() {1,2,3}, terrain = terrainTypes.grass, colorIndex = 1, meeplePlacementIndex = 3},
             new Area { edges = new List<int>() {4,5,6,0,10,11,12}, terrain = terrainTypes.castle, colorIndex = 2, meeplePlacementIndex = 0},
             new Area { edges = new List<int>() {7,8,9}, terrain = terrainTypes.grass, colorIndex = 3, meeplePlacementIndex = 23}});
         //CFCF_2
-        addTileToList(terrainTypes.castle, terrainTypes.grass, terrainTypes.castle, terrainTypes.grass, 0, 0, CFCF_2, CFCF_2_Mask, 3, 0, false, new List<Area>() {
+        addTileToList(15, terrainTypes.castle, terrainTypes.grass, terrainTypes.castle, terrainTypes.grass, 0, 0, CFCF_2, CFCF_2_Mask, 3, 0, false, new List<Area>() {
             new Area { edges = new List<int>() {1,2,3}, terrain = terrainTypes.castle, colorIndex = 1, meeplePlacementIndex = 3},
             new Area { edges = new List<int>() {4,5,6,0,10,11,12}, terrain = terrainTypes.grass, colorIndex = 2, meeplePlacementIndex = 0},
             new Area { edges = new List<int>() {7,8,9}, terrain = terrainTypes.castle, colorIndex = 3, meeplePlacementIndex = 23}});
         //CRRF
-        addTileToList(terrainTypes.castle, terrainTypes.road, terrainTypes.road, terrainTypes.grass, 0, 0, CRRF, CRRF_Mask, 3, 0, false, new List<Area>() {
+        addTileToList(16, terrainTypes.castle, terrainTypes.road, terrainTypes.road, terrainTypes.grass, 0, 0, CRRF, CRRF_Mask, 3, 0, false, new List<Area>() {
             new Area { edges = new List<int>() {1,2,3}, terrain = terrainTypes.castle, colorIndex = 1, meeplePlacementIndex = 3},
             new Area { edges = new List<int>() {0,4,9,10,11,12}, terrain = terrainTypes.grass, colorIndex = 2, meeplePlacementIndex = 35},
             new Area { edges = new List<int>() {5,8}, terrain = terrainTypes.road, colorIndex = 3, meeplePlacementIndex = 25},
             new Area { edges = new List<int>() {7,6}, terrain = terrainTypes.grass, colorIndex = 4, meeplePlacementIndex =  21}});
         //CFRR
-        addTileToList(terrainTypes.castle, terrainTypes.grass, terrainTypes.road, terrainTypes.road, 0, 0, CFRR, CFRR_Mask, 3, 0, false, new List<Area>() {
+        addTileToList(17, terrainTypes.castle, terrainTypes.grass, terrainTypes.road, terrainTypes.road, 0, 0, CFRR, CFRR_Mask, 3, 0, false, new List<Area>() {
             new Area { edges = new List<int>() {1,2,3}, terrain = terrainTypes.castle, colorIndex = 1, meeplePlacementIndex = 3},
             new Area { edges = new List<int>() {0,4,5,6,7,12}, terrain = terrainTypes.grass, colorIndex = 2, meeplePlacementIndex = 15},
             new Area { edges = new List<int>() {8,11}, terrain = terrainTypes.road, colorIndex = 3, meeplePlacementIndex = 35},
             new Area { edges = new List<int>() {9,10}, terrain = terrainTypes.grass, colorIndex = 4, meeplePlacementIndex = 31}});
         //CRRR
-        addTileToList(terrainTypes.castle, terrainTypes.road, terrainTypes.road, terrainTypes.road, 0, 0, CRRR, CRRR_Mask, 3, 0, false, new List<Area>() {
+        addTileToList(18, terrainTypes.castle, terrainTypes.road, terrainTypes.road, terrainTypes.road, 0, 0, CRRR, CRRR_Mask, 3, 0, false, new List<Area>() {
             new Area { edges = new List<int>() {1,2,3}, terrain = terrainTypes.castle, colorIndex = 1, meeplePlacementIndex = 3},
             new Area { edges = new List<int>() {4,12}, terrain = terrainTypes.grass, colorIndex = 2, meeplePlacementIndex = 15},
             new Area { edges = new List<int>() {5}, terrain = terrainTypes.road, colorIndex = 3, meeplePlacementIndex = 13},
@@ -686,17 +690,17 @@ public class TilesManager : MonoBehaviour
             new Area { edges = new List<int>() {11}, terrain = terrainTypes.road, colorIndex = 7, meeplePlacementIndex = 33},
             new Area { edges = new List<int>() {0}, terrain = terrainTypes.intersection, colorIndex = -1, meeplePlacementIndex = -1}});
         //FRFR
-        addTileToList(terrainTypes.grass, terrainTypes.road, terrainTypes.grass, terrainTypes.road, 0, 0, FRFR, FRFR_Mask, 8, 0, false, new List<Area>() {
+        addTileToList(19, terrainTypes.grass, terrainTypes.road, terrainTypes.grass, terrainTypes.road, 0, 0, FRFR, FRFR_Mask, 8, 0, false, new List<Area>() {
             new Area { edges = new List<int>() {1,2,3,4,12}, terrain = terrainTypes.grass, colorIndex = 1, meeplePlacementIndex = 3},
             new Area { edges = new List<int>() {5, 0, 11}, terrain = terrainTypes.road, colorIndex = 2, meeplePlacementIndex = 0},
             new Area { edges = new List<int>() {6,7,8,9,10}, terrain = terrainTypes.grass, colorIndex = 3, meeplePlacementIndex = 23}});
         //FFRR
-        addTileToList(terrainTypes.grass, terrainTypes.grass, terrainTypes.road, terrainTypes.road, 0, 0, FFRR, FFRR_Mask, 9, 0, false, new List<Area>() {
+        addTileToList(20, terrainTypes.grass, terrainTypes.grass, terrainTypes.road, terrainTypes.road, 0, 0, FFRR, FFRR_Mask, 9, 0, false, new List<Area>() {
             new Area { edges = new List<int>() {0,1,2,3,4,5,6,7,12}, terrain = terrainTypes.grass, colorIndex = 1, meeplePlacementIndex = 15},
             new Area { edges = new List<int>() {8,11}, terrain = terrainTypes.road, colorIndex = 2, meeplePlacementIndex = 0},
             new Area { edges = new List<int>() {9,10}, terrain = terrainTypes.grass, colorIndex = 3, meeplePlacementIndex = 31}});
         //FRRR
-        addTileToList(terrainTypes.grass, terrainTypes.road, terrainTypes.road, terrainTypes.road, 0, 0, FRRR, FRRR_Mask, 4, 0, false, new List<Area>() {
+        addTileToList(21, terrainTypes.grass, terrainTypes.road, terrainTypes.road, terrainTypes.road, 0, 0, FRRR, FRRR_Mask, 4, 0, false, new List<Area>() {
             new Area { edges = new List<int>() {1,2,3,4,12}, terrain = terrainTypes.grass, colorIndex = 1, meeplePlacementIndex = 3},
             new Area { edges = new List<int>() {5}, terrain = terrainTypes.road, colorIndex = 2, meeplePlacementIndex = 13},
             new Area { edges = new List<int>() {7,6}, terrain = terrainTypes.grass, colorIndex = 3, meeplePlacementIndex = 21},
@@ -705,7 +709,7 @@ public class TilesManager : MonoBehaviour
             new Area { edges = new List<int>() {11}, terrain = terrainTypes.road, colorIndex = 6, meeplePlacementIndex = 33},
             new Area { edges = new List<int>() {0}, terrain = terrainTypes.intersection, colorIndex = -1, meeplePlacementIndex = -1}});
         //RRRR
-        addTileToList(terrainTypes.road, terrainTypes.road, terrainTypes.road, terrainTypes.road, 0, 0, RRRR, RRRR_Mask, 1, 0, false, new List<Area>() {
+        addTileToList(22, terrainTypes.road, terrainTypes.road, terrainTypes.road, terrainTypes.road, 0, 0, RRRR, RRRR_Mask, 1, 0, false, new List<Area>() {
             new Area { edges = new List<int>() {12,1}, terrain = terrainTypes.grass, colorIndex = 1, meeplePlacementIndex = 1},
             new Area { edges = new List<int>() {2}, terrain = terrainTypes.road, colorIndex = 2, meeplePlacementIndex = 3},
             new Area { edges = new List<int>() {3,4} ,terrain = terrainTypes.grass, colorIndex = 3, meeplePlacementIndex = 11},
@@ -716,151 +720,14 @@ public class TilesManager : MonoBehaviour
             new Area { edges = new List<int>() {11}, terrain = terrainTypes.road, colorIndex = 8, meeplePlacementIndex = 33},
             new Area { edges = new List<int>() {0}, terrain = terrainTypes.intersection, colorIndex = -1, meeplePlacementIndex = -1}});
         //FFRF_M
-        addTileToList(terrainTypes.grass, terrainTypes.grass, terrainTypes.road, terrainTypes.grass, 0, 0, FFRF_M, FFRF_M_Mask, 2, 0, false, new List<Area>() {
+        addTileToList(23, terrainTypes.grass, terrainTypes.grass, terrainTypes.road, terrainTypes.grass, 0, 0, FFRF_M, FFRF_M_Mask, 2, 0, false, new List<Area>() {
             new Area { edges = new List<int>() {1,2,3,4,5,6,7,9,10,11,12}, terrain = terrainTypes.grass, colorIndex = 1, meeplePlacementIndex = 21},
             new Area { edges = new List<int>() {8}, terrain = terrainTypes.road, colorIndex = 2, meeplePlacementIndex = 23},
             new Area { edges = new List<int>() {0}, terrain = terrainTypes.monastery, colorIndex = 3, meeplePlacementIndex = 0}});
         //FFFF_M
-        addTileToList(terrainTypes.grass, terrainTypes.grass, terrainTypes.grass, terrainTypes.grass, 0, 0, FFFF_M, FFFF_M_Mask, 4, 0, false, new List<Area>() {
+        addTileToList(24, terrainTypes.grass, terrainTypes.grass, terrainTypes.grass, terrainTypes.grass, 0, 0, FFFF_M, FFFF_M_Mask, 4, 0, false, new List<Area>() {
             new Area { edges = new List<int>() {1,2,3,4,5,6,7,8,9,10,11,12}, terrain = terrainTypes.grass, colorIndex = 1, meeplePlacementIndex = 21},
             new Area { edges = new List<int>() {0}, terrain = terrainTypes.monastery, colorIndex = 2, meeplePlacementIndex = 0}});
-
-        /*
-        //CRFR
-        addTileToList(terrainTypes.castle, terrainTypes.road, terrainTypes.grass, terrainTypes.road, 0, 0, CRFR, CRFR_Mask, 3, 0, false, new List<Area>() { 
-            new Area { edges = new List<int>() {1,2,3} ,terrain = terrainTypes.castle, colorIndex = 1, meeplePlacementIndex = 3},
-            new Area { edges = new List<int>() {4,12}, terrain = terrainTypes.grass, colorIndex = 2, meeplePlacementIndex = 5},
-            new Area { edges = new List<int>() {5, 0, 11}, terrain = terrainTypes.road, colorIndex = 3, meeplePlacementIndex = 0}, 
-            new Area { edges = new List<int>() {6,7,8,9,10}, terrain = terrainTypes.grass, colorIndex = 4, meeplePlacementIndex = 23}});
-        //CFFF
-        addTileToList(terrainTypes.castle, terrainTypes.grass, terrainTypes.grass, terrainTypes.grass, 0, 0, CFFF, CFFF_Mask, 5, 0, false, new List<Area>() {
-            new Area { edges = new List<int>() {1,2,3}, terrain = terrainTypes.castle, colorIndex = 1, meeplePlacementIndex = 3},
-            new Area { edges = new List<int>() {0,4,5,6,7,8,9,10,11,12}, terrain = terrainTypes.grass, colorIndex = 2, meeplePlacementIndex = 0}});
-        //CFFC
-        addTileToList(terrainTypes.castle, terrainTypes.grass, terrainTypes.grass, terrainTypes.castle, 0, 0, CFFC, CFFC_Mask,3, 0, false, new List<Area>() {
-            new Area { edges = new List<int>() {1,2,3,10,11,12}, terrain = terrainTypes.castle, colorIndex = 1, meeplePlacementIndex =1},
-            new Area { edges = new List<int>() {0,4,5,6,7,8,9}, terrain = terrainTypes.grass, colorIndex = 2, meeplePlacementIndex = 25}});
-        //CFFC_2
-        addTileToList(terrainTypes.castle, terrainTypes.grass, terrainTypes.grass, terrainTypes.castle, 0, 0, CFFC_2, CFFC_2_Mask, 2, 0, false, new List<Area>() {
-            new Area { edges = new List<int>() {1,2,3}, terrain = terrainTypes.castle, colorIndex = 1, meeplePlacementIndex = 3},
-            new Area { edges = new List<int>() {0,4,5,6,7,8,9}, terrain = terrainTypes.grass, colorIndex = 2, meeplePlacementIndex = 25},
-            new Area { edges = new List<int>() {10,11,12}, terrain = terrainTypes.castle, colorIndex = 3, meeplePlacementIndex = 33}});
-        //CFFC_P
-        addTileToList(terrainTypes.castle, terrainTypes.grass, terrainTypes.grass, terrainTypes.castle, 0, 0, CFFC_P, CFFC_Mask, 2, 0, true, new List<Area>() {
-            new Area { edges = new List<int>() {1,2,3,10,11,12}, terrain = terrainTypes.castle, colorIndex = 1, meeplePlacementIndex =1},
-            new Area { edges = new List<int>() {0,4,5,6,7,8,9}, terrain = terrainTypes.grass, colorIndex = 2, meeplePlacementIndex = 25}});
-        //CCFC
-        addTileToList(terrainTypes.castle, terrainTypes.castle, terrainTypes.grass, terrainTypes.castle, 0, 0, CCFC, CCFC_Mask, 3, 0, false, new List<Area>() { 
-            new Area { edges = new List<int>() {0,1,2,3,4,5,6,10,11,12}, terrain = terrainTypes.castle, colorIndex = 1, meeplePlacementIndex = 3},
-            new Area { edges = new List<int>() {7,8,9}, terrain = terrainTypes.grass, colorIndex = 2, meeplePlacementIndex = 23}});
-        //CCFC_P
-        addTileToList(terrainTypes.castle, terrainTypes.castle, terrainTypes.grass, terrainTypes.castle, 0, 0, CCFC_P, CCFC_Mask, 1, 0, true, new List<Area>() {
-            new Area { edges = new List<int>() {0,1,2,3,4,5,6,10,11,12}, terrain = terrainTypes.castle, colorIndex = 1, meeplePlacementIndex = 3},
-            new Area { edges = new List<int>() {7,8,9}, terrain = terrainTypes.grass, colorIndex = 2, meeplePlacementIndex = 23}});
-        //CCRC
-        addTileToList(terrainTypes.castle, terrainTypes.castle, terrainTypes.road, terrainTypes.castle, 0, 0, CCRC, CCRC_Mask, 1, 0, false, new List<Area>() { 
-            new Area { edges = new List<int>() {0,1,2,3,4,5,6,10,11,12}, terrain = terrainTypes.castle, colorIndex = 1, meeplePlacementIndex = 3},
-            new Area { edges = new List<int>() {7}, terrain = terrainTypes.grass, colorIndex = 2, meeplePlacementIndex = 22},
-            new Area { edges = new List<int>() {8}, terrain = terrainTypes.road, colorIndex = 3, meeplePlacementIndex = 23},
-            new Area { edges = new List<int>() {9}, terrain = terrainTypes.grass, colorIndex = 4, meeplePlacementIndex = 24}});
-        //CCRC_P
-        addTileToList(terrainTypes.castle, terrainTypes.castle, terrainTypes.road, terrainTypes.castle, 0, 0, CCRC_P, CCRC_Mask, 2, 0, true, new List<Area>() {
-            new Area { edges = new List<int>() {0,1,2,3,4,5,6,10,11,12}, terrain = terrainTypes.castle, colorIndex = 1, meeplePlacementIndex = 3},
-            new Area { edges = new List<int>() {7}, terrain = terrainTypes.grass, colorIndex = 2, meeplePlacementIndex = 22},
-            new Area { edges = new List<int>() {8}, terrain = terrainTypes.road, colorIndex = 3, meeplePlacementIndex = 23},
-            new Area { edges = new List<int>() {9}, terrain = terrainTypes.grass, colorIndex = 4, meeplePlacementIndex = 24}});
-        //CCCC_P
-        addTileToList(terrainTypes.castle, terrainTypes.castle, terrainTypes.castle, terrainTypes.castle, 0, 0, CCCC_P, CCCC_Mask, 1, 0, true, new List<Area>() {
-            new Area { edges = new List<int>() {0,1,2,3,4,5,6,7,8,9,10,11,12}, terrain = terrainTypes.castle, colorIndex = 1, meeplePlacementIndex = 0}});
-        //CRRC
-        addTileToList(terrainTypes.castle, terrainTypes.road, terrainTypes.road, terrainTypes.castle, 0, 0, CRRC, CRRC_Mask, 3, 0, false, new List<Area>() { 
-            new Area { edges = new List<int>() {1,2,3,10,11,12}, terrain = terrainTypes.castle, colorIndex = 1, meeplePlacementIndex = 1},
-            new Area { edges = new List<int>() {0,4,9}, terrain = terrainTypes.grass, colorIndex = 2, meeplePlacementIndex = 0},
-            new Area { edges = new List<int>() {5,8}, terrain = terrainTypes.road, colorIndex = 3, meeplePlacementIndex = 25},
-            new Area { edges = new List<int>() {7,6}, terrain = terrainTypes.grass, colorIndex = 4, meeplePlacementIndex = 21}});
-        //CRRC_P
-        addTileToList(terrainTypes.castle, terrainTypes.road, terrainTypes.road, terrainTypes.castle, 0, 0, CRRC_P, CRRC_Mask, 2, 0, true, new List<Area>() {
-            new Area { edges = new List<int>() {1,2,3,10,11,12}, terrain = terrainTypes.castle, colorIndex = 1, meeplePlacementIndex = 1},
-            new Area { edges = new List<int>() {0,4,9}, terrain = terrainTypes.grass, colorIndex = 2, meeplePlacementIndex = 0},
-            new Area { edges = new List<int>() {5,8}, terrain = terrainTypes.road, colorIndex = 3, meeplePlacementIndex = 25},
-            new Area { edges = new List<int>() {7,6}, terrain = terrainTypes.grass, colorIndex = 4, meeplePlacementIndex = 21}});
-        //FCFC
-        addTileToList(terrainTypes.grass, terrainTypes.castle, terrainTypes.grass, terrainTypes.castle, 0, 0, FCFC, FCFC_Mask, 1, 0, false, new List<Area>() { 
-            new Area { edges = new List<int>() {1,2,3}, terrain = terrainTypes.grass, colorIndex = 1, meeplePlacementIndex = 3},
-            new Area { edges = new List<int>() {4,5,6,0,10,11,12}, terrain = terrainTypes.castle, colorIndex = 2, meeplePlacementIndex = 0},
-            new Area { edges = new List<int>() {7,8,9}, terrain = terrainTypes.grass, colorIndex = 3, meeplePlacementIndex = 23}});
-        //FCFC_P
-        addTileToList(terrainTypes.grass, terrainTypes.castle, terrainTypes.grass, terrainTypes.castle, 0, 0, FCFC_P, FCFC_Mask, 2, 0, true, new List<Area>() {
-            new Area { edges = new List<int>() {1,2,3}, terrain = terrainTypes.grass, colorIndex = 1, meeplePlacementIndex = 3},
-            new Area { edges = new List<int>() {4,5,6,0,10,11,12}, terrain = terrainTypes.castle, colorIndex = 2, meeplePlacementIndex = 0},
-            new Area { edges = new List<int>() {7,8,9}, terrain = terrainTypes.grass, colorIndex = 3, meeplePlacementIndex = 23}});
-        //CFCF_2
-        addTileToList(terrainTypes.castle, terrainTypes.grass, terrainTypes.castle, terrainTypes.grass, 0, 0, CFCF_2, CFCF_2_Mask, 3, 0, false, new List<Area>() { 
-            new Area { edges = new List<int>() {1,2,3}, terrain = terrainTypes.castle, colorIndex = 1, meeplePlacementIndex = 3},
-            new Area { edges = new List<int>() {4,5,6,0,10,11,12}, terrain = terrainTypes.grass, colorIndex = 2, meeplePlacementIndex = 0},
-            new Area { edges = new List<int>() {7,8,9}, terrain = terrainTypes.castle, colorIndex = 3, meeplePlacementIndex = 23}});
-        //CRRF
-        addTileToList(terrainTypes.castle, terrainTypes.road, terrainTypes.road, terrainTypes.grass, 0, 0, CRRF, CRRF_Mask, 3, 0, false, new List<Area>() { 
-            new Area { edges = new List<int>() {1,2,3}, terrain = terrainTypes.castle, colorIndex = 1, meeplePlacementIndex = 3},
-            new Area { edges = new List<int>() {0,4,9,10,11,12}, terrain = terrainTypes.grass, colorIndex = 2, meeplePlacementIndex = 35},
-            new Area { edges = new List<int>() {5,8}, terrain = terrainTypes.road, colorIndex = 3, meeplePlacementIndex = 25},
-            new Area { edges = new List<int>() {7,6}, terrain = terrainTypes.grass, colorIndex = 4, meeplePlacementIndex =  21}});
-        //CFRR
-        addTileToList(terrainTypes.castle, terrainTypes.grass, terrainTypes.road, terrainTypes.road, 0, 0, CFRR, CFRR_Mask, 3, 0, false, new List<Area>() { 
-            new Area { edges = new List<int>() {1,2,3}, terrain = terrainTypes.castle, colorIndex = 1, meeplePlacementIndex = 3},
-            new Area { edges = new List<int>() {0,4,5,6,7,12}, terrain = terrainTypes.grass, colorIndex = 2, meeplePlacementIndex = 15},
-            new Area { edges = new List<int>() {8,11}, terrain = terrainTypes.road, colorIndex = 3, meeplePlacementIndex = 35},
-            new Area { edges = new List<int>() {9,10}, terrain = terrainTypes.grass, colorIndex = 4, meeplePlacementIndex = 31}});
-        //CRRR
-        addTileToList(terrainTypes.castle, terrainTypes.road, terrainTypes.road, terrainTypes.road, 0, 0, CRRR, CRRR_Mask, 3, 0, false, new List<Area>() { 
-            new Area { edges = new List<int>() {1,2,3}, terrain = terrainTypes.castle, colorIndex = 1, meeplePlacementIndex = 3},
-            new Area { edges = new List<int>() {4,12}, terrain = terrainTypes.grass, colorIndex = 2, meeplePlacementIndex = 15},
-            new Area { edges = new List<int>() {5}, terrain = terrainTypes.road, colorIndex = 3, meeplePlacementIndex = 13},
-            new Area { edges = new List<int>() {7,6}, terrain = terrainTypes.grass, colorIndex = 4, meeplePlacementIndex = 21},
-            new Area { edges = new List<int>() {8}, terrain = terrainTypes.road, colorIndex = 5, meeplePlacementIndex = 23},
-            new Area { edges = new List<int>() {9,10}, terrain = terrainTypes.grass, colorIndex = 6, meeplePlacementIndex = 31},
-            new Area { edges = new List<int>() {11}, terrain = terrainTypes.road, colorIndex = 7, meeplePlacementIndex = 33},
-            new Area { edges = new List<int>() {0}, terrain = terrainTypes.intersection, colorIndex = -1, meeplePlacementIndex = -1}});
-        //FRFR
-        addTileToList(terrainTypes.grass, terrainTypes.road, terrainTypes.grass, terrainTypes.road, 0, 0, FRFR, FRFR_Mask, 8, 0, false, new List<Area>() { 
-            new Area { edges = new List<int>() {1,2,3,4,12}, terrain = terrainTypes.grass, colorIndex = 1, meeplePlacementIndex = 3},
-            new Area { edges = new List<int>() {5, 0, 11}, terrain = terrainTypes.road, colorIndex = 2, meeplePlacementIndex = 0}, 
-            new Area { edges = new List<int>() {6,7,8,9,10}, terrain = terrainTypes.grass, colorIndex = 3, meeplePlacementIndex = 23}});
-        //FFRR
-        addTileToList(terrainTypes.grass, terrainTypes.grass, terrainTypes.road, terrainTypes.road, 0, 0, FFRR, FFRR_Mask, 9, 0, false, new List<Area>() { 
-            new Area { edges = new List<int>() {0,1,2,3,4,5,6,7,12}, terrain = terrainTypes.grass, colorIndex = 1, meeplePlacementIndex = 15},
-            new Area { edges = new List<int>() {8,11}, terrain = terrainTypes.road, colorIndex = 2, meeplePlacementIndex = 0},
-            new Area { edges = new List<int>() {9,10}, terrain = terrainTypes.grass, colorIndex = 3, meeplePlacementIndex = 31}});
-        //FRRR
-        addTileToList(terrainTypes.grass, terrainTypes.road, terrainTypes.road, terrainTypes.road, 0, 0, FRRR, FRRR_Mask, 4, 0, false, new List<Area>() { 
-            new Area { edges = new List<int>() {1,2,3,4,12}, terrain = terrainTypes.grass, colorIndex = 1, meeplePlacementIndex = 3},
-            new Area { edges = new List<int>() {5}, terrain = terrainTypes.road, colorIndex = 2, meeplePlacementIndex = 13},
-            new Area { edges = new List<int>() {7,6}, terrain = terrainTypes.grass, colorIndex = 3, meeplePlacementIndex = 21},
-            new Area { edges = new List<int>() {8}, terrain = terrainTypes.road, colorIndex = 4, meeplePlacementIndex = 23},
-            new Area { edges = new List<int>() {9,10}, terrain = terrainTypes.grass, colorIndex = 5, meeplePlacementIndex = 31},
-            new Area { edges = new List<int>() {11}, terrain = terrainTypes.road, colorIndex = 6, meeplePlacementIndex = 33},
-            new Area { edges = new List<int>() {0}, terrain = terrainTypes.intersection, colorIndex = -1, meeplePlacementIndex = -1}});
-        //RRRR
-        addTileToList(terrainTypes.road, terrainTypes.road, terrainTypes.road, terrainTypes.road, 0, 0, RRRR, RRRR_Mask, 20, 0, false, new List<Area>() { 
-            new Area { edges = new List<int>() {12,1}, terrain = terrainTypes.grass, colorIndex = 1, meeplePlacementIndex = 1},
-            new Area { edges = new List<int>() {2}, terrain = terrainTypes.road, colorIndex = 2, meeplePlacementIndex = 3},
-            new Area { edges = new List<int>() {3,4} ,terrain = terrainTypes.grass, colorIndex = 3, meeplePlacementIndex = 11},
-            new Area { edges = new List<int>() {5}, terrain = terrainTypes.road, colorIndex = 4, meeplePlacementIndex = 13},
-            new Area { edges = new List<int>() {6,7}, terrain = terrainTypes.grass, colorIndex = 5, meeplePlacementIndex = 21},
-            new Area { edges = new List<int>() {8}, terrain = terrainTypes.road, colorIndex = 6, meeplePlacementIndex = 23},
-            new Area { edges = new List<int>() {9,10}, terrain = terrainTypes.grass, colorIndex = 7, meeplePlacementIndex = 31},
-            new Area { edges = new List<int>() {11}, terrain = terrainTypes.road, colorIndex = 8, meeplePlacementIndex = 33},
-            new Area { edges = new List<int>() {0}, terrain = terrainTypes.intersection, colorIndex = -1, meeplePlacementIndex = -1}});
-        //FFRF_M
-        addTileToList(terrainTypes.grass, terrainTypes.grass, terrainTypes.road, terrainTypes.grass, 0, 0, FFRF_M, FFRF_M_Mask, 2, 0, false, new List<Area>() {
-            new Area { edges = new List<int>() {1,2,3,4,5,6,7,8,9,10,11,12}, terrain = terrainTypes.grass, colorIndex = 1, meeplePlacementIndex = 21},
-            new Area { edges = new List<int>() {8}, terrain = terrainTypes.road, colorIndex = 2, meeplePlacementIndex = 23},
-            new Area { edges = new List<int>() {0}, terrain = terrainTypes.monastery, colorIndex = 3, meeplePlacementIndex = 0}});
-        //FFFF_M
-        addTileToList(terrainTypes.grass, terrainTypes.grass, terrainTypes.grass, terrainTypes.grass, 0, 0, FFFF_M, FFFF_M_Mask, 4, 0, false, new List<Area>() {
-            new Area { edges = new List<int>() {1,2,3,4,5,6,7,8,9,10,11,12}, terrain = terrainTypes.grass, colorIndex = 1, meeplePlacementIndex = 21},
-            new Area { edges = new List<int>() {0}, terrain = terrainTypes.monastery, colorIndex = 2, meeplePlacementIndex = 0}});
-            */
     }
 
 

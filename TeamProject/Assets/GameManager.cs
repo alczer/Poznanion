@@ -105,11 +105,9 @@ public class GameManager : MonoBehaviour
                 SceneManager.LoadScene("menu");
                 break;
             case GameState.GAME:
-                SceneManager.UnloadScene("addPlayer");
                 SceneManager.LoadScene("game",LoadSceneMode.Single);
                 break;
             case GameState.ADD_PLAYER_MENU:
-                SceneManager.UnloadScene("menu");
                 SceneManager.LoadScene("addPlayer");
                 break;
             case GameState.LOBBY:
