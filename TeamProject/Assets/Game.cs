@@ -59,6 +59,9 @@ public class Game : MonoBehaviour
 
     public void AcceptButtonClicked()
     {
+       // FloatingTextController.Initialize();
+       // FloatingTextController.CreateFloatingText2("OK",0, 10,Color.blue);
+
         tilesLeft--;
         tilesLeftText.text = tilesLeft.ToString();
 
@@ -275,7 +278,7 @@ public class Game : MonoBehaviour
                 } while (possiblePositions.Count == 0 && j < 10);
 
                 Double prob = AM.probability(TM.tilesList, choosenTile);
-                Debug.Log("Prawdopodobieństwo wylosowania wylosowanego tile'a: " + prob);
+                //Debug.Log("Prawdopodobieństwo wylosowania wylosowanego tile'a: " + prob);
 
                 NextTileImage.GetComponent<Image>().material = choosenTile.Material;
                 rolled = UnityEngine.Random.Range(0, possiblePositions.Count);
@@ -411,7 +414,7 @@ public class Game : MonoBehaviour
                 } while (possiblePositions.Count == 0 && j < 10);
 
                 Double prob = AM.probability(TM.tilesList, choosenTile);
-                Debug.Log("Prawdopodobieństwo wylosowania wylosowanego tile'a: " + prob);
+                //Debug.Log("Prawdopodobieństwo wylosowania wylosowanego tile'a: " + prob);
 
                 NextTileImage.GetComponent<Image>().material = choosenTile.Material;
 
@@ -614,7 +617,7 @@ public class Game : MonoBehaviour
                                     result4 += " | ";
 
                                 }
-                         //       Debug.Log(result4);
+                         //       Debug.Log(result4);(float)0.1
 
 
                                 tilesOnBoard[arrayIndex[0], arrayIndex[1]].GetComponent<Renderer>().material = choosenTile.Material;

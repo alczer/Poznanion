@@ -70,7 +70,7 @@ public class TilesManager : MonoBehaviour
         for (int i = 0; i < count; i++)
         {
             tilesList.Add(tmp);
-            Debug.Log(i);
+            //Debug.Log(i);
         }
     }
     public void placeTile(ref GameObject tile, ref GameObject mask, int x, int y, ref GameObject[,] tilesOnBoard, ref GameObject[,] masks)

@@ -206,11 +206,18 @@ public class PointsCounter : MonoBehaviour {
         return true;
 
     }
-
+    public float[] getCoordinates(int row, int col)
+    {
+        float x = ((float)col - 100) * 10;
+        float z = ((float)row - 100) * (-10);
+        float[] array = new float[2] { x, z };
+        return array;
+    }
 
     public void countMonasteryPoints(int[] coord, ref GameObject[,] board, ref GameObject[,] meeples)
 	{
-		if(board[coord[0], coord[1]].GetComponent<Tile>().Areas.All(a => a.player == null))
+        
+        if (board[coord[0], coord[1]].GetComponent<Tile>().Areas.All(a => a.player == null))
 			return;
 		for(int i = -1; i < 2; ++i)
 			for(int j = -1; j < 2; ++j)
@@ -219,10 +226,21 @@ public class PointsCounter : MonoBehaviour {
 
         GM.AddScore(board[coord[0], coord[1]].GetComponent<Tile>().Areas.Find(a => a.player != null).player.color, 9);
         // board[coord[0], coord[1]].GetComponent<Tile>().Areas.Find (a => a.player != null).player.points += 9;
-
+        Color col = board[coord[0], coord[1]].GetComponent<Tile>().Areas.Find(a => a.player != null).player.rgbaColor;
         GM.ReturnMeeple(board[coord[0], coord[1]].GetComponent<Tile>().Areas.Find(a => a.player != null).player.color);
         board [coord[0], coord[1]].GetComponent<Tile>().Areas.Find (a => a.player != null).player = null;
         Destroy(meeples[coord [0], coord [1]]);
+
+        for (int i = -1; i < 2; ++i)
+        {
+            for (int j = -1; j < 2; ++j)
+            {
+                
+                FloatingTextController.Initialize();
+                FloatingTextController.CreateFloatingText2("+1".ToString(), getCoordinates(coord[0] + i, coord[1] + j)[0], getCoordinates(coord[0] + i, coord[1] + j)[1], col);
+            }                
+        }
+           
         meeples[coord[0], coord[1]] = null;
 
     }
@@ -300,9 +318,40 @@ public class PointsCounter : MonoBehaviour {
                     else
                     {
                         if (result.points == (2 * POINTS_FOR_CASTLE_TILE)) result.points = POINTS_FOR_CASTLE_TILE;
+                        int shift = 0;
                         foreach (var player in RemoveMeeplesAndPickWinner(ref board, result.meeplesPositions, ref meeples))
-                        {                            
+                        {
+                            
+                            if (result.points == 2)
+                            {
+                                foreach (var tile in checkedAreas)
+                                {
+                                    FloatingTextController.Initialize();
+                                    FloatingTextController.CreateFloatingText2("+1", getCoordinates(tile.x,tile.y)[0], getCoordinates(tile.x, tile.y)[1], GM.GetPlayerListCopy().Find(p => p.color== (PlayerColor)player).rgbaColor);
+
+                                }
+                            }
+                            else
+                            {
+                                foreach (var tile in checkedAreas)
+                                {
+                                    if (board[tile.x, tile.y].GetComponent<Tile>().Plus == true)
+                                    {
+                                        FloatingTextController.Initialize();
+                                        FloatingTextController.CreateFloatingText2("+4", getCoordinates(tile.x, tile.y)[0]+shift, getCoordinates(tile.x, tile.y)[1]+shift, GM.GetPlayerListCopy().Find(p => p.color == (PlayerColor)player).rgbaColor);
+                                    }
+                                    else
+                                    {
+                                        FloatingTextController.Initialize();
+                                        FloatingTextController.CreateFloatingText2("+2", getCoordinates(tile.x, tile.y)[0]+shift, getCoordinates(tile.x, tile.y)[1]+shift, GM.GetPlayerListCopy().Find(p => p.color == (PlayerColor)player).rgbaColor);
+                                    }
+                                }
+
+                            }
+                            
+                                
                             GM.AddScore((PlayerColor)player, result.points);
+                            shift += 1;
                         }
                     }
                 }
@@ -332,10 +381,21 @@ public class PointsCounter : MonoBehaviour {
                     }
                     else
                     {
+                        int shift = 0;
                         foreach (var player in RemoveMeeplesAndPickWinner(ref board, result.meeplesPositions, ref meeples))
                         {
+
                             GM.AddScore((PlayerColor)player, result.points);
+
+                            foreach (var tile in checkedAreas)
+                            {
+                                FloatingTextController.Initialize();
+                                FloatingTextController.CreateFloatingText2("+1", getCoordinates(tile.x, tile.y)[0]+shift, getCoordinates(tile.x, tile.y)[1]+shift, GM.GetPlayerListCopy().Find(p => p.color == (PlayerColor)player).rgbaColor);
+
+                            }
+                            shift += 1;
                         }
+
                     }
                 }
                  
