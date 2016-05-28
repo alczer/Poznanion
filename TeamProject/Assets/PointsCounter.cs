@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using System.Collections;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System;
@@ -206,6 +205,7 @@ public class PointsCounter : MonoBehaviour {
         return true;
 
     }
+
     public float[] getCoordinates(int row, int col)
     {
         float x = ((float)col - 100) * 10;
@@ -342,7 +342,7 @@ public class PointsCounter : MonoBehaviour {
                                     }
                                     else
                                     {
-                                        FloatingTextController.Initialize();
+                                         FloatingTextController.Initialize();
                                         FloatingTextController.CreateFloatingText2("+2", getCoordinates(tile.x, tile.y)[0]+shift, getCoordinates(tile.x, tile.y)[1]+shift, GM.GetPlayerListCopy().Find(p => p.color == (PlayerColor)player).rgbaColor);
                                     }
                                 }
@@ -640,6 +640,4 @@ public class PointsCounter : MonoBehaviour {
         }
         return accumulator;
     }
-   
-
 }

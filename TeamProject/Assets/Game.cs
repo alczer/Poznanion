@@ -6,14 +6,17 @@ using System.Linq;
 using System;
 using System.Globalization;
 
+
+
 public class Game : MonoBehaviour
 {
     GameObject[,] tilesOnBoard = new GameObject[200, 200];
-    GameObject[,] masks = new GameObject[200, 200];
     GameObject[,] possibleMoves = new GameObject[200, 200];
     GameObject[,] meeples = new GameObject[200, 200];
-
     List<Area> possibleMeeple = new List<Area>();
+
+    GameObject[,] masks = new GameObject[200, 200];
+
     int choosenAreaColor = -1;
     int ColorType = -1;
     public Text redPlayerScore;
@@ -116,9 +119,6 @@ public class Game : MonoBehaviour
 
         TM.tilesList.RemoveAt(currentTileIndex);
 
-        
-        
-            
         // Score text
         List<Player> players = GM.GetPlayerListCopy();
         if (players.Any(it => it.color == PlayerColor.RED))
@@ -277,8 +277,9 @@ public class Game : MonoBehaviour
                     j++;
                 } while (possiblePositions.Count == 0 && j < 10);
 
-                Double prob = AM.probability(TM.tilesList, choosenTile);
-                //Debug.Log("Prawdopodobieństwo wylosowania wylosowanego tile'a: " + prob);
+                // Probability check
+                float prob = AM.Probability(TM.tilesList, choosenTile);
+                Debug.Log("Prawdopodobieństwo wylosowania wylosowanego tile'a: " + prob);
 
                 NextTileImage.GetComponent<Image>().material = choosenTile.Material;
                 rolled = UnityEngine.Random.Range(0, possiblePositions.Count);
@@ -413,8 +414,9 @@ public class Game : MonoBehaviour
                     j++;
                 } while (possiblePositions.Count == 0 && j < 10);
 
-                Double prob = AM.probability(TM.tilesList, choosenTile);
-                //Debug.Log("Prawdopodobieństwo wylosowania wylosowanego tile'a: " + prob);
+                //Probability check
+                float prob = AM.Probability(TM.tilesList, choosenTile);
+                Debug.Log("Prawdopodobieństwo wylosowania wylosowanego tile'a: " + prob);
 
                 NextTileImage.GetComponent<Image>().material = choosenTile.Material;
 
