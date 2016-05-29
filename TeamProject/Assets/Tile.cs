@@ -24,6 +24,7 @@ public class Area
 
 public class Tile : MonoBehaviour
 {
+    private int rotation = 0;
     private int idNumber;
     private terrainTypes upTerrain;
     private terrainTypes rightTerrain;
@@ -40,6 +41,7 @@ public class Tile : MonoBehaviour
 
     public void Init(int id, terrainTypes up, terrainTypes right, terrainTypes down, terrainTypes left, float x, float y, Material m, Material mask1, int turn1, bool plus, List<Area> areas1)
     {
+        this.rotation = 0;
         this.idNumber = id;
         this.upTerrain = up;
         this.rightTerrain = right;
@@ -57,6 +59,7 @@ public class Tile : MonoBehaviour
 
     public void Clone(Tile other)
     {
+        this.rotation = other.rotation;
         this.idNumber = other.idNumber; 
         this.upTerrain = other.upTerrain;
         this.rightTerrain = other.rightTerrain;
@@ -145,5 +148,17 @@ public class Tile : MonoBehaviour
         set { this.areas = value; }
     }
 
+    public int Rotation
+    {
+        get
+        {
+            return rotation;
+        }
+
+        set
+        {
+            rotation = value;
+        }
+    }
 }
 

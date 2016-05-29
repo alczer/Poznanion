@@ -21,6 +21,17 @@ public class Player{
         this.meeples = 5;
         this.rgbaColor = rgba;
     }
+
+    public void Clone(Player other)
+    {
+        this.name = other.name;
+        this.points = other.points;
+        this.color = other.color;
+        this.type = other.type;
+        this.meeples = other.meeples;
+        this.rgbaColor = other.rgbaColor;
+    }
+
     public void ChangeScore(int score)
     {
         this.points += score;
