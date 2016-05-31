@@ -12,10 +12,23 @@ public class Ads : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        Admob.Instance().initAdmob("ca-app-pub-3940256099942544/6300978111", "ca-app-pub-3940256099942544/1033173712");//admob id with format ca-app-pub-279xxxxxxxx/xxxxxxxx
-        //Admob.Instance().showBannerRelative(AdSize.Banner, AdPosition.BOTTOM_CENTER, 0); 
-        Admob.Instance().showBannerRelative(new AdSize(160, 50), AdPosition.BOTTOM_LEFT, 0);
+        int width = 80;
+        if (Screen.width >= 1080)
+        {
+            width = 320;
+        }
+        else if (Screen.width >= 320)
+        {
+            width = 160;
+        }
+        
 
+        if (Application.platform == RuntimePlatform.Android)
+        {
+            Admob.Instance().initAdmob("ca-app-pub-3940256099942544/6300978111", "ca-app-pub-3940256099942544/1033173712");//admob id with format ca-app-pub-279xxxxxxxx/xxxxxxxx
+            //Admob.Instance().showBannerRelative(AdSize.Banner, AdPosition.BOTTOM_CENTER, 0); 
+            Admob.Instance().showBannerRelative(new AdSize(width, 50), AdPosition.BOTTOM_LEFT, 0);
+        }
       //  AdSize adSize = new AdSize(200, 50);
      //    Admob.Instance().showBannerAbsolute(adSize,0,30);
      //   Admob.Instance().showBannerRelative(AdSize.Banner, AdPosition.BOTTOM_LEFT, 0); 

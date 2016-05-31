@@ -105,12 +105,14 @@ public class GameManager : MonoBehaviour
                 SceneManager.LoadScene("menu");
                 break;
             case GameState.GAME:
-                SceneManager.LoadScene("game",LoadSceneMode.Single);
+                SceneManager.LoadScene("game");
                 break;
             case GameState.ADD_PLAYER_MENU:
+                ShowAdPlacement();
                 SceneManager.LoadScene("addPlayer");
                 break;
             case GameState.LOBBY:
+                ShowAdPlacement();
                 SceneManager.LoadScene("lanLobby");
                 break;
             case GameState.LANGAME:
@@ -131,24 +133,24 @@ public class GameManager : MonoBehaviour
         GameManager.instance = null;
     }
 
-    //public void ShowAdPlacement()
-    //{
-    //    Advertisement.debugLevel = Advertisement.DebugLevel.Debug;
-    //    if(Advertisement.testMode)
-    //    {
-    //        Debug.Log("test");
-    //    }
-    //    if (Advertisement.IsReady())
-    //    {
-    //        Advertisement.Show();
-    //    }
-    //    //if (string.IsNullOrEmpty(zoneId)) zoneId = null;
+    public void ShowAdPlacement()
+    {
+        Advertisement.debugLevel = Advertisement.DebugLevel.Debug;
+        if(Advertisement.testMode)
+        {
+            Debug.Log("test");
+        }
+        if (Advertisement.IsReady())
+        {
+            Advertisement.Show();
+        }
+        if (string.IsNullOrEmpty(zoneId)) zoneId = null;
 
-    //    //ShowOptions options = new ShowOptions();
-    //    //options.resultCallback = HandleShowResult;
-    //    //if (Advertisement.IsReady())
-    //    //{
-    //    //    Advertisement.Show(zoneId, options);
-    //    //}
-    //}
+        //ShowOptions options = new ShowOptions();
+        //options.resultCallback = HandleShowResult;
+        //if (Advertisement.IsReady())
+        //{
+        //    Advertisement.Show(zoneId, options);
+        //}
+    }
 }
