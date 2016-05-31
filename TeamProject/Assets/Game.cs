@@ -58,6 +58,7 @@ public class Game : MonoBehaviour
     int tilesLeft = 71;
 
     int currentTileIndex;
+    bool finished = true;
 
 
     public void AcceptButtonClicked()
@@ -379,6 +380,9 @@ public class Game : MonoBehaviour
     }
     void AI()
     {
+        finished = false;
+        Debug.Log("wchodze");
+
         if (TM.tilesList.Count > 0)
         {
             int i;
@@ -398,8 +402,17 @@ public class Game : MonoBehaviour
 
             currentlyPlacingTile = true;
             playername.text = GM.GetCurrentPlayer().name;
+            //foreach (var t in TM.tilesList)
+            //{
+            //    Debug.Log(t.IdNumber);
+            //}
 
-            Move move = AM.Expectimax(ref tilesOnBoard, TM.tilesList, 2, GM.GetPlayerListCopy());
+
+            Move move = AM.Expectimax(tilesOnBoard, TM.tilesList, 2, GM.GetPlayerListCopy());
+
+            Debug.Log(move.x+ " "+move.y);
+
+
 
             tilesOnBoard[move.x, move.y] = Instantiate(objectToinstantiate, new Vector3(move.x, 0, move.y), Quaternion.identity) as GameObject;// instatiate a prefab on the position where the ray hits the floor.                         
             Tile tile = tilesOnBoard[move.x, move.y].AddComponent<Tile>();
@@ -441,8 +454,10 @@ public class Game : MonoBehaviour
 
                 placedMeeple = true;
             }
-            OKButton.SetActive(true);
-            MeepleButton.SetActive(true);
+
+            Debug.Log("wychodze");
+            AcceptButtonClicked();
+            finished = true;
         }
     }
 
@@ -460,7 +475,7 @@ public class Game : MonoBehaviour
         }
 
         // Sprawdzamy czy to komputer
-        if (GM.GetCurrentPlayer().type == PlayerType.AI)
+        if (GM.GetCurrentPlayer().type == PlayerType.AI && finished)
         {
             AI(); // Funkcja wyzej tymczasowo
                 
@@ -487,6 +502,11 @@ public class Game : MonoBehaviour
 
                 NextTileImage.GetComponent<Image>().material = choosenTile.Material;
 
+                if (choosenTile == null)
+                {
+                    Debug.Log("wylosowany null!");
+                    Debug.Log(choosenTile.Material.name);
+                }
                 /*
                 TM.tilesList[i].TypeCount--;
                 if (TM.tilesList[i].TypeCount == 0)

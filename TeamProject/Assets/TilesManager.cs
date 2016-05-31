@@ -121,7 +121,6 @@ public class TilesManager : MonoBehaviour
         //Return the list with areas that are ready for meeple.
         return possibleAreas;
     }
-
     public List<Area> possibleMeepleAreas(ref Tile[,] board, int x, int y)
     {
         List<Area> possibleAreas = new List<Area>();
@@ -199,7 +198,6 @@ public class TilesManager : MonoBehaviour
         }
         return neighbour;
     }
-
     public AreaTuple areaNeighbour(ref Tile[,] board, int x, int y, int edge)
     {
         AreaTuple neighbour = new AreaTuple();
@@ -235,7 +233,7 @@ public class TilesManager : MonoBehaviour
         {
             (neighbour.y)--;
         }
-        if (board[neighbour.x, neighbour.y] != null)
+        if ((object)board[neighbour.x, neighbour.y] != null)
         {
             foreach (var area in board[neighbour.x, neighbour.y].Areas)
             {
@@ -276,17 +274,22 @@ public class TilesManager : MonoBehaviour
         {
             AreaTuple neighbour = areaNeighbour(ref board, x, y, edge);
             if (neighbour.initialized)
+            {
                 neighbours.Add(neighbour);
+                Debug.Log("initialized");
+            }
+                
         }
         foreach (var n in neighbours)
         {
-            //   Debug.Log("Klocek sąsiad to : " + n.x + " " + n.y);
-            //    Debug.Log("Obszar klokcka sąsiada to : " + String.Join(" ", n.area.edges.Select(item => item.ToString()).ToArray()));
+            Debug.Log("Klocek sąsiad to : " + n.x + " " + n.y);
+            Debug.Log("Obszar klokcka sąsiada to : " + String.Join(" ", n.area.edges.Select(item => item.ToString()).ToArray()));
         }
-        //  Debug.Log("---");
-        //Debug.Log("wielkość listy:"+neighbours.Count);
+        Debug.Log("---");
+        Debug.Log("wielkość listy:" + neighbours.Count);
         return neighbours;
     }
+
     public bool isMovePossible(ref GameObject[,] board, int x, int y, Area currentlyChecked, List<AreaTuple> checkedAreas)
     {
         //If the tile has meeple already, we can't place meeple in there.
@@ -337,31 +340,31 @@ public class TilesManager : MonoBehaviour
     public List<int> possibleRotations(Tile tile, Tile[,] tiles, int[] tilePosition)
     {
         List<int> possibleRotations = new List<int>();
-        if ((tiles[tilePosition[0] - 1, tilePosition[1]] == null || tiles[tilePosition[0] - 1, tilePosition[1]].GetComponent<Tile>().DownTerrain == gameObject.GetComponent<Tile>().UpTerrain)
-           && (tiles[tilePosition[0], tilePosition[1] + 1] == null || tiles[tilePosition[0], tilePosition[1] + 1].GetComponent<Tile>().LeftTerrain == gameObject.GetComponent<Tile>().RightTerrain)
-           && (tiles[tilePosition[0] + 1, tilePosition[1]] == null || tiles[tilePosition[0] + 1, tilePosition[1]].GetComponent<Tile>().UpTerrain == gameObject.GetComponent<Tile>().DownTerrain)
-           && (tiles[tilePosition[0], tilePosition[1] - 1] == null || tiles[tilePosition[0], tilePosition[1] - 1].GetComponent<Tile>().RightTerrain == gameObject.GetComponent<Tile>().LeftTerrain))
+        if (((object)tiles[tilePosition[0] - 1, tilePosition[1]] == null || tiles[tilePosition[0] - 1, tilePosition[1]].DownTerrain == tile.UpTerrain)
+           && ((object)tiles[tilePosition[0], tilePosition[1] + 1] == null || tiles[tilePosition[0], tilePosition[1] + 1].LeftTerrain == tile.RightTerrain)
+           && ((object)tiles[tilePosition[0] + 1, tilePosition[1]] == null || tiles[tilePosition[0] + 1, tilePosition[1]].UpTerrain == tile.DownTerrain)
+           && ((object)tiles[tilePosition[0], tilePosition[1] - 1] == null || tiles[tilePosition[0], tilePosition[1] - 1].RightTerrain == tile.LeftTerrain))
         {
             possibleRotations.Add(0);
         }
-            if ((tiles[tilePosition[0] - 1, tilePosition[1]] == null || tiles[tilePosition[0] - 1, tilePosition[1]].GetComponent<Tile>().DownTerrain == gameObject.GetComponent<Tile>().LeftTerrain)
-           && (tiles[tilePosition[0], tilePosition[1] + 1] == null || tiles[tilePosition[0], tilePosition[1] + 1].GetComponent<Tile>().LeftTerrain == gameObject.GetComponent<Tile>().UpTerrain)
-           && (tiles[tilePosition[0] + 1, tilePosition[1]] == null || tiles[tilePosition[0] + 1, tilePosition[1]].GetComponent<Tile>().UpTerrain == gameObject.GetComponent<Tile>().RightTerrain)
-           && (tiles[tilePosition[0], tilePosition[1] - 1] == null || tiles[tilePosition[0], tilePosition[1] - 1].GetComponent<Tile>().RightTerrain == gameObject.GetComponent<Tile>().DownTerrain))
+            if (((object)tiles[tilePosition[0] - 1, tilePosition[1]] == null || tiles[tilePosition[0] - 1, tilePosition[1]].DownTerrain == tile.LeftTerrain)
+           && ((object)tiles[tilePosition[0], tilePosition[1] + 1] == null || tiles[tilePosition[0], tilePosition[1] + 1].LeftTerrain == tile.UpTerrain)
+           && ((object)tiles[tilePosition[0] + 1, tilePosition[1]] == null || tiles[tilePosition[0] + 1, tilePosition[1]].UpTerrain == tile.RightTerrain)
+           && ((object)tiles[tilePosition[0], tilePosition[1] - 1] == null || tiles[tilePosition[0], tilePosition[1] - 1].RightTerrain == tile.DownTerrain))
         {
             possibleRotations.Add(1);
         }
-        if ((tiles[tilePosition[0] - 1, tilePosition[1]] == null || tiles[tilePosition[0] - 1, tilePosition[1]].GetComponent<Tile>().DownTerrain == gameObject.GetComponent<Tile>().DownTerrain)
-            && (tiles[tilePosition[0], tilePosition[1] + 1] == null || tiles[tilePosition[0], tilePosition[1] + 1].GetComponent<Tile>().LeftTerrain == gameObject.GetComponent<Tile>().LeftTerrain)
-            && (tiles[tilePosition[0] + 1, tilePosition[1]] == null || tiles[tilePosition[0] + 1, tilePosition[1]].GetComponent<Tile>().UpTerrain == gameObject.GetComponent<Tile>().UpTerrain)
-            && (tiles[tilePosition[0], tilePosition[1] - 1] == null || tiles[tilePosition[0], tilePosition[1] - 1].GetComponent<Tile>().RightTerrain == gameObject.GetComponent<Tile>().RightTerrain))
+        if (((object)tiles[tilePosition[0] - 1, tilePosition[1]] == null || tiles[tilePosition[0] - 1, tilePosition[1]].DownTerrain == tile.DownTerrain)
+            && ((object)tiles[tilePosition[0], tilePosition[1] + 1] == null || tiles[tilePosition[0], tilePosition[1] + 1].LeftTerrain == tile.LeftTerrain)
+            && ((object)tiles[tilePosition[0] + 1, tilePosition[1]] == null || tiles[tilePosition[0] + 1, tilePosition[1]].UpTerrain == tile.UpTerrain)
+            && ((object)tiles[tilePosition[0], tilePosition[1] - 1] == null || tiles[tilePosition[0], tilePosition[1] - 1].RightTerrain == tile.RightTerrain))
         {
             possibleRotations.Add(2);
         }
-        if ((tiles[tilePosition[0] - 1, tilePosition[1]] == null || tiles[tilePosition[0] - 1, tilePosition[1]].GetComponent<Tile>().DownTerrain == gameObject.GetComponent<Tile>().RightTerrain)
-            && (tiles[tilePosition[0], tilePosition[1] + 1] == null || tiles[tilePosition[0], tilePosition[1] + 1].GetComponent<Tile>().LeftTerrain == gameObject.GetComponent<Tile>().DownTerrain)
-            && (tiles[tilePosition[0] + 1, tilePosition[1]] == null || tiles[tilePosition[0] + 1, tilePosition[1]].GetComponent<Tile>().UpTerrain == gameObject.GetComponent<Tile>().LeftTerrain)
-            && (tiles[tilePosition[0], tilePosition[1] - 1] == null || tiles[tilePosition[0], tilePosition[1] - 1].GetComponent<Tile>().RightTerrain == gameObject.GetComponent<Tile>().UpTerrain))
+        if (((object)tiles[tilePosition[0] - 1, tilePosition[1]] == null || tiles[tilePosition[0] - 1, tilePosition[1]].DownTerrain == tile.RightTerrain)
+            && ((object)tiles[tilePosition[0], tilePosition[1] + 1] == null || tiles[tilePosition[0], tilePosition[1] + 1].LeftTerrain == tile.DownTerrain)
+            && ((object)tiles[tilePosition[0] + 1, tilePosition[1]] == null || tiles[tilePosition[0] + 1, tilePosition[1]].UpTerrain == tile.LeftTerrain)
+            && ((object)tiles[tilePosition[0], tilePosition[1] - 1] == null || tiles[tilePosition[0], tilePosition[1] - 1].RightTerrain == tile.UpTerrain))
         {
             possibleRotations.Add(3);
         }
@@ -658,25 +661,26 @@ public class TilesManager : MonoBehaviour
         {
             for (int col = 0; col < tilesOnBoard.GetLength(1); col++)
             {
-                if (tilesOnBoard[row, col] != null)
+                if ((object)tilesOnBoard[row, col] != null)
                 {
+                    Debug.Log("ok");
                     //UP
-                    if (tilesOnBoard[row - 1, col] == null)
+                    if ((object)tilesOnBoard[row - 1, col] == null)
                     {
                         possiblePositions.Add(new int[] { row - 1, col });
                     }
                     //RIGHT
-                    if (tilesOnBoard[row, col + 1] == null)
+                    if ((object)tilesOnBoard[row, col + 1] == null)
                     {
                         possiblePositions.Add(new int[] { row, col + 1 });
                     }
                     //DOWN
-                    if (tilesOnBoard[row + 1, col] == null)
+                    if ((object)tilesOnBoard[row + 1, col] == null)
                     {
                         possiblePositions.Add(new int[] { row + 1, col });
                     }
                     //LEFT
-                    if (tilesOnBoard[row, col - 1] == null)
+                    if ((object)tilesOnBoard[row, col - 1] == null)
                     {
                         possiblePositions.Add(new int[] { row, col - 1 });
                     }

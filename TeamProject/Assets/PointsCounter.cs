@@ -32,17 +32,13 @@ public class ReturnPoints
 {
     public ReturnPoints()
     {
-        
 
     }
     public ReturnPoints(int p, List<Index> meeplesPositionss)
     {
         this.points = p;
         this.meeplesPositions = meeplesPositionss;
-
     }
-
-
     public int points;
 	public List<Index> meeplesPositions = new List<Index>();
 }
@@ -51,8 +47,6 @@ public class AreaTuple
 {
     public AreaTuple()
     {
-
-
     }
     public AreaTuple(int xx, int yy, Area areaa, bool init)
     {
@@ -60,10 +54,7 @@ public class AreaTuple
         this.x = xx;
         this.y = yy;
         this.initialized = init;
-
     }
-
-
     public int x;
 	public int y;
 	public Area area;
@@ -73,8 +64,6 @@ public class AreaTupleTwo
 {
     public AreaTupleTwo()
     {
-
-
     }
     public AreaTupleTwo(int xx, int yy, List<int> areaa, bool init)
     {
@@ -83,8 +72,6 @@ public class AreaTupleTwo
         this.y = yy;
         this.initialized = init;
     }
-
-
     public int x;
     public int y;
     public List<int> area;
@@ -202,7 +189,7 @@ public class PointsCounter : MonoBehaviour {
         {
             (neighbour.y)--;
         }
-        if (board[neighbour.x, neighbour.y] != null)
+        if ((object)board[neighbour.x, neighbour.y] != null)
         {
             foreach (var area in board[neighbour.x, neighbour.y].Areas)
             {
@@ -213,6 +200,7 @@ public class PointsCounter : MonoBehaviour {
                 }
             }
         }
+        //neighbour.initialized = true;
         return neighbour;
     }
 
@@ -268,8 +256,8 @@ public class PointsCounter : MonoBehaviour {
             }
         }
         return true;
-
     }
+
     public bool checkClosedArea(int x, int y, ref Tile[,] board, ref List<AreaTupleTwo> checkedAreas, ref List<AreaTupleTwo> checkedGivenAreas, Area area)
     {
         AreaTupleTwo currentTuple = new AreaTupleTwo(x, y, area.edges, true);
@@ -282,11 +270,10 @@ public class PointsCounter : MonoBehaviour {
         List<AreaTuple> an = areaNeighbours(ref board, x, y, area.edges);
         foreach (var neighbour in an)
         {
-            if (board[neighbour.x, neighbour.y] == null)
+            if ((object)board[neighbour.x, neighbour.y] == null)
             {
                 return false;
             }
-
             bool returnValue = checkClosedArea(neighbour.x, neighbour.y, ref board, ref checkedAreas, ref checkedGivenAreas, neighbour.area);
             if (returnValue == false)
             {
@@ -294,12 +281,10 @@ public class PointsCounter : MonoBehaviour {
             }
         }
         return true;
-
     }
 
     public void countMonasteryPoints(int[] coord, ref GameObject[,] board, ref GameObject[,] meeples)
 	{
-        
         if (board[coord[0], coord[1]].GetComponent<Tile>().Areas.All(a => a.player == null))
 			return;
 		for(int i = -1; i < 2; ++i)
@@ -334,7 +319,7 @@ public class PointsCounter : MonoBehaviour {
             return;
         for (int i = -1; i < 2; ++i)
             for (int j = -1; j < 2; ++j)
-                if (board[coord[0] + i, coord[1] + j] == null)
+                if ((object)board[coord[0] + i, coord[1] + j] == null)
                     return;
 
         PlayerColor color = board[coord[0], coord[1]].Areas.Find(a => a.player != null).player.color;
@@ -365,7 +350,7 @@ public class PointsCounter : MonoBehaviour {
         int value = 0;
         for (int i = -1; i < 2; ++i)
             for (int j = -1; j < 2; ++j)
-                if (board[coord[0] + i, coord[1] + j] != null)
+                if ((object)board[coord[0] + i, coord[1] + j] != null)
                     value++;
 
         PlayerColor color = board[coord[0], coord[1]].Areas.Find(a => a.player != null).player.color;
@@ -406,7 +391,7 @@ public class PointsCounter : MonoBehaviour {
         {
             for (int i = -1; i < 2; ++i)
                 for (int j = -1; j < 2; ++j)
-                    if (board[x + i, y + j] != null && board[x + i, y + j].Areas.Exists(a => a.terrain == terrainTypes.monastery))
+                    if ((object)board[x + i, y + j] != null && board[x + i, y + j].Areas.Exists(a => a.terrain == terrainTypes.monastery))
                         countMonasteryPoints(new int[] { x + i, y + j }, ref board, ref players);
         }
     }
@@ -452,14 +437,12 @@ public class PointsCounter : MonoBehaviour {
                         int shift = 0;
                         foreach (var player in RemoveMeeplesAndPickWinner(ref board, result.meeplesPositions, ref meeples))
                         {
-
                             if (result.points == 2)
                             {
                                 foreach (var tile in checkedAreas)
                                 {
                                     FloatingTextController.Initialize();
                                     FloatingTextController.CreateFloatingText2("+1", getCoordinates(tile.x, tile.y)[0], getCoordinates(tile.x, tile.y)[1], GM.GetPlayerListCopy().Find(p => p.color == (PlayerColor)player).rgbaColor);
-
                                 }
                             }
                             else
@@ -477,10 +460,7 @@ public class PointsCounter : MonoBehaviour {
                                         FloatingTextController.CreateFloatingText2("+2", getCoordinates(tile.x, tile.y)[0] + shift, getCoordinates(tile.x, tile.y)[1] + shift, GM.GetPlayerListCopy().Find(p => p.color == (PlayerColor)player).rgbaColor);
                                     }
                                 }
-
                             }
-
-
                             GM.AddScore((PlayerColor)player, result.points);
                             shift += 1;
                         }
@@ -799,7 +779,7 @@ public class PointsCounter : MonoBehaviour {
         foreach (var neighbour in an)
         {
             //   Debug.Log("Sprawdzamy sąsiada: " + neighbour.x + " " + neighbour.y);
-            if (board[neighbour.x, neighbour.y] == null)
+            if ((object)board[neighbour.x, neighbour.y] == null)
             {
                 //     Debug.Log("Ten: " + neighbour.x + " " + neighbour.y + " to null, wiec exit");
                 return new ReturnPoints(0, new List<Index>());
@@ -850,7 +830,7 @@ public class PointsCounter : MonoBehaviour {
         List<AreaTuple> an = areaNeighbours(ref board, x, y, area.edges);
         foreach (var neighbour in an)
         {
-            if (board[neighbour.x, neighbour.y] != null)
+            if ((object)board[neighbour.x, neighbour.y] != null)
             {
                 accumulator = countRoadsEnd(ref board, neighbour.x, neighbour.y, accumulator, ref checkedAreas, neighbour.area);
             }
@@ -926,7 +906,7 @@ public class PointsCounter : MonoBehaviour {
         List<AreaTuple> an = areaNeighbours(ref board, x, y, area.edges);
         foreach (var neighbour in an)
         {
-            if (board[neighbour.x, neighbour.y] != null)
+            if ((object)board[neighbour.x, neighbour.y] != null)
             {
                 accumulator = countGrass(ref board, neighbour.x, neighbour.y, accumulator, ref checkedAreas, ref checkedCastles, neighbour.area);
             }
@@ -1017,7 +997,7 @@ public class PointsCounter : MonoBehaviour {
         foreach (var neighbour in an)
         {
             //    Debug.Log("Sprawdzamy sąsiada: " + neighbour.x + " " + neighbour.y);
-            if (board[neighbour.x, neighbour.y] == null)
+            if ((object)board[neighbour.x, neighbour.y] == null)
             {
                 //     Debug.Log("Ten: " + neighbour.x + " " + neighbour.y + " to null, wiec exit");
                 return new ReturnPoints(0, new List<Index>());
@@ -1072,7 +1052,7 @@ public class PointsCounter : MonoBehaviour {
         List<AreaTuple> an = areaNeighbours(ref board, x, y, area.edges);
         foreach (var neighbour in an)
         {
-            if (board[neighbour.x, neighbour.y] != null)
+            if ((object)board[neighbour.x, neighbour.y] != null)
             {
                 accumulator = countCastleEnd(ref board, neighbour.x, neighbour.y, accumulator, ref checkedAreas, neighbour.area);
             }
