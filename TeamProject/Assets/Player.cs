@@ -11,6 +11,7 @@ public class Player{
     public PlayerType type;
     public int meeples;
     public Color rgbaColor;
+    public GameObject glow;
 
     public Player(string n, PlayerColor col, Color rgba, PlayerType typ = PlayerType.HUMAN)
     {
@@ -30,6 +31,7 @@ public class Player{
         this.type = other.type;
         this.meeples = other.meeples;
         this.rgbaColor = other.rgbaColor;
+        this.glow = other.glow;
     }
 
     public void ChangeScore(int score)

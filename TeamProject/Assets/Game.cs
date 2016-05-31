@@ -95,16 +95,20 @@ public class Game : MonoBehaviour
                 }
             }
         }
-        if (currentGlow != null)
+        if (GM.GetCurrentPlayer().glow != null)
         {
-            Destroy(currentGlow);
+            Destroy(GM.GetCurrentPlayer().glow);
         }
-        
-
         lastPlacedTile[0] = currentlyPlacedTile[0];
         lastPlacedTile[1] = currentlyPlacedTile[1];
 
-        currentGlow = Instantiate(Glow, new Vector3(TM.getCoordinates(lastPlacedTile[0], lastPlacedTile[1])[0], (float)0.1, TM.getCoordinates(lastPlacedTile[0], lastPlacedTile[1])[1]), Quaternion.identity) as GameObject;
+        GM.GetCurrentPlayer().glow = Instantiate(Glow, new Vector3(TM.getCoordinates(lastPlacedTile[0], lastPlacedTile[1])[0], (float)0.1, TM.getCoordinates(lastPlacedTile[0], lastPlacedTile[1])[1]), Quaternion.identity) as GameObject;
+        GM.GetCurrentPlayer().glow.GetComponentInChildren<ParticleSystem>().startColor = GM.GetCurrentPlayer().rgbaColor;
+
+
+        //lastPlacedTile[0] = currentlyPlacedTile[0];
+        // lastPlacedTile[1] = currentlyPlacedTile[1];
+        // currentGlow = Instantiate(Glow, new Vector3(TM.getCoordinates(lastPlacedTile[0], lastPlacedTile[1])[0], (float)0.1, TM.getCoordinates(lastPlacedTile[0], lastPlacedTile[1])[1]), Quaternion.identity) as GameObject;
 
         currentlyPlacingMeeple = false;
         currentlyPlacingTile = false;
