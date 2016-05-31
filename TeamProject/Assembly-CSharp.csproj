@@ -61,6 +61,7 @@
      <Compile Include="Assets\Tile.cs" />
      <Compile Include="Assets\TilesManager.cs" />
      <Compile Include="Assets\UIManager.cs" />
+     <None Include="Assets\Plugins\Android\AndroidManifest.xml" />
      <None Include="Assets\Fonts\Kingthings License.txt" />
  <Reference Include="UnityEngine.Advertisements">
  <HintPath>D:/Programy/Unity/Editor/Data/UnityExtensions/Unity/Advertisements/UnityEngine.Advertisements.dll</HintPath>
@@ -71,6 +72,10 @@
  <Reference Include="UnityEngine.Networking">
  <HintPath>D:/Programy/Unity/Editor/Data/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll</HintPath>
  </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="Assembly-CSharp-firstpass.csproj">
+      <Project>{024AB7CA-C350-1A48-AE78-9F82B514E1B9}</Project>      <Name>Assembly-CSharp-firstpass</Name>    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
