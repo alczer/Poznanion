@@ -40,6 +40,7 @@ public class Game : MonoBehaviour
     private bool currentlyPlacingMeeple;
     private bool placedMeeple;
     private int[] currentlyPlacedTile;
+    private int[] lastPlacedTile;
     private Tile choosenTile;
 
     public GameObject OKButton;
@@ -47,6 +48,8 @@ public class Game : MonoBehaviour
     public GameObject Mask;
     public GameObject StandingMeeple;
     public GameObject FarmerMeeple;
+    public GameObject Glow;
+    GameObject currentGlow;
 
     private List<GameObject> placedMeepleObject;
     private Area placedMeepleArea;
@@ -92,7 +95,17 @@ public class Game : MonoBehaviour
                 }
             }
         }
+        if (currentGlow != null)
+        {
+            Destroy(currentGlow);
+        }
         
+
+        lastPlacedTile[0] = currentlyPlacedTile[0];
+        lastPlacedTile[1] = currentlyPlacedTile[1];
+
+        currentGlow = Instantiate(Glow, new Vector3(TM.getCoordinates(lastPlacedTile[0], lastPlacedTile[1])[0], (float)0.1, TM.getCoordinates(lastPlacedTile[0], lastPlacedTile[1])[1]), Quaternion.identity) as GameObject;
+
         currentlyPlacingMeeple = false;
         currentlyPlacingTile = false;
         currentlyPlacedTile = null;
@@ -240,6 +253,7 @@ public class Game : MonoBehaviour
     {
         
         currentlyPlacedTile = new int[2];
+        lastPlacedTile = new int[2];
         currentNbrTiles = 0;
         TM.placeTile(ref objectToinstantiate, ref Mask, 100, 100, ref tilesOnBoard, ref masks);
         Tile startTile = tilesOnBoard[100, 100].AddComponent<Tile>();
