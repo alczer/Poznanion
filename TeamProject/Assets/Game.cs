@@ -63,6 +63,9 @@ public class Game : MonoBehaviour
     int currentTileIndex;
     bool finished = true;
 
+    public AudioClip impact;
+    AudioSource audio;
+
 
     public void AcceptButtonClicked()
     {
@@ -272,6 +275,7 @@ public class Game : MonoBehaviour
         currentlyPlacingMeeple = false;
         placedMeeple = false;
         currentlyPlacedMeeple = 0;
+        audio = GetComponent<AudioSource>();
 
         TM.init(); // Inicjowanie Tiles
         //tilesLeft = TM.tilesList.Count;
@@ -667,12 +671,8 @@ public class Game : MonoBehaviour
                                 if (arrayIndex[0] == currentlyPlacedTile[0] && arrayIndex[1] == currentlyPlacedTile[1])
                                 {
                                     TM.rotateFirstMatchingRotation(ref tilesOnBoard[arrayIndex[0], arrayIndex[1]], ref masks[arrayIndex[0], arrayIndex[1]], arrayIndex, ref tilesOnBoard);
-                                    String result3 = "";
-                                    foreach (var l in tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas)
-                                    {
-                                        result3 += String.Join(" ", l.edges.Select(item => item.ToString()).ToArray());
-                                        result3 += " | ";
-                                    }
+                                    audio.PlayOneShot(impact, 1.0F);
+                                    
                                   //  Debug.Log(result3);
                                     //rotateClockwise90(ref tilesOnBoard[arrayIndex[0], arrayIndex[1]]);              
                                 }
@@ -702,6 +702,9 @@ public class Game : MonoBehaviour
                                 choosenTile.Clone(TM.tilesList[currentTileIndex]);
                                 tilesOnBoard[arrayIndex[0], arrayIndex[1]] = Instantiate(objectToinstantiate, position, Quaternion.identity) as GameObject; // instatiate a prefab on the position where the ray hits the floor. 
                                 masks[arrayIndex[0], arrayIndex[1]] = Instantiate(Mask, position, Quaternion.identity) as GameObject;
+
+                                audio.PlayOneShot(impact, 1.0F);
+
 
                                 Tile tile = tilesOnBoard[arrayIndex[0], arrayIndex[1]].AddComponent<Tile>();
                             //    Debug.Log("choosen tile:");
