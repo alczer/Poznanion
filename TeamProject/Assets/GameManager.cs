@@ -120,6 +120,7 @@ public class GameManager : MonoBehaviour
             case GameState.CREDITS:
                 break;
             case GameState.HELP:
+                SceneManager.LoadScene("rules");
                 break;
             case GameState.PAUSED:
                 break;

@@ -147,6 +147,13 @@ public class UIManager : MonoBehaviour
         GM.SetGameState(GameState.ADD_PLAYER_MENU);
         Debug.Log(GM.gameState);
     }
+    public void GoToHelp()
+    {
+        //GM.ShowAdPlacement();
+        GM.SetGameState(GameState.HELP);
+        Debug.Log(GM.gameState);
+    }
+
     public void GoToSettings()
     {
         //GM.ShowAdPlacement();
