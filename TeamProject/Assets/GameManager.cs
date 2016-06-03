@@ -136,16 +136,16 @@ public class GameManager : MonoBehaviour
 
     public void ShowAdPlacement()
     {
-        Advertisement.debugLevel = Advertisement.DebugLevel.Debug;
-        if(Advertisement.testMode)
-        {
-            Debug.Log("test");
-        }
-        if (Advertisement.IsReady())
-        {
-            Advertisement.Show();
-        }
-        if (string.IsNullOrEmpty(zoneId)) zoneId = null;
+        //Advertisement.debugLevel = Advertisement.DebugLevel.Debug;
+        //if(Advertisement.testMode)
+        //{
+        //    Debug.Log("test");
+        //}
+        //if (Advertisement.IsReady())
+        //{
+        //    Advertisement.Show();
+        //}
+        //if (string.IsNullOrEmpty(zoneId)) zoneId = null;
 
         //ShowOptions options = new ShowOptions();
         //options.resultCallback = HandleShowResult;
