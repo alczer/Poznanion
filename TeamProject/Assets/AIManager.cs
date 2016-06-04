@@ -330,9 +330,8 @@ public class AIManager : MonoBehaviour {
                 foreach (int rotation in possibleRotations)
                 {
                     Move move = new Move();
-                    TileAI tmpTile = new TileAI();
-                    tmpTile.Clone(move.tile);
                     move.Clone(tmp);
+                    
 
                     if (rotation == 0)
                     {
