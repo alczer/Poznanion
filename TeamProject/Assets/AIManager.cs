@@ -34,10 +34,12 @@ public class AIManager : MonoBehaviour {
 
     public Move Expectimax(GameObject[,] tiles, List<Tile> tileList, Tile currentTile, int maxDepth, List<Player> players)
     {
-        TileAI[,] simulation = new TileAI[200, 200];
-        TileAI current = new TileAI();
-        current.Clone(currentTile);
+        // currentTile
+        TileAI currentlyRolledTile = new TileAI();
+        currentlyRolledTile.Clone(currentTile);
 
+        // tiles
+        TileAI[,] simulation = new TileAI[200, 200];
         for (int x = 0; x < tiles.GetLength(0); x++)
         {
             for (int y = 0; y < tiles.GetLength(1);y++)
@@ -54,14 +56,34 @@ public class AIManager : MonoBehaviour {
             }
         }
 
-        List<Move> possibleMoves = GetPossibleMoves(simulation, current, players[0]); // 0 to AI
-        Debug.Log("---------------------------------------------------");
-        for (int i = 0; i < possibleMoves.Count; i++)
+        // tileList
+        List<TileAI> tileListTemp = new List<TileAI>();
+        
+        for (int i = tileList.Count -1 ; i > 0-1; i--)
         {
-            Debug.Log(i+ ". Move: "+ possibleMoves[i].tile.Material.name + " pos: " + possibleMoves[i].x + ", " + possibleMoves[i].y +" rotation: " + possibleMoves[i].tile.Rotation);
+            TileAI tmp = new TileAI();
+            tmp.Clone(tileList[i]);
+            //Debug.Log(tmp.Material.name);
+            tileListTemp.Add(tmp);
         }
-        Debug.Log("---------------------------------------------------");
-        Move bestMove = possibleMoves[possibleMoves.Count /2];
+
+
+        //List<Move> possibleMoves = GetPossibleMoves1(simulation, tileListTemp, players[1]); // tutaj dla wszystkich tiles test
+        List<Move> possibleMoves = GetPossibleMoves(simulation, currentlyRolledTile, players[1]); // 1 to AI jednak
+
+        //Debug.Log("---------------------------------------------------");
+        //for (int i = 0; i < possibleMoves.Count; i++)
+        //{
+        //    Debug.Log(i+ ". Move: "+ possibleMoves[i].tile.Material.name + " pos: " + possibleMoves[i].x + ", " + possibleMoves[i].y +" rotation: " + possibleMoves[i].tile.Rotation);
+        //}
+        //Debug.Log("---------------------------------------------------");
+
+
+        // tymczasowy rand
+        int rand = UnityEngine.Random.Range(0, possibleMoves.Count);
+        Move bestMove = possibleMoves[rand];
+
+
         //Move bestMove = new Move();
 
         //Move iterator = new Move();
@@ -69,20 +91,21 @@ public class AIManager : MonoBehaviour {
         //for (int u = 0; u < possibleMoves.Count; u++)
         //{
         //    // kopia
-        //    Tile[,] tempBoard = new Tile[200, 200];
+        //    TileAI[,] tempBoard = new TileAI[200, 200];
         //    for (int x = 0; x < simulation.GetLength(0); x++)
         //    {
         //        for (int y = 0; y < simulation.GetLength(1); y++)
         //        {
         //            if (simulation[x, y] != null)
         //            {
+        //                tempBoard[x, y] = new TileAI();
         //                tempBoard[x, y].Clone(simulation[x, y]);
         //            }
         //        }
         //    }
 
-        //    possibleMoves[u] = DoMove(possibleMoves[u], ref tempBoard, ref tileList, ref players, 1);
-        //    possibleMoves[u].score += MinMax(tempBoard, tileList, 0, maxDepth, players, 1); //1 to chance
+        //    possibleMoves[u] = DoMove(possibleMoves[u], ref tempBoard, ref tileListTemp, ref players, 1);
+        //    possibleMoves[u].score += MinMax(tempBoard, tileListTemp, 0, maxDepth, players, 1); //1 to chance
         //}
         //foreach (var move in possibleMoves)
         //{
@@ -108,11 +131,11 @@ public class AIManager : MonoBehaviour {
         if (currentPlayer == 1)
         {
             result = 8192f;
-            possibleMoves = GetPossibleMoves1(ref tiles, tileList, players[1]);
+            possibleMoves = GetPossibleMoves1(tiles, tileList, players[1]);
         }
         else
         {
-            possibleMoves = GetPossibleMoves1(ref tiles, tileList, players[0]);
+            possibleMoves = GetPossibleMoves1(tiles, tileList, players[0]);
         }
         foreach (var move in possibleMoves)
         {
@@ -125,6 +148,7 @@ public class AIManager : MonoBehaviour {
                 {
                     if (tiles[x, y] != null)
                     {
+                        tempBoard[x, y] = new TileAI();
                         tempBoard[x, y].Clone(tiles[x, y]);
                     }
                 }
@@ -146,6 +170,7 @@ public class AIManager : MonoBehaviour {
 
     public Move DoMove(Move move, ref TileAI[,] tiles, ref List<TileAI> tileList, ref List<Player> players, int currentPlayer)
     {
+        tiles[move.x, move.y] = new TileAI();
         tiles[move.x, move.y].Clone(move.tile);
         tileList.Remove(move.tile); // moze nie dziala nie weim
 
@@ -182,53 +207,33 @@ public class AIManager : MonoBehaviour {
         return result;
     }
 
-    public List<Move> GetPossibleMoves1(ref TileAI[,] tiles, List<TileAI> tileList, Player player)
+    public List<Move> GetPossibleMoves1(TileAI[,] tiles, List<TileAI> tileList, Player player)
     {
-        //for (int x = 0; x < tiles.GetLength(0); x++)
-        //{
-        //    for (int y = 0; y < tiles.GetLength(1); y++)
-        //    {
-        //        if (!System.Object.Equals(tiles[x, y], null))
-        //        {
-        //            Debug.Log(tiles[x, y].Material.name);
-        //        }
-        //    }
-        //}
-
+        // What we return;
         List<Move> MovesList = new List<Move>();
+
         List<int[]> possiblePositions = new List<int[]>();
         List<int> possibleRotations = new List<int>();
         List<Area> possibleMeeple = new List<Area>();
 
         Move tmp = new Move();
-
-        //Tile tmptile = new Tile();
+        Move tmp2 = new Move();
+        Move tmp3 = new Move();
         tmp.tile = new TileAI();
 
         int help = -1;
 
-       for (int k = 0; k < tileList.Count; k++)
+        for (int k = 0; k < tileList.Count; k++)
         {
             tmp.tile.Clone(tileList[k]);
-           
+            Debug.Log(tmp.tile.Material.name + " " + tmp.tile.IdNumber);
 
-            if (tmp.tile.IdNumber != help /*|| tmptile == null*/)
+            if (tmp.tile.IdNumber != help)
             {
                 help = tmp.tile.IdNumber;
-                Debug.Log("jiji" + tileList[k].IdNumber);
-                //if (tmp.tile == null)
-                //{
-                //    Debug.Log("tmp.tile null!");
-                //}
-                Debug.Log("surrounding count" + TM.findSourrounding(ref tiles).Count);
 
+                // Position
                 possiblePositions = TM.findMatchingEdges(TM.findSourrounding(ref tiles), tmp.tile, ref tiles);
-                Debug.Log("positions count" + possiblePositions.Count);
-                if (possiblePositions == null)
-                {
-                    Debug.Log("brak pozycji");
-                }
-
                 if (possiblePositions != null)
                 {
                     foreach (int[] pos in possiblePositions)
@@ -236,52 +241,56 @@ public class AIManager : MonoBehaviour {
                         tmp.x = pos[0];
                         tmp.y = pos[1];
 
-                        Move move = new Move();
-                        Debug.Log(tmp.x + " " + tmp.y);
-                        move.Clone(tmp);
-                        Debug.Log(move.x + " " + move.y);
-                        //MovesList.Add(move); // dodaje bez meepla
-
+                        // Rotation
                         possibleRotations = TM.possibleRotations(tmp.tile, tiles, pos);
                         foreach (int rotation in possibleRotations)
                         {
+                            tmp2 = new Move();
+                            tmp2.Clone(tmp);
+                    
+                            if (rotation == 0)
+                            {
+                                tmp2.rotation = rotation;
+                                MovesList.Add(tmp2);
+                            }
                             if (rotation == 1)
                             {
-                                TM.rotateClockwise90(ref tmp.tile);
-                                
+                                TM.rotateClockwise90(ref tmp2.tile);
+                                tmp2.rotation = rotation;
+                                MovesList.Add(tmp2); // dodaje bez meepla
                             }
-                            else if(rotation == 2)
+                            else if (rotation == 2)
                             {
-                                TM.rotateClockwise90(ref tmp.tile);
-                                TM.rotateClockwise90(ref tmp.tile);
+
+                                TM.rotateClockwise90(ref tmp2.tile);
+                                TM.rotateClockwise90(ref tmp2.tile);
+                                tmp2.rotation = rotation;
+                                MovesList.Add(tmp2); // dodaje bez meepla
                             }
                             else if (rotation == 3)
                             {
-                                TM.rotateClockwise90(ref tmp.tile);
-                                TM.rotateClockwise90(ref tmp.tile);
-                                TM.rotateClockwise90(ref tmp.tile);
+                                TM.rotateClockwise90(ref tmp2.tile);
+                                TM.rotateClockwise90(ref tmp2.tile);
+                                TM.rotateClockwise90(ref tmp2.tile);
+                                tmp2.rotation = rotation;
+                                MovesList.Add(tmp2); // dodaje bez meepla
                             }
 
+                            // Meeple
                             tiles[pos[0], pos[1]] = new TileAI();
-                            tiles[pos[0], pos[1]].Clone(tmp.tile);
-
+                            tiles[pos[0], pos[1]].Clone(tmp2.tile);
                             possibleMeeple = TM.possibleMeepleAreas(ref tiles, pos[0], pos[1]);
-                            //tiles[pos[0], pos[1]] = null;
-
+                            tiles[pos[0], pos[1]] = null;
                             if (player.meeples > 0)
                             {
-                                foreach (Area area in tmp.tile.Areas )
+                                foreach (Area area in tmp2.tile.Areas)
                                 {
                                     if (possibleMeeple.Any(a => a.meeplePlacementIndex == area.meeplePlacementIndex))
                                     {
                                         area.player = player;
-                                        Debug.Log(tmp.x + " " + tmp.y);
-
-                                        move.Clone(tmp);
-
-                                        Debug.Log(move.x + " " + move.y);
-                                        MovesList.Add(move);
-
+                                        tmp3 = new Move();
+                                        tmp3.Clone(tmp2);
+                                        MovesList.Add(tmp3);
                                         area.player = null;
                                     }
                                 }
@@ -291,24 +300,27 @@ public class AIManager : MonoBehaviour {
                 }
             }  
         }
-        Debug.Log("wychodze z pętli");
         return MovesList;
     }
+
     public List<Move> GetPossibleMoves(TileAI[,] tiles, TileAI tile, Player player)
     {
         // What we return;
         List<Move> MovesList = new List<Move>();
 
-        List<int[]> possiblePositions = new List<int[]>(); //OK
-        List<int> possibleRotations = new List<int>(); 
-        List<Area> possibleMeeple = new List<Area>();
+        List<int[]> possiblePositions = new List<int[]>(); 
+        List<int> possibleRotations = new List<int>();  
+        List<Area> possibleMeeple = new List<Area>(); 
 
         Move tmp = new Move();
+        Move tmp2 = new Move();
+        Move tmp3 = new Move();
+
         tmp.tile = new TileAI();
         tmp.tile.Clone(tile);
 
+        // Position
         possiblePositions = TM.findMatchingEdges(TM.findSourrounding(ref tiles), tmp.tile, ref tiles);
-
         if (possiblePositions != null)
         {
             Debug.Log("Ilość możliwych pozycji: "+possiblePositions.Count);
@@ -317,96 +329,65 @@ public class AIManager : MonoBehaviour {
                 tmp.x = pos[0];
                 tmp.y = pos[1];
 
+                // Rotation
                 possibleRotations = TM.possibleRotations(tmp.tile, tiles, pos);
-                if (possibleRotations == null)
-                {
-                    Debug.Log("brak pozycji");
-                }
-                else
-                {
-                    Debug.Log("ilość możliwych rotacji: " + possibleRotations.Count);
-                }
-
                 foreach (int rotation in possibleRotations)
                 {
-                    Move move = new Move();
-                    move.Clone(tmp);
+                    tmp2 = new Move();
+                    tmp2.Clone(tmp);
                     
-
                     if (rotation == 0)
                     {
-                        Debug.Log("rotacja" + move.tile.Rotation);
-                        move.rotation = rotation;
-                        MovesList.Add(move);
+                        Debug.Log("rotacja" + tmp2.tile.Rotation);
+                        tmp2.rotation = rotation;
+                        MovesList.Add(tmp2);
                     }
                     if (rotation == 1)
                     {
-                        TM.rotateClockwise90(ref move.tile);
-                        Debug.Log("rotacja" + move.tile.Rotation);
-                        move.rotation = rotation;
-                        MovesList.Add(move); // dodaje bez meepla
+                        TM.rotateClockwise90(ref tmp2.tile);
+                        Debug.Log("rotacja" + tmp2.tile.Rotation);
+                        tmp2.rotation = rotation;
+                        MovesList.Add(tmp2); // dodaje bez meepla
                     }
                     else if (rotation == 2)
                     {
 
-                        TM.rotateClockwise90(ref move.tile);
-                        TM.rotateClockwise90(ref move.tile);
-                        move.rotation = rotation;
-                        Debug.Log("rotacja" + move.tile.Rotation);
-                        MovesList.Add(move); // dodaje bez meepla
+                        TM.rotateClockwise90(ref tmp2.tile);
+                        TM.rotateClockwise90(ref tmp2.tile);
+                        tmp2.rotation = rotation;
+                        Debug.Log("rotacja" + tmp2.tile.Rotation);
+                        MovesList.Add(tmp2); // dodaje bez meepla
                     }
                     else if (rotation == 3)
                     {
-                        TM.rotateClockwise90(ref move.tile);
-                        TM.rotateClockwise90(ref move.tile);
-                        TM.rotateClockwise90(ref move.tile);
-                        move.rotation = rotation;
-                        Debug.Log("rotacja" + move.tile.Rotation);
-                        MovesList.Add(move); // dodaje bez meepla
+                        TM.rotateClockwise90(ref tmp2.tile);
+                        TM.rotateClockwise90(ref tmp2.tile);
+                        TM.rotateClockwise90(ref tmp2.tile);
+                        tmp2.rotation = rotation;
+                        Debug.Log("rotacja" + tmp2.tile.Rotation);
+                        MovesList.Add(tmp2); // dodaje bez meepla
                     }
 
-                    //tiles[pos[0], pos[1]] = new TileAI();
-                    //tiles[pos[0], pos[1]].Clone(tmp.tile);
-                    //possibleMeeple = TM.possibleMeepleAreas(ref tiles, pos[0], pos[1]);
-                    //Debug.Log("possible meeple count: "+ possibleMeeple.Count);
-
-
-                    //tiles[pos[0], pos[1]] = null;
-
-                    //if (player.meeples > 0)
-                    //{
-                    //    foreach (Area area in tmp.tile.Areas)
-                    //    {
-                    //        Debug.Log("HOphp");
-                    //        //if (possibleMeeple.Any(a => a. == area.colorIndex))
-                    //        //{
-                            
-                    //            area.player = player;
-                            
-
-                    //            if (area.player == null)
-                    //            {
-                    //                Debug.Log("coś nie tak");
-                    //            }
-                    //            Debug.Log(tmp.x + " " + tmp.y);
-
-                    //            move.Clone(tmp);
-                    //            if (move.tile.Areas.Find(a => a.player != null) == null)
-                    //            {
-                    //                Debug.Log("coś nie tak !!!!!!!!!!!!!!");
-                    //            }
-
-
-
-                    //            Debug.Log(move.tile.Areas.Find(a => a.player != null).colorIndex);
-
-                    //            Debug.Log(move.x + " " + move.y);
-                    //            MovesList.Add(move);
-
-                    //            area.player = null;
-                    //        //}
-                    //    }
-                    //}
+                    // Meeple
+                    tiles[pos[0], pos[1]] = new TileAI();
+                    tiles[pos[0], pos[1]].Clone(tmp2.tile);
+                    possibleMeeple = TM.possibleMeepleAreas(ref tiles, pos[0], pos[1]);
+                    tiles[pos[0], pos[1]] = null;
+                    Debug.Log("player meeples: " + player.meeples);
+                    if (player.meeples > 0)
+                    {
+                        foreach (Area area in tmp2.tile.Areas)
+                        {
+                            if (possibleMeeple.Any(a => a.meeplePlacementIndex == area.meeplePlacementIndex))
+                            {
+                                area.player = player;
+                                tmp3 = new Move();
+                                tmp3.Clone(tmp2);
+                                MovesList.Add(tmp3);
+                                area.player = null;
+                            }
+                        }
+                    }
                 }
             }
         }
