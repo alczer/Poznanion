@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System;
+
 public class Index
 {
 	public Index(int xx, int yy)
@@ -15,19 +16,16 @@ public class Index
 	public int x;
 	public int y;
 }
-
 public class CastleCoords
 {
 	public Index index;
 	public List<int> area;
 }
-
 public class CastleData
 {
 	public bool isFinished;
 	public List<CastleCoords> fields= new List<CastleCoords>();
 }
-
 public class ReturnPoints
 {
     public ReturnPoints()
@@ -42,7 +40,6 @@ public class ReturnPoints
     public int points;
 	public List<Index> meeplesPositions = new List<Index>();
 }
-
 public class AreaTuple
 {
     public AreaTuple()
@@ -154,7 +151,7 @@ public class PointsCounter : MonoBehaviour {
 
         return neighbour;
 	}
-    public AreaTuple areaNeighbour(ref Tile[,] board, int x, int y, int edge)
+    public AreaTuple areaNeighbour(ref TileAI[,] board, int x, int y, int edge)
     {
         AreaTuple neighbour = new AreaTuple();
         neighbour.initialized = false;
@@ -221,7 +218,7 @@ public class PointsCounter : MonoBehaviour {
 		//Debug.Log("wielkość listy:"+neighbours.Count);
 		return neighbours;
 	}
-    public List<AreaTuple> areaNeighbours(ref Tile[,] board, int x, int y, List<int> edges)
+    public List<AreaTuple> areaNeighbours(ref TileAI[,] board, int x, int y, List<int> edges)
     {
         List<AreaTuple> neighbours = new List<AreaTuple>();
         foreach (var edge in edges)
@@ -258,7 +255,7 @@ public class PointsCounter : MonoBehaviour {
         return true;
     }
 
-    public bool checkClosedArea(int x, int y, ref Tile[,] board, ref List<AreaTupleTwo> checkedAreas, ref List<AreaTupleTwo> checkedGivenAreas, Area area)
+    public bool checkClosedArea(int x, int y, ref TileAI[,] board, ref List<AreaTupleTwo> checkedAreas, ref List<AreaTupleTwo> checkedGivenAreas, Area area)
     {
         AreaTupleTwo currentTuple = new AreaTupleTwo(x, y, area.edges, true);
         if (checkedGivenAreas.Any(opt => opt.x == currentTuple.x && opt.y == currentTuple.y && Enumerable.SequenceEqual(opt.area.OrderBy(t => t), currentTuple.area.OrderBy(t => t))))
@@ -312,7 +309,7 @@ public class PointsCounter : MonoBehaviour {
         meeples[coord[0], coord[1]] = null;
 
     }
-    public void countMonasteryPoints(int[] coord, ref Tile[,] board, ref List<Player> players)
+    public void countMonasteryPoints(int[] coord, ref TileAI[,] board, ref List<Player> players)
     {
 
         if (board[coord[0], coord[1]].Areas.All(a => a.player == null))
@@ -345,7 +342,7 @@ public class PointsCounter : MonoBehaviour {
         meeples[coord[0], coord[1]] = null;
     }
 
-    public void countMonasteryPointsEnd(int[] coord, ref Tile[,] board, ref List<Player> players)
+    public void countMonasteryPointsEnd(int[] coord, ref TileAI[,] board, ref List<Player> players)
     {
         int value = 0;
         for (int i = -1; i < 2; ++i)
@@ -378,7 +375,7 @@ public class PointsCounter : MonoBehaviour {
         }
     }
 
-    public void countPointsAfterMove(ref Tile[,] board, ref List<Player> players, int x, int y, bool endgame = false)
+    public void countPointsAfterMove(ref TileAI[,] board, ref List<Player> players, int x, int y, bool endgame = false)
     {
         // Debug.Log("Jestem w counterze");
         foreach (var area in board[x, y].Areas)
@@ -535,7 +532,7 @@ public class PointsCounter : MonoBehaviour {
                 break;
         }
     }
-    public void CountAreaPoints(ref Tile[,] board, int x, int y, Area area, bool endgame, ref List<Player> players)
+    public void CountAreaPoints(ref TileAI[,] board, int x, int y, Area area, bool endgame, ref List<Player> players)
     {
         List<AreaTupleTwo> checkedAreas = new List<AreaTupleTwo>();
         ReturnPoints result = new ReturnPoints();
@@ -676,7 +673,7 @@ public class PointsCounter : MonoBehaviour {
 		}
 		return maxList;
 	}
-    public List<int> RemoveMeeplesAndPickWinner(ref Tile[,] board, List<Index> meeplesPositions, ref List<Player> playersList)
+    public List<int> RemoveMeeplesAndPickWinner(ref TileAI[,] board, List<Index> meeplesPositions, ref List<Player> playersList)
     {
         const int MAX_PLAYER_SIZE = 5;
         int[] players = new int[5];
@@ -757,7 +754,7 @@ public class PointsCounter : MonoBehaviour {
    //     Debug.Log("Sąsiedzi sprawdzeni, zwracamy akumulator: " + accumulator.points + "!");
         return accumulator;
     }
-    public ReturnPoints countRoads(ref Tile[,] board, int x, int y, ReturnPoints accumulator, ref List<AreaTupleTwo> checkedAreas, Area area)
+    public ReturnPoints countRoads(ref TileAI[,] board, int x, int y, ReturnPoints accumulator, ref List<AreaTupleTwo> checkedAreas, Area area)
     {
         // Debug.Log("--------------------------------------------------------------------------- liczymy dla drogi");
 
@@ -816,7 +813,7 @@ public class PointsCounter : MonoBehaviour {
         }
         return accumulator;
     }
-    public ReturnPoints countRoadsEnd(ref Tile[,] board, int x, int y, ReturnPoints accumulator, ref List<AreaTupleTwo> checkedAreas, Area area)
+    public ReturnPoints countRoadsEnd(ref TileAI[,] board, int x, int y, ReturnPoints accumulator, ref List<AreaTupleTwo> checkedAreas, Area area)
     {
         AreaTupleTwo currentTuple = new AreaTupleTwo(x, y, area.edges, true);
         if (checkedAreas.Any(opt => opt.x == currentTuple.x && opt.y == currentTuple.y && Enumerable.SequenceEqual(opt.area.OrderBy(t => t), currentTuple.area.OrderBy(t => t))))
@@ -875,7 +872,7 @@ public class PointsCounter : MonoBehaviour {
         }
         return accumulator;
     }
-    public ReturnPoints countGrass(ref Tile[,] board, int x, int y, ReturnPoints accumulator, ref List<AreaTupleTwo> checkedAreas, ref List<AreaTupleTwo> checkedCastles, Area area)
+    public ReturnPoints countGrass(ref TileAI[,] board, int x, int y, ReturnPoints accumulator, ref List<AreaTupleTwo> checkedAreas, ref List<AreaTupleTwo> checkedCastles, Area area)
     {
         Debug.Log("Jestem na trawie w :" + x + " " + y + " " + String.Join(" ", area.edges.Select(item => item.ToString()).ToArray()));
         AreaTupleTwo currentTuple = new AreaTupleTwo(x, y, area.edges, true);
@@ -963,7 +960,7 @@ public class PointsCounter : MonoBehaviour {
       //  Debug.Log("Sąsiedzi sprawdzeni, zwracamy akumulator: " + accumulator.points + "!");
         return accumulator;
     }
-    public ReturnPoints countCastle(ref Tile[,] board, int x, int y, ReturnPoints accumulator, ref List<AreaTupleTwo> checkedAreas, Area area)
+    public ReturnPoints countCastle(ref TileAI[,] board, int x, int y, ReturnPoints accumulator, ref List<AreaTupleTwo> checkedAreas, Area area)
     {
         AreaTupleTwo currentTuple = new AreaTupleTwo(x, y, area.edges, true);
         if (checkedAreas.Any(opt => opt.x == currentTuple.x && opt.y == currentTuple.y && Enumerable.SequenceEqual(opt.area.OrderBy(t => t), currentTuple.area.OrderBy(t => t))))
@@ -1036,7 +1033,7 @@ public class PointsCounter : MonoBehaviour {
         }
         return accumulator;
     }
-    public ReturnPoints countCastleEnd(ref Tile[,] board, int x, int y, ReturnPoints accumulator, ref List<AreaTupleTwo> checkedAreas, Area area)
+    public ReturnPoints countCastleEnd(ref TileAI[,] board, int x, int y, ReturnPoints accumulator, ref List<AreaTupleTwo> checkedAreas, Area area)
     {
         AreaTupleTwo currentTuple = new AreaTupleTwo(x, y, area.edges, true);
         if (checkedAreas.Any(opt => opt.x == currentTuple.x && opt.y == currentTuple.y && Enumerable.SequenceEqual(opt.area.OrderBy(t => t), currentTuple.area.OrderBy(t => t))))

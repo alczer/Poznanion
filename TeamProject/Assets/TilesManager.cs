@@ -65,7 +65,7 @@ public class TilesManager : MonoBehaviour
     }
     public void addTileToList(int id, terrainTypes up, terrainTypes right, terrainTypes down, terrainTypes left, float x, float y, Material m, Material mask, int count, int turn, bool plus, List<Area> areas)
     {
-        Tile tmp = new Tile();
+        Tile tmp = gameObject.AddComponent<Tile>();
         tmp.Init(id, up, right, down, left, x, y, m, mask, turn, plus, areas);
         for (int i = 0; i < count; i++)
         {
@@ -78,7 +78,6 @@ public class TilesManager : MonoBehaviour
         tilesOnBoard[x, y] = Instantiate(tile, new Vector3(0, (float)0.1, 0), Quaternion.identity) as GameObject;
         masks[x, y] = Instantiate(mask, new Vector3(0, (float)0.1, 0), Quaternion.identity) as GameObject;
     }
-
     public int[] getArrayPosition(float x, float z)
     {
         float col = 100 + (x / 10);
@@ -86,13 +85,121 @@ public class TilesManager : MonoBehaviour
         int[] array = new int[2] { (int)row, (int)col };
         return array;
     }
-
     public float[] getCoordinates(int row, int col)
     {
         float x = ((float)col - 100) * 10;
         float z = ((float)row - 100) * (-10);
         float[] array = new float[2] { x, z };
         return array;
+    }
+    public Vector3 GetMeeplePosition(int meeplePosIndex, float[] coords)
+    {
+        Vector3 pos = new Vector3(0, 0, 0);
+
+        switch (meeplePosIndex)
+        {
+            case 0:
+                pos = new Vector3(coords[0], 0, coords[1]);
+                break;
+            case 1:
+                pos = new Vector3(coords[0] - 3.4f, 0, coords[1] + 3.4f);
+                break;
+            case 2:
+                pos = new Vector3(coords[0] - 2.5f, 0, coords[1] + 4);
+                break;
+            case 3:
+                pos = new Vector3(coords[0], 0, coords[1] + 4);
+                break;
+            case 4:
+                pos = new Vector3(coords[0] + 2.5f, 0, coords[1] + 4);
+                break;
+            case 5:
+                pos = new Vector3(coords[0] - 1, 0, coords[1] + 1);
+                break;
+            case 11:
+                pos = new Vector3(coords[0] + 3.4f, 0, coords[1] + 3.4f);
+                break;
+            case 12:
+                pos = new Vector3(coords[0] + 4, 0, coords[1] + 2.5f);
+                break;
+            case 13:
+                pos = new Vector3(coords[0] + 4, 0, coords[1]);
+                break;
+            case 14:
+                pos = new Vector3(coords[0] + 4, 0, coords[1] - 2.5f);
+                break;
+            case 15:
+                pos = new Vector3(coords[0] + 1, 0, coords[1] + 1);
+                break;
+            case 21:
+                pos = new Vector3(coords[0] + 3.4f, 0, coords[1] - 3.4f);
+                break;
+            case 22:
+                pos = new Vector3(coords[0] + 2.5f, 0, coords[1] - 4);
+                break;
+            case 23:
+                pos = new Vector3(coords[0], 0, coords[1] - 4);
+                break;
+            case 24:
+                pos = new Vector3(coords[0] + 2.5f, 0, coords[1] - 4);
+                break;
+            case 25:
+                pos = new Vector3(coords[0] + 1, 0, coords[1] - 1);
+                break;
+            case 31:
+                pos = new Vector3(coords[0] - 3.4f, 0, coords[1] - 3.4f);
+                break;
+            case 32:
+                pos = new Vector3(coords[0] - 4, 0, coords[1] - 2.5f);
+                break;
+            case 33:
+                pos = new Vector3(coords[0] - 4, 0, coords[1]);
+                break;
+            case 34:
+                pos = new Vector3(coords[0] - 4, 0, coords[1] + 2.5f);
+                break;
+            case 35:
+                pos = new Vector3(coords[0] - 1, 0, coords[1] - 1);
+                break;
+        }
+        return pos;
+    }
+    public int ColorClassify(float R)
+    {
+        int x = 0;
+        if (R <= 0.066f)
+        {
+            return 1;
+        }
+        if (R <= 0.133f)
+        {
+            return 2;
+        }
+        if (R <= 0.200f)
+        {
+            return 3;
+        }
+        if (R <= 0.266f)
+        {
+            return 4;
+        }
+        if (R <= 0.333f)
+        {
+            return 5;
+        }
+        if (R <= 0.400f)
+        {
+            return 6;
+        }
+        if (R <= 0.466f)
+        {
+            return 7;
+        }
+        if (R <= 0.533f)
+        {
+            return 8;
+        }
+        return x;
     }
 
     public List<Area> possibleMeepleAreas(ref GameObject[,] board, int x, int y)
@@ -121,7 +228,7 @@ public class TilesManager : MonoBehaviour
         //Return the list with areas that are ready for meeple.
         return possibleAreas;
     }
-    public List<Area> possibleMeepleAreas(ref Tile[,] board, int x, int y)
+    public List<Area> possibleMeepleAreas(ref TileAI[,] board, int x, int y)
     {
         List<Area> possibleAreas = new List<Area>();
         //Check which area can hold meeple:
@@ -198,7 +305,7 @@ public class TilesManager : MonoBehaviour
         }
         return neighbour;
     }
-    public AreaTuple areaNeighbour(ref Tile[,] board, int x, int y, int edge)
+    public AreaTuple areaNeighbour(ref TileAI[,] board, int x, int y, int edge)
     {
         AreaTuple neighbour = new AreaTuple();
         neighbour.initialized = false;
@@ -267,7 +374,7 @@ public class TilesManager : MonoBehaviour
         //Debug.Log("wielkość listy:"+neighbours.Count);
         return neighbours;
     }
-    public List<AreaTuple> areaNeighbours(ref Tile[,] board, int x, int y, List<int> edges)
+    public List<AreaTuple> areaNeighbours(ref TileAI[,] board, int x, int y, List<int> edges)
     {
         List<AreaTuple> neighbours = new List<AreaTuple>();
         foreach (var edge in edges)
@@ -276,17 +383,17 @@ public class TilesManager : MonoBehaviour
             if (neighbour.initialized)
             {
                 neighbours.Add(neighbour);
-                Debug.Log("initialized");
+                //Debug.Log("initialized");
             }
                 
         }
-        foreach (var n in neighbours)
-        {
-            Debug.Log("Klocek sąsiad to : " + n.x + " " + n.y);
-            Debug.Log("Obszar klokcka sąsiada to : " + String.Join(" ", n.area.edges.Select(item => item.ToString()).ToArray()));
-        }
-        Debug.Log("---");
-        Debug.Log("wielkość listy:" + neighbours.Count);
+        //foreach (var n in neighbours)
+        //{
+        //    Debug.Log("Klocek sąsiad to : " + n.x + " " + n.y);
+        //    Debug.Log("Obszar klokcka sąsiada to : " + String.Join(" ", n.area.edges.Select(item => item.ToString()).ToArray()));
+        //}
+        //Debug.Log("---");
+        //Debug.Log("wielkość listy:" + neighbours.Count);
         return neighbours;
     }
 
@@ -313,7 +420,7 @@ public class TilesManager : MonoBehaviour
         //If we got here, it means that move is possible.
         return true;
     }
-    public bool isMovePossible(ref Tile[,] board, int x, int y, Area currentlyChecked, List<AreaTuple> checkedAreas)
+    public bool isMovePossible(ref TileAI[,] board, int x, int y, Area currentlyChecked, List<AreaTuple> checkedAreas)
     {
         //If the tile has meeple already, we can't place meeple in there.
         if (currentlyChecked.player != null)
@@ -337,7 +444,7 @@ public class TilesManager : MonoBehaviour
         return true;
     }
 
-    public List<int> possibleRotations(Tile tile, Tile[,] tiles, int[] tilePosition)
+    public List<int> possibleRotations(TileAI tile, TileAI[,] tiles, int[] tilePosition)
     {
         List<int> possibleRotations = new List<int>();
         if (((object)tiles[tilePosition[0] - 1, tilePosition[1]] == null || tiles[tilePosition[0] - 1, tilePosition[1]].DownTerrain == tile.UpTerrain)
@@ -416,6 +523,7 @@ public class TilesManager : MonoBehaviour
         gameObject.GetComponent<Tile>().LeftTerrain = down;
         gameObject.transform.Rotate(new Vector3(0, 90, 0));
         mask.transform.Rotate(new Vector3(0, 90, 0));
+
         if (gameObject.GetComponent<Tile>().Rotation == 3)
         {
             gameObject.GetComponent<Tile>().Rotation = 0;
@@ -425,38 +533,7 @@ public class TilesManager : MonoBehaviour
             gameObject.GetComponent<Tile>().Rotation++;
         }
     }
-    public void rotateXTimes(int times, ref GameObject gameObject, ref GameObject mask)
-    {
-        if (times == 0)
-        {
-            //do nothing
-        }
-        else if (times == 1)
-        {
-            gameObject.transform.Rotate(new Vector3(0, 90, 0));
-            mask.transform.Rotate(new Vector3(0, 90, 0));
-        }
-        else if (times == 2)
-        {
-            gameObject.transform.Rotate(new Vector3(0, 90, 0));
-            mask.transform.Rotate(new Vector3(0, 90, 0));
-            gameObject.transform.Rotate(new Vector3(0, 90, 0));
-            mask.transform.Rotate(new Vector3(0, 90, 0));
-        }
-        else if (times == 3)
-        {
-            gameObject.transform.Rotate(new Vector3(0, 90, 0));
-            mask.transform.Rotate(new Vector3(0, 90, 0));
-            gameObject.transform.Rotate(new Vector3(0, 90, 0));
-            mask.transform.Rotate(new Vector3(0, 90, 0));
-            gameObject.transform.Rotate(new Vector3(0, 90, 0));
-            mask.transform.Rotate(new Vector3(0, 90, 0));
-        }
-
-
-
-    }
-    public void rotateClockwise90(ref Tile tile)
+    public void rotateClockwise90(ref TileAI tile)          
     {
         terrainTypes up = tile.UpTerrain;
         terrainTypes right = tile.RightTerrain;
@@ -508,6 +585,36 @@ public class TilesManager : MonoBehaviour
             tile.Rotation++;
         }
     }
+
+    public void rotateXTimes(int times, ref GameObject gameObject, ref GameObject mask)
+    {
+        if (times == 0)
+        {
+            //do nothing
+        }
+        else if (times == 1)
+        {
+            gameObject.transform.Rotate(new Vector3(0, 90, 0));
+            mask.transform.Rotate(new Vector3(0, 90, 0));
+        }
+        else if (times == 2)
+        {
+            gameObject.transform.Rotate(new Vector3(0, 90, 0));
+            mask.transform.Rotate(new Vector3(0, 90, 0));
+            gameObject.transform.Rotate(new Vector3(0, 90, 0));
+            mask.transform.Rotate(new Vector3(0, 90, 0));
+        }
+        else if (times == 3)
+        {
+            gameObject.transform.Rotate(new Vector3(0, 90, 0));
+            mask.transform.Rotate(new Vector3(0, 90, 0));
+            gameObject.transform.Rotate(new Vector3(0, 90, 0));
+            mask.transform.Rotate(new Vector3(0, 90, 0));
+            gameObject.transform.Rotate(new Vector3(0, 90, 0));
+            mask.transform.Rotate(new Vector3(0, 90, 0));
+        }
+    }
+   
 
     public void rotateFirstMatchingRotation(ref GameObject gameObject, ref GameObject mask, int[] gameObjectPosition, ref GameObject[,] tilesOnBoard)
     {
@@ -577,41 +684,40 @@ public class TilesManager : MonoBehaviour
         }
         return matchingEdges.Distinct().ToList();
     }
-
-    public List<int[]> findMatchingEdges(List<int[]> movesList, Tile choosenTile, ref Tile[,] tilesOnBoard)
+    public List<int[]> findMatchingEdges(List<int[]> movesList, TileAI choosenTile, ref TileAI[,] tilesOnBoard)
     {
         List<int[]> matchingEdges = new List<int[]>();
         foreach (var position in movesList)
         {
             //UP RIGHT DOWN LEFT 0
-            if ((tilesOnBoard[position[0] - 1, position[1]] == null || tilesOnBoard[position[0] - 1, position[1]].DownTerrain == choosenTile.UpTerrain)
-                && (tilesOnBoard[position[0], position[1] + 1] == null || tilesOnBoard[position[0], position[1] + 1].LeftTerrain == choosenTile.RightTerrain)
-                && (tilesOnBoard[position[0] + 1, position[1]] == null || tilesOnBoard[position[0] + 1, position[1]].UpTerrain == choosenTile.DownTerrain)
-                && (tilesOnBoard[position[0], position[1] - 1] == null || tilesOnBoard[position[0], position[1] - 1].RightTerrain == choosenTile.LeftTerrain))
+            if (((object)tilesOnBoard[position[0] - 1, position[1]] == null || tilesOnBoard[position[0] - 1, position[1]].DownTerrain == choosenTile.UpTerrain)
+                && ((object)tilesOnBoard[position[0], position[1] + 1] == null || tilesOnBoard[position[0], position[1] + 1].LeftTerrain == choosenTile.RightTerrain)
+                && ((object)tilesOnBoard[position[0] + 1, position[1]] == null || tilesOnBoard[position[0] + 1, position[1]].UpTerrain == choosenTile.DownTerrain)
+                && ((object)tilesOnBoard[position[0], position[1] - 1] == null || tilesOnBoard[position[0], position[1] - 1].RightTerrain == choosenTile.LeftTerrain))
             {
                 matchingEdges.Add(position);
             }
             // UP RIGHT DOWN LEFT 90
-            else if ((tilesOnBoard[position[0] - 1, position[1]] == null || tilesOnBoard[position[0] - 1, position[1]].DownTerrain == choosenTile.LeftTerrain)
-                && (tilesOnBoard[position[0], position[1] + 1] == null || tilesOnBoard[position[0], position[1] + 1].LeftTerrain == choosenTile.UpTerrain)
-                && (tilesOnBoard[position[0] + 1, position[1]] == null || tilesOnBoard[position[0] + 1, position[1]].UpTerrain == choosenTile.RightTerrain)
-                && (tilesOnBoard[position[0], position[1] - 1] == null || tilesOnBoard[position[0], position[1] - 1].RightTerrain == choosenTile.DownTerrain))
+            else if (((object)tilesOnBoard[position[0] - 1, position[1]] == null || tilesOnBoard[position[0] - 1, position[1]].DownTerrain == choosenTile.LeftTerrain)
+                && ((object)tilesOnBoard[position[0], position[1] + 1] == null || tilesOnBoard[position[0], position[1] + 1].LeftTerrain == choosenTile.UpTerrain)
+                && ((object)tilesOnBoard[position[0] + 1, position[1]] == null || tilesOnBoard[position[0] + 1, position[1]].UpTerrain == choosenTile.RightTerrain)
+                && ((object)tilesOnBoard[position[0], position[1] - 1] == null || tilesOnBoard[position[0], position[1] - 1].RightTerrain == choosenTile.DownTerrain))
             {
                 matchingEdges.Add(position);
             }
             // UP RIGHT DOWN LEFT 180
-            else if ((tilesOnBoard[position[0] - 1, position[1]] == null || tilesOnBoard[position[0] - 1, position[1]].DownTerrain == choosenTile.DownTerrain)
-                && (tilesOnBoard[position[0], position[1] + 1] == null || tilesOnBoard[position[0], position[1] + 1].LeftTerrain == choosenTile.LeftTerrain)
-                && (tilesOnBoard[position[0] + 1, position[1]] == null || tilesOnBoard[position[0] + 1, position[1]].UpTerrain == choosenTile.UpTerrain)
-                && (tilesOnBoard[position[0], position[1] - 1] == null || tilesOnBoard[position[0], position[1] - 1].RightTerrain == choosenTile.RightTerrain))
+            else if (((object)tilesOnBoard[position[0] - 1, position[1]] == null || tilesOnBoard[position[0] - 1, position[1]].DownTerrain == choosenTile.DownTerrain)
+                && ((object)tilesOnBoard[position[0], position[1] + 1] == null || tilesOnBoard[position[0], position[1] + 1].LeftTerrain == choosenTile.LeftTerrain)
+                && ((object)tilesOnBoard[position[0] + 1, position[1]] == null || tilesOnBoard[position[0] + 1, position[1]].UpTerrain == choosenTile.UpTerrain)
+                && ((object)tilesOnBoard[position[0], position[1] - 1] == null || tilesOnBoard[position[0], position[1] - 1].RightTerrain == choosenTile.RightTerrain))
             {
                 matchingEdges.Add(position);
             }
             // UP RIGHT DOWN LEFT 270
-            else if ((tilesOnBoard[position[0] - 1, position[1]] == null || tilesOnBoard[position[0] - 1, position[1]].DownTerrain == choosenTile.RightTerrain)
-                && (tilesOnBoard[position[0], position[1] + 1] == null || tilesOnBoard[position[0], position[1] + 1].LeftTerrain == choosenTile.DownTerrain)
-                && (tilesOnBoard[position[0] + 1, position[1]] == null || tilesOnBoard[position[0] + 1, position[1]].UpTerrain == choosenTile.LeftTerrain)
-                && (tilesOnBoard[position[0], position[1] - 1] == null || tilesOnBoard[position[0], position[1] - 1].RightTerrain == choosenTile.UpTerrain))
+            else if (((object)tilesOnBoard[position[0] - 1, position[1]] == null || tilesOnBoard[position[0] - 1, position[1]].DownTerrain == choosenTile.RightTerrain)
+                && ((object)tilesOnBoard[position[0], position[1] + 1] == null || tilesOnBoard[position[0], position[1] + 1].LeftTerrain == choosenTile.DownTerrain)
+                && ((object)tilesOnBoard[position[0] + 1, position[1]] == null || tilesOnBoard[position[0] + 1, position[1]].UpTerrain == choosenTile.LeftTerrain)
+                && ((object)tilesOnBoard[position[0], position[1] - 1] == null || tilesOnBoard[position[0], position[1] - 1].RightTerrain == choosenTile.UpTerrain))
             {
                 matchingEdges.Add(position);
             }
@@ -653,8 +759,7 @@ public class TilesManager : MonoBehaviour
         }
         return possiblePositions.Distinct().ToList();
     }
-
-    public List<int[]> findSourrounding(ref Tile[,] tilesOnBoard)
+    public List<int[]> findSourrounding(ref TileAI[,] tilesOnBoard)
     {
         List<int[]> possiblePositions = new List<int[]>();
         for (int row = 0; row < tilesOnBoard.GetLength(0); row++)
@@ -688,117 +793,6 @@ public class TilesManager : MonoBehaviour
             }
         }
         return possiblePositions.Distinct().ToList();
-    }
-
-    public Vector3 GetMeeplePosition(int meeplePosIndex, float[] coords)
-    {
-        Vector3 pos = new Vector3(0, 0, 0);
-
-        switch (meeplePosIndex)
-        {
-            case 0:
-                pos = new Vector3(coords[0], 0, coords[1]);
-                break;
-            case 1:
-                pos = new Vector3(coords[0] - 3.4f, 0, coords[1] + 3.4f);
-                break;
-            case 2:
-                pos = new Vector3(coords[0] - 2.5f, 0, coords[1] + 4);
-                break;
-            case 3:
-                pos = new Vector3(coords[0], 0, coords[1] + 4);
-                break;
-            case 4:
-                pos = new Vector3(coords[0] + 2.5f, 0, coords[1] + 4);
-                break;
-            case 5:
-                pos = new Vector3(coords[0] - 1, 0, coords[1] + 1);
-                break;
-            case 11:
-                pos = new Vector3(coords[0] + 3.4f, 0, coords[1] + 3.4f);
-                break;
-            case 12:
-                pos = new Vector3(coords[0] + 4, 0, coords[1] + 2.5f);
-                break;
-            case 13:
-                pos = new Vector3(coords[0] + 4, 0, coords[1]);
-                break;
-            case 14:
-                pos = new Vector3(coords[0] + 4, 0, coords[1] - 2.5f);
-                break;
-            case 15:
-                pos = new Vector3(coords[0] + 1, 0, coords[1] + 1);
-                break;
-            case 21:
-                pos = new Vector3(coords[0] + 3.4f, 0, coords[1] - 3.4f);
-                break;
-            case 22:
-                pos = new Vector3(coords[0] + 2.5f, 0, coords[1] - 4);
-                break;
-            case 23:
-                pos = new Vector3(coords[0], 0, coords[1] -4);
-                break;
-            case 24:
-                pos = new Vector3(coords[0] + 2.5f, 0, coords[1] -4);
-                break;
-            case 25:
-                pos = new Vector3(coords[0] + 1, 0, coords[1] - 1);
-                break;
-            case 31:
-                pos = new Vector3(coords[0] - 3.4f, 0, coords[1] - 3.4f);
-                break;
-            case 32:
-                pos = new Vector3(coords[0] - 4, 0, coords[1] - 2.5f);
-                break;
-            case 33:
-                pos = new Vector3(coords[0] - 4, 0, coords[1]);
-                break;
-            case 34:
-                pos = new Vector3(coords[0] - 4, 0, coords[1] + 2.5f);
-                break;
-            case 35:
-                pos = new Vector3(coords[0] - 1, 0, coords[1] - 1);
-                break;
-        }
-        return pos;
-    }
-
-    public int ColorClassify(float R)
-    {
-        int x = 0;
-        if (R <= 0.066f)
-        {
-            return 1;
-        }
-        if (R <= 0.133f)
-        {
-            return 2;
-        }
-        if (R <= 0.200f)
-        {
-            return 3;
-        }
-        if (R <= 0.266f)
-        {
-            return 4;
-        }
-        if (R <= 0.333f)
-        {
-            return 5;
-        }
-        if (R <= 0.400f)
-        {
-            return 6;
-        }
-        if (R <= 0.466f)
-        {
-            return 7;
-        }
-        if (R <= 0.533f)
-        {
-            return 8;
-        }
-        return x;
     }
 
     public void init() 
