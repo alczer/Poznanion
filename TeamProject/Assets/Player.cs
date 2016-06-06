@@ -23,6 +23,10 @@ public class Player{
         this.rgbaColor = rgba;
     }
 
+    public Player()
+    {
+    }
+
     public void Clone(Player other)
     {
         this.name = other.name;

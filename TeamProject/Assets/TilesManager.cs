@@ -365,13 +365,6 @@ public class TilesManager : MonoBehaviour
             if (neighbour.initialized)
                 neighbours.Add(neighbour);
         }
-        foreach (var n in neighbours)
-        {
-         //   Debug.Log("Klocek sąsiad to : " + n.x + " " + n.y);
-        //    Debug.Log("Obszar klokcka sąsiada to : " + String.Join(" ", n.area.edges.Select(item => item.ToString()).ToArray()));
-        }
-      //  Debug.Log("---");
-        //Debug.Log("wielkość listy:"+neighbours.Count);
         return neighbours;
     }
     public List<AreaTuple> areaNeighbours(ref TileAI[,] board, int x, int y, List<int> edges)
@@ -768,7 +761,6 @@ public class TilesManager : MonoBehaviour
             {
                 if ((object)tilesOnBoard[row, col] != null)
                 {
-                    Debug.Log("ok");
                     //UP
                     if ((object)tilesOnBoard[row - 1, col] == null)
                     {
@@ -795,8 +787,30 @@ public class TilesManager : MonoBehaviour
         return possiblePositions.Distinct().ToList();
     }
 
-    public void init() 
-    {
+    public void init()
+    {//CRFR
+        addTileToList(1, terrainTypes.castle, terrainTypes.road, terrainTypes.grass, terrainTypes.road, 0, 0, CRFR, CRFR_Mask, 1, 0, false, new List<Area>() {
+            new Area { edges = new List<int>() {1,2,3} ,terrain = terrainTypes.castle, colorIndex = 1, meeplePlacementIndex = 3},
+            new Area { edges = new List<int>() {4,12}, terrain = terrainTypes.grass, colorIndex = 2, meeplePlacementIndex = 5},
+            new Area { edges = new List<int>() {5, 11}, terrain = terrainTypes.road, colorIndex = 3, meeplePlacementIndex = 0},
+            new Area { edges = new List<int>() {6,7,8,9,10}, terrain = terrainTypes.grass, colorIndex = 4, meeplePlacementIndex = 23}});
+        //CFFC
+        addTileToList(3, terrainTypes.castle, terrainTypes.grass, terrainTypes.grass, terrainTypes.castle, 0, 0, CFFC, CFFC_Mask, 1, 0, false, new List<Area>() {
+            new Area { edges = new List<int>() {1,2,3,10,11,12}, terrain = terrainTypes.castle, colorIndex = 1, meeplePlacementIndex =1},
+            new Area { edges = new List<int>() {0,4,5,6,7,8,9}, terrain = terrainTypes.grass, colorIndex = 2, meeplePlacementIndex = 25}});
+        //CFFC_2
+        addTileToList(4, terrainTypes.castle, terrainTypes.grass, terrainTypes.grass, terrainTypes.castle, 0, 0, CFFC_2, CFFC_2_Mask, 1, 0, false, new List<Area>() {
+            new Area { edges = new List<int>() {1,2,3}, terrain = terrainTypes.castle, colorIndex = 1, meeplePlacementIndex = 3},
+            new Area { edges = new List<int>() {0,4,5,6,7,8,9}, terrain = terrainTypes.grass, colorIndex = 2, meeplePlacementIndex = 25},
+            new Area { edges = new List<int>() {10,11,12}, terrain = terrainTypes.castle, colorIndex = 3, meeplePlacementIndex = 33}});
+
+        addTileToList(8, terrainTypes.castle, terrainTypes.castle, terrainTypes.road, terrainTypes.castle, 0, 0, CCRC, CCRC_Mask, 1, 0, false, new List<Area>() {
+            new Area { edges = new List<int>() {0,1,2,3,4,5,6,10,11,12}, terrain = terrainTypes.castle, colorIndex = 1, meeplePlacementIndex = 3},
+            new Area { edges = new List<int>() {7}, terrain = terrainTypes.grass, colorIndex = 2, meeplePlacementIndex = 22},
+            new Area { edges = new List<int>() {8}, terrain = terrainTypes.road, colorIndex = 3, meeplePlacementIndex = 23},
+            new Area { edges = new List<int>() {9}, terrain = terrainTypes.grass, colorIndex = 4, meeplePlacementIndex = 24}});
+
+        /*
         //CRFR
         addTileToList(1, terrainTypes.castle, terrainTypes.road, terrainTypes.grass, terrainTypes.road, 0, 0, CRFR, CRFR_Mask, 3, 0, false, new List<Area>() {
             new Area { edges = new List<int>() {1,2,3} ,terrain = terrainTypes.castle, colorIndex = 1, meeplePlacementIndex = 3},
@@ -931,6 +945,12 @@ public class TilesManager : MonoBehaviour
         addTileToList(24, terrainTypes.grass, terrainTypes.grass, terrainTypes.grass, terrainTypes.grass, 0, 0, FFFF_M, FFFF_M_Mask, 4, 0, false, new List<Area>() {
             new Area { edges = new List<int>() {1,2,3,4,5,6,7,8,9,10,11,12}, terrain = terrainTypes.grass, colorIndex = 1, meeplePlacementIndex = 21},
             new Area { edges = new List<int>() {0}, terrain = terrainTypes.monastery, colorIndex = 2, meeplePlacementIndex = 0}});
+            */
+
+
+
+
+
     }
 
 
