@@ -24,24 +24,20 @@ public class Area
 
 public class TileAI
 {
-    private int rotation = 0;
     private int idNumber;
     private terrainTypes upTerrain;
     private terrainTypes rightTerrain;
     private terrainTypes downTerrain;
     private terrainTypes leftTerrain;
-    private Material material;
-    private Material mask;
     private float xPosition;
     private float yPosition;
     //private int typeCount; //how many tiles of this type exist    
-    private int turn; //0 = 0 degrees, 1 = 90 degrees, 2 = 180 degrees, 3 = 270 degrees
+    private int rotation; //0 = 0 degrees, 1 = 90 degrees, 2 = 180 degrees, 3 = 270 degrees
     private bool plus;
     private List<Area> areas = new List<Area>();
 
-    public void Init(int id, terrainTypes up, terrainTypes right, terrainTypes down, terrainTypes left, float x, float y, Material m, Material mask1, int turn1, bool plus, List<Area> areas1)
+    public void Init(int id, terrainTypes up, terrainTypes right, terrainTypes down, terrainTypes left, float x, float y, int rotation, bool plus, List<Area> areas1)
     {
-        //this.rotation = 0;
         this.idNumber = id;
         this.upTerrain = up;
         this.rightTerrain = right;
@@ -49,10 +45,8 @@ public class TileAI
         this.leftTerrain = left;
         this.xPosition = x;
         this.yPosition = y;
-        this.material = m;
-        this.mask = mask1;
         //this.typeCount = count;
-        this.turn = turn1;
+        this.rotation = rotation;
         this.areas = areas1;
         this.plus = plus;
     }
@@ -65,8 +59,6 @@ public class TileAI
         this.rightTerrain = other.rightTerrain;
         this.downTerrain = other.downTerrain;
         this.leftTerrain = other.leftTerrain;
-        this.material = other.material;
-        this.mask = other.mask;
         this.xPosition = other.xPosition;
         this.yPosition = other.yPosition;
         this.plus = other.plus;
@@ -101,8 +93,6 @@ public class TileAI
         this.rightTerrain = other.RightTerrain;
         this.downTerrain = other.DownTerrain;
         this.leftTerrain = other.LeftTerrain;
-        this.material = other.Material;
-        this.mask = other.Mask;
         this.xPosition = other.XPosition;
         this.yPosition = other.YPosition;
         this.plus = other.Plus;
@@ -129,15 +119,6 @@ public class TileAI
             }
         }
         this.areas = ar;
-    }
-
-    public Material Material
-    {
-        get { return this.material; }
-    }
-    public Material Mask
-    {
-        get { return this.mask; }
     }
     public float XPosition
     {
@@ -176,8 +157,8 @@ public class TileAI
     }
     public int Turn
     {
-        get { return this.turn; }
-        set { this.turn = value; }
+        get { return this.rotation; }
+        set { this.rotation = value; }
     }
     public bool Plus
     {
@@ -199,7 +180,6 @@ public class TileAI
 
 public class Tile : MonoBehaviour
 {
-    private int rotation = 0;
     private int idNumber;
     private terrainTypes upTerrain;
     private terrainTypes rightTerrain;
@@ -210,11 +190,11 @@ public class Tile : MonoBehaviour
     private float xPosition;
     private float yPosition;
     //private int typeCount; //how many tiles of this type exist    
-    private int turn; //0 = 0 degrees, 1 = 90 degrees, 2 = 180 degrees, 3 = 270 degrees
+    private int rotation = 0; //0 = 0 degrees, 1 = 90 degrees, 2 = 180 degrees, 3 = 270 degrees
     private bool plus;
     private List<Area> areas = new List<Area>();
 
-    public void Init(int id, terrainTypes up, terrainTypes right, terrainTypes down, terrainTypes left, float x, float y, Material m, Material mask1, int turn1, bool plus, List<Area> areas1)
+    public void Init(int id, terrainTypes up, terrainTypes right, terrainTypes down, terrainTypes left, float x, float y, Material m, Material mask1, int rotation, bool plus, List<Area> areas1)
     {
         this.rotation = 0;
         this.idNumber = id;
@@ -227,7 +207,6 @@ public class Tile : MonoBehaviour
         this.material = m;
         this.mask = mask1;
         //this.typeCount = count;
-        this.turn = turn1;
         this.areas = areas1;
         this.plus = plus;
     }
@@ -276,8 +255,6 @@ public class Tile : MonoBehaviour
         this.rightTerrain = other.RightTerrain;
         this.downTerrain = other.DownTerrain;
         this.leftTerrain = other.LeftTerrain;
-        this.material = other.Material;
-        this.mask = other.Mask;
         this.xPosition = other.XPosition;
         this.yPosition = other.YPosition;
         this.plus = other.Plus;
@@ -348,11 +325,6 @@ public class Tile : MonoBehaviour
     {
         get { return this.idNumber; }
         set { this.idNumber = value; }
-    }
-    public int Turn
-    {
-        get { return this.turn; }
-        set { this.turn = value; }
     }
     public bool Plus
     {

@@ -8,7 +8,9 @@ using System;
 public class TilesManager : MonoBehaviour
 {
     //TILES:
-    public List<Tile> tilesList = new List<Tile>(); //List of all disponible tiles (not on board)
+    public List<Tile> tilesList = new List<Tile>();         //List of all disponible tiles (not on board)
+    public List<Tile> distinctTileList = new List<Tile>();  //List of all distinct disponible tiles (not on board)
+
     //Start tile
     public Material CRFR;
     public Material CFFF;   
@@ -67,6 +69,7 @@ public class TilesManager : MonoBehaviour
     {
         Tile tmp = gameObject.AddComponent<Tile>();
         tmp.Init(id, up, right, down, left, x, y, m, mask, turn, plus, areas);
+        distinctTileList.Add(tmp);
         for (int i = 0; i < count; i++)
         {
             tilesList.Add(tmp);
@@ -437,40 +440,6 @@ public class TilesManager : MonoBehaviour
         return true;
     }
 
-    public List<int> possibleRotations(TileAI tile, TileAI[,] tiles, int[] tilePosition)
-    {
-        List<int> possibleRotations = new List<int>();
-        if (((object)tiles[tilePosition[0] - 1, tilePosition[1]] == null || tiles[tilePosition[0] - 1, tilePosition[1]].DownTerrain == tile.UpTerrain)
-           && ((object)tiles[tilePosition[0], tilePosition[1] + 1] == null || tiles[tilePosition[0], tilePosition[1] + 1].LeftTerrain == tile.RightTerrain)
-           && ((object)tiles[tilePosition[0] + 1, tilePosition[1]] == null || tiles[tilePosition[0] + 1, tilePosition[1]].UpTerrain == tile.DownTerrain)
-           && ((object)tiles[tilePosition[0], tilePosition[1] - 1] == null || tiles[tilePosition[0], tilePosition[1] - 1].RightTerrain == tile.LeftTerrain))
-        {
-            possibleRotations.Add(0);
-        }
-            if (((object)tiles[tilePosition[0] - 1, tilePosition[1]] == null || tiles[tilePosition[0] - 1, tilePosition[1]].DownTerrain == tile.LeftTerrain)
-           && ((object)tiles[tilePosition[0], tilePosition[1] + 1] == null || tiles[tilePosition[0], tilePosition[1] + 1].LeftTerrain == tile.UpTerrain)
-           && ((object)tiles[tilePosition[0] + 1, tilePosition[1]] == null || tiles[tilePosition[0] + 1, tilePosition[1]].UpTerrain == tile.RightTerrain)
-           && ((object)tiles[tilePosition[0], tilePosition[1] - 1] == null || tiles[tilePosition[0], tilePosition[1] - 1].RightTerrain == tile.DownTerrain))
-        {
-            possibleRotations.Add(1);
-        }
-        if (((object)tiles[tilePosition[0] - 1, tilePosition[1]] == null || tiles[tilePosition[0] - 1, tilePosition[1]].DownTerrain == tile.DownTerrain)
-            && ((object)tiles[tilePosition[0], tilePosition[1] + 1] == null || tiles[tilePosition[0], tilePosition[1] + 1].LeftTerrain == tile.LeftTerrain)
-            && ((object)tiles[tilePosition[0] + 1, tilePosition[1]] == null || tiles[tilePosition[0] + 1, tilePosition[1]].UpTerrain == tile.UpTerrain)
-            && ((object)tiles[tilePosition[0], tilePosition[1] - 1] == null || tiles[tilePosition[0], tilePosition[1] - 1].RightTerrain == tile.RightTerrain))
-        {
-            possibleRotations.Add(2);
-        }
-        if (((object)tiles[tilePosition[0] - 1, tilePosition[1]] == null || tiles[tilePosition[0] - 1, tilePosition[1]].DownTerrain == tile.RightTerrain)
-            && ((object)tiles[tilePosition[0], tilePosition[1] + 1] == null || tiles[tilePosition[0], tilePosition[1] + 1].LeftTerrain == tile.DownTerrain)
-            && ((object)tiles[tilePosition[0] + 1, tilePosition[1]] == null || tiles[tilePosition[0] + 1, tilePosition[1]].UpTerrain == tile.LeftTerrain)
-            && ((object)tiles[tilePosition[0], tilePosition[1] - 1] == null || tiles[tilePosition[0], tilePosition[1] - 1].RightTerrain == tile.UpTerrain))
-        {
-            possibleRotations.Add(3);
-        }
-        return possibleRotations;
-    }    
-
     public void rotateClockwise90(ref GameObject gameObject, ref GameObject mask)
     {
         terrainTypes up = gameObject.GetComponent<Tile>().UpTerrain;
@@ -578,7 +547,63 @@ public class TilesManager : MonoBehaviour
             tile.Rotation++;
         }
     }
-
+    public List<int> possibleRotations(TileAI tile, TileAI[,] tiles, int[] tilePosition)
+    {
+        List<int> possibleRotations = new List<int>();
+        if (tile.UpTerrain == tile.DownTerrain && tile.LeftTerrain == tile.RightTerrain && tile.RightTerrain == tile.UpTerrain)
+        {
+            possibleRotations.Add(0);
+        }
+        else if (tile.UpTerrain == tile.DownTerrain && tile.LeftTerrain == tile.RightTerrain)
+        {
+            if (((object)tiles[tilePosition[0] - 1, tilePosition[1]] == null || tiles[tilePosition[0] - 1, tilePosition[1]].DownTerrain == tile.UpTerrain)
+               && ((object)tiles[tilePosition[0], tilePosition[1] + 1] == null || tiles[tilePosition[0], tilePosition[1] + 1].LeftTerrain == tile.RightTerrain)
+               && ((object)tiles[tilePosition[0] + 1, tilePosition[1]] == null || tiles[tilePosition[0] + 1, tilePosition[1]].UpTerrain == tile.DownTerrain)
+               && ((object)tiles[tilePosition[0], tilePosition[1] - 1] == null || tiles[tilePosition[0], tilePosition[1] - 1].RightTerrain == tile.LeftTerrain))
+            {
+                possibleRotations.Add(0);
+            }
+            if (((object)tiles[tilePosition[0] - 1, tilePosition[1]] == null || tiles[tilePosition[0] - 1, tilePosition[1]].DownTerrain == tile.LeftTerrain)
+               && ((object)tiles[tilePosition[0], tilePosition[1] + 1] == null || tiles[tilePosition[0], tilePosition[1] + 1].LeftTerrain == tile.UpTerrain)
+               && ((object)tiles[tilePosition[0] + 1, tilePosition[1]] == null || tiles[tilePosition[0] + 1, tilePosition[1]].UpTerrain == tile.RightTerrain)
+               && ((object)tiles[tilePosition[0], tilePosition[1] - 1] == null || tiles[tilePosition[0], tilePosition[1] - 1].RightTerrain == tile.DownTerrain))
+            {
+                possibleRotations.Add(1);
+            }
+        }
+        else
+        {
+            if (((object)tiles[tilePosition[0] - 1, tilePosition[1]] == null || tiles[tilePosition[0] - 1, tilePosition[1]].DownTerrain == tile.UpTerrain)
+               && ((object)tiles[tilePosition[0], tilePosition[1] + 1] == null || tiles[tilePosition[0], tilePosition[1] + 1].LeftTerrain == tile.RightTerrain)
+               && ((object)tiles[tilePosition[0] + 1, tilePosition[1]] == null || tiles[tilePosition[0] + 1, tilePosition[1]].UpTerrain == tile.DownTerrain)
+               && ((object)tiles[tilePosition[0], tilePosition[1] - 1] == null || tiles[tilePosition[0], tilePosition[1] - 1].RightTerrain == tile.LeftTerrain))
+            {
+                possibleRotations.Add(0);
+            }
+            if (((object)tiles[tilePosition[0] - 1, tilePosition[1]] == null || tiles[tilePosition[0] - 1, tilePosition[1]].DownTerrain == tile.LeftTerrain)
+               && ((object)tiles[tilePosition[0], tilePosition[1] + 1] == null || tiles[tilePosition[0], tilePosition[1] + 1].LeftTerrain == tile.UpTerrain)
+               && ((object)tiles[tilePosition[0] + 1, tilePosition[1]] == null || tiles[tilePosition[0] + 1, tilePosition[1]].UpTerrain == tile.RightTerrain)
+               && ((object)tiles[tilePosition[0], tilePosition[1] - 1] == null || tiles[tilePosition[0], tilePosition[1] - 1].RightTerrain == tile.DownTerrain))
+            {
+                possibleRotations.Add(1);
+            }
+            if (((object)tiles[tilePosition[0] - 1, tilePosition[1]] == null || tiles[tilePosition[0] - 1, tilePosition[1]].DownTerrain == tile.DownTerrain)
+                && ((object)tiles[tilePosition[0], tilePosition[1] + 1] == null || tiles[tilePosition[0], tilePosition[1] + 1].LeftTerrain == tile.LeftTerrain)
+                && ((object)tiles[tilePosition[0] + 1, tilePosition[1]] == null || tiles[tilePosition[0] + 1, tilePosition[1]].UpTerrain == tile.UpTerrain)
+                && ((object)tiles[tilePosition[0], tilePosition[1] - 1] == null || tiles[tilePosition[0], tilePosition[1] - 1].RightTerrain == tile.RightTerrain))
+            {
+                possibleRotations.Add(2);
+            }
+            if (((object)tiles[tilePosition[0] - 1, tilePosition[1]] == null || tiles[tilePosition[0] - 1, tilePosition[1]].DownTerrain == tile.RightTerrain)
+                && ((object)tiles[tilePosition[0], tilePosition[1] + 1] == null || tiles[tilePosition[0], tilePosition[1] + 1].LeftTerrain == tile.DownTerrain)
+                && ((object)tiles[tilePosition[0] + 1, tilePosition[1]] == null || tiles[tilePosition[0] + 1, tilePosition[1]].UpTerrain == tile.LeftTerrain)
+                && ((object)tiles[tilePosition[0], tilePosition[1] - 1] == null || tiles[tilePosition[0], tilePosition[1] - 1].RightTerrain == tile.UpTerrain))
+            {
+                possibleRotations.Add(3);
+            }
+        }
+        return possibleRotations;
+    }
     public void rotateXTimes(int times, ref GameObject gameObject, ref GameObject mask)
     {
         if (times == 0)
@@ -607,33 +632,39 @@ public class TilesManager : MonoBehaviour
             mask.transform.Rotate(new Vector3(0, 90, 0));
         }
     }
-   
-
     public void rotateFirstMatchingRotation(ref GameObject gameObject, ref GameObject mask, int[] gameObjectPosition, ref GameObject[,] tilesOnBoard)
     {
+        //if ((tilesOnBoard[gameObjectPosition[0] - 1, gameObjectPosition[1]] == null || tilesOnBoard[gameObjectPosition[0] - 1, gameObjectPosition[1]].GetComponent<Tile>().DownTerrain == gameObject.GetComponent<Tile>().UpTerrain)
+        //   && (tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1] + 1] == null || tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1] + 1].GetComponent<Tile>().LeftTerrain == gameObject.GetComponent<Tile>().RightTerrain)
+        //   && (tilesOnBoard[gameObjectPosition[0] + 1, gameObjectPosition[1]] == null || tilesOnBoard[gameObjectPosition[0] + 1, gameObjectPosition[1]].GetComponent<Tile>().UpTerrain == gameObject.GetComponent<Tile>().DownTerrain)
+        //   && (tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1] - 1] == null || tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1] - 1].GetComponent<Tile>().RightTerrain == gameObject.GetComponent<Tile>().LeftTerrain))
+        //{
+        //    // Do nothing
+        //}
+        //else 
         if ((tilesOnBoard[gameObjectPosition[0] - 1, gameObjectPosition[1]] == null || tilesOnBoard[gameObjectPosition[0] - 1, gameObjectPosition[1]].GetComponent<Tile>().DownTerrain == gameObject.GetComponent<Tile>().LeftTerrain)
             && (tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1] + 1] == null || tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1] + 1].GetComponent<Tile>().LeftTerrain == gameObject.GetComponent<Tile>().UpTerrain)
             && (tilesOnBoard[gameObjectPosition[0] + 1, gameObjectPosition[1]] == null || tilesOnBoard[gameObjectPosition[0] + 1, gameObjectPosition[1]].GetComponent<Tile>().UpTerrain == gameObject.GetComponent<Tile>().RightTerrain)
             && (tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1] - 1] == null || tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1] - 1].GetComponent<Tile>().RightTerrain == gameObject.GetComponent<Tile>().DownTerrain))
-        {           
-            rotateClockwise90(ref gameObject, ref mask);                    
+        {
+            rotateClockwise90(ref gameObject, ref mask);
         }
         else if ((tilesOnBoard[gameObjectPosition[0] - 1, gameObjectPosition[1]] == null || tilesOnBoard[gameObjectPosition[0] - 1, gameObjectPosition[1]].GetComponent<Tile>().DownTerrain == gameObject.GetComponent<Tile>().DownTerrain)
             && (tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1] + 1] == null || tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1] + 1].GetComponent<Tile>().LeftTerrain == gameObject.GetComponent<Tile>().LeftTerrain)
             && (tilesOnBoard[gameObjectPosition[0] + 1, gameObjectPosition[1]] == null || tilesOnBoard[gameObjectPosition[0] + 1, gameObjectPosition[1]].GetComponent<Tile>().UpTerrain == gameObject.GetComponent<Tile>().UpTerrain)
             && (tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1] - 1] == null || tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1] - 1].GetComponent<Tile>().RightTerrain == gameObject.GetComponent<Tile>().RightTerrain))
-        {                     
+        {
             rotateClockwise90(ref gameObject, ref mask);
-            rotateClockwise90(ref gameObject, ref mask);              
+            rotateClockwise90(ref gameObject, ref mask);
         }
         else if ((tilesOnBoard[gameObjectPosition[0] - 1, gameObjectPosition[1]] == null || tilesOnBoard[gameObjectPosition[0] - 1, gameObjectPosition[1]].GetComponent<Tile>().DownTerrain == gameObject.GetComponent<Tile>().RightTerrain)
             && (tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1] + 1] == null || tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1] + 1].GetComponent<Tile>().LeftTerrain == gameObject.GetComponent<Tile>().DownTerrain)
             && (tilesOnBoard[gameObjectPosition[0] + 1, gameObjectPosition[1]] == null || tilesOnBoard[gameObjectPosition[0] + 1, gameObjectPosition[1]].GetComponent<Tile>().UpTerrain == gameObject.GetComponent<Tile>().LeftTerrain)
             && (tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1] - 1] == null || tilesOnBoard[gameObjectPosition[0], gameObjectPosition[1] - 1].GetComponent<Tile>().RightTerrain == gameObject.GetComponent<Tile>().UpTerrain))
-        {                  
+        {
             rotateClockwise90(ref gameObject, ref mask);
             rotateClockwise90(ref gameObject, ref mask);
-            rotateClockwise90(ref gameObject, ref mask);                  
+            rotateClockwise90(ref gameObject, ref mask);
         }
     }
 
@@ -788,7 +819,8 @@ public class TilesManager : MonoBehaviour
     }
 
     public void init()
-    {//CRFR
+    {
+        //CRFR
         addTileToList(1, terrainTypes.castle, terrainTypes.road, terrainTypes.grass, terrainTypes.road, 0, 0, CRFR, CRFR_Mask, 1, 0, false, new List<Area>() {
             new Area { edges = new List<int>() {1,2,3} ,terrain = terrainTypes.castle, colorIndex = 1, meeplePlacementIndex = 3},
             new Area { edges = new List<int>() {4,12}, terrain = terrainTypes.grass, colorIndex = 2, meeplePlacementIndex = 5},
@@ -803,12 +835,40 @@ public class TilesManager : MonoBehaviour
             new Area { edges = new List<int>() {1,2,3}, terrain = terrainTypes.castle, colorIndex = 1, meeplePlacementIndex = 3},
             new Area { edges = new List<int>() {0,4,5,6,7,8,9}, terrain = terrainTypes.grass, colorIndex = 2, meeplePlacementIndex = 25},
             new Area { edges = new List<int>() {10,11,12}, terrain = terrainTypes.castle, colorIndex = 3, meeplePlacementIndex = 33}});
-
+        /*
+        //CCRC
         addTileToList(8, terrainTypes.castle, terrainTypes.castle, terrainTypes.road, terrainTypes.castle, 0, 0, CCRC, CCRC_Mask, 1, 0, false, new List<Area>() {
             new Area { edges = new List<int>() {0,1,2,3,4,5,6,10,11,12}, terrain = terrainTypes.castle, colorIndex = 1, meeplePlacementIndex = 3},
             new Area { edges = new List<int>() {7}, terrain = terrainTypes.grass, colorIndex = 2, meeplePlacementIndex = 22},
             new Area { edges = new List<int>() {8}, terrain = terrainTypes.road, colorIndex = 3, meeplePlacementIndex = 23},
             new Area { edges = new List<int>() {9}, terrain = terrainTypes.grass, colorIndex = 4, meeplePlacementIndex = 24}});
+        //CCFC_P
+        addTileToList(7, terrainTypes.castle, terrainTypes.castle, terrainTypes.grass, terrainTypes.castle, 0, 0, CCFC_P, CCFC_Mask, 1, 0, true, new List<Area>() {
+            new Area { edges = new List<int>() {0,1,2,3,4,5,6,10,11,12}, terrain = terrainTypes.castle, colorIndex = 1, meeplePlacementIndex = 3},
+            new Area { edges = new List<int>() {7,8,9}, terrain = terrainTypes.grass, colorIndex = 2, meeplePlacementIndex = 23}});
+        //CCRC*/
+        /*
+        addTileToList(8, terrainTypes.castle, terrainTypes.castle, terrainTypes.road, terrainTypes.castle, 0, 0, CCRC, CCRC_Mask, 1, 0, false, new List<Area>() {
+            new Area { edges = new List<int>() {0,1,2,3,4,5,6,10,11,12}, terrain = terrainTypes.castle, colorIndex = 1, meeplePlacementIndex = 3},
+            new Area { edges = new List<int>() {7}, terrain = terrainTypes.grass, colorIndex = 2, meeplePlacementIndex = 22},
+            new Area { edges = new List<int>() {8}, terrain = terrainTypes.road, colorIndex = 3, meeplePlacementIndex = 23},
+            new Area { edges = new List<int>() {9}, terrain = terrainTypes.grass, colorIndex = 4, meeplePlacementIndex = 24}});
+        //CCRC_P
+        addTileToList(9, terrainTypes.castle, terrainTypes.castle, terrainTypes.road, terrainTypes.castle, 0, 0, CCRC_P, CCRC_Mask, 1, 0, true, new List<Area>() {
+            new Area { edges = new List<int>() {0,1,2,3,4,5,6,10,11,12}, terrain = terrainTypes.castle, colorIndex = 1, meeplePlacementIndex = 3},
+            new Area { edges = new List<int>() {7}, terrain = terrainTypes.grass, colorIndex = 2, meeplePlacementIndex = 22},
+            new Area { edges = new List<int>() {8}, terrain = terrainTypes.road, colorIndex = 3, meeplePlacementIndex = 23},
+            new Area { edges = new List<int>() {9}, terrain = terrainTypes.grass, colorIndex = 4, meeplePlacementIndex = 24}});
+        //CCCC_P
+        addTileToList(10, terrainTypes.castle, terrainTypes.castle, terrainTypes.castle, terrainTypes.castle, 0, 0, CCCC_P, CCCC_Mask, 1, 0, true, new List<Area>() {
+            new Area { edges = new List<int>() {0,1,2,3,4,5,6,7,8,9,10,11,12}, terrain = terrainTypes.castle, colorIndex = 1, meeplePlacementIndex = 0}});
+        //CRRC
+        addTileToList(11, terrainTypes.castle, terrainTypes.road, terrainTypes.road, terrainTypes.castle, 0, 0, CRRC, CRRC_Mask, 1, 0, false, new List<Area>() {
+            new Area { edges = new List<int>() {1,2,3,10,11,12}, terrain = terrainTypes.castle, colorIndex = 1, meeplePlacementIndex = 1},
+            new Area { edges = new List<int>() {0,4,9}, terrain = terrainTypes.grass, colorIndex = 2, meeplePlacementIndex = 0},
+            new Area { edges = new List<int>() {5,8}, terrain = terrainTypes.road, colorIndex = 3, meeplePlacementIndex = 25},
+            new Area { edges = new List<int>() {7,6}, terrain = terrainTypes.grass, colorIndex = 4, meeplePlacementIndex = 21}});
+*/
 
         /*
         //CRFR
@@ -945,9 +1005,9 @@ public class TilesManager : MonoBehaviour
         addTileToList(24, terrainTypes.grass, terrainTypes.grass, terrainTypes.grass, terrainTypes.grass, 0, 0, FFFF_M, FFFF_M_Mask, 4, 0, false, new List<Area>() {
             new Area { edges = new List<int>() {1,2,3,4,5,6,7,8,9,10,11,12}, terrain = terrainTypes.grass, colorIndex = 1, meeplePlacementIndex = 21},
             new Area { edges = new List<int>() {0}, terrain = terrainTypes.monastery, colorIndex = 2, meeplePlacementIndex = 0}});
-            */
+            
 
-
+    */
 
 
 

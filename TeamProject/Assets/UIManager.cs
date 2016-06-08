@@ -4,6 +4,8 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System;
 using System.Collections.Generic;
+using UnityEngine.Networking;
+using UnityEngine.Networking.NetworkSystem;
 
 enum PlayerOptions
 {
@@ -12,9 +14,12 @@ enum PlayerOptions
     PLAYER_AI,
     PLAYER_END
 };
-public class UIManager : MonoBehaviour
+
+public class UIManager : NetworkBehaviour
 {
-    GameManager GM;
+    public NetworkView networkView;
+    public int player;
+    public GameManager GM;
     Ads ADS;
     PlayerOptions playerOptionsRed;
     PlayerOptions playerOptionsGreen;
@@ -37,11 +42,14 @@ public class UIManager : MonoBehaviour
     public GameObject BlackInput;
     public GameObject BlackAI;
     public GameObject StartGameButton;
-    
+    public int Client_number;
+    public int Connenctions_number;
+    public bool[] Connections;
+    public int group;
     void Awake()
     {
         GM = GameManager.Instance;
-        
+
 
         GM.OnStateChange += HandleOnStateChange;
         playerOptionsRed = PlayerOptions.PLAYER_PLAYER;
@@ -50,9 +58,15 @@ public class UIManager : MonoBehaviour
         playerOptionsYellow = PlayerOptions.PLAYER_EMPTY;
         playerOptionsBlack = PlayerOptions.PLAYER_EMPTY;
     }
+    public int wait;
+    public bool change;
     public void StartGame()
     {
-        
+        if ((Network.connections.Length > 0) && (Network.peerType == NetworkPeerType.Server))
+        {
+            networkView.RPC("LanStartGame", RPCMode.All);
+
+        }
         GM.playersList = new List<Player>();
         if (RedInput.activeSelf == true)
         {
@@ -119,9 +133,10 @@ public class UIManager : MonoBehaviour
         }
         if (BlackAI.activeSelf == true)
         {
-            GM.AddPlayer(new Player("AI5", PlayerColor.BLACK, new Color(0, 0, 0, 1),  PlayerType.AI));
+            GM.AddPlayer(new Player("AI5", PlayerColor.BLACK, new Color(0, 0, 0, 1), PlayerType.AI));
         }
-
+        GM.Client_number = Client_number;
+        GM.Connections = Connections;
         GM.SetGameState(GameState.GAME);
         Debug.Log(GM.gameState);
     }
@@ -147,20 +162,13 @@ public class UIManager : MonoBehaviour
         GM.SetGameState(GameState.ADD_PLAYER_MENU);
         Debug.Log(GM.gameState);
     }
-    public void GoToHelp()
-    {
-        //GM.ShowAdPlacement();
-        GM.SetGameState(GameState.HELP);
-        Debug.Log(GM.gameState);
-    }
-
     public void GoToSettings()
     {
         //GM.ShowAdPlacement();
     }
-    private void HandlePlayerOptions(PlayerOptions options,ref GameObject frame,ref GameObject input, ref GameObject AI)
+    private void HandlePlayerOptions(PlayerOptions options, ref GameObject frame, ref GameObject input, ref GameObject AI)
     {
-        switch(options)
+        switch (options)
         {
             case PlayerOptions.PLAYER_AI:
                 Debug.Log("aktywny komputer");
@@ -195,71 +203,257 @@ public class UIManager : MonoBehaviour
     }
     public void NextPlayerOptionRed()
     {
-        playerOptionsRed++;
-        if (playerOptionsRed == PlayerOptions.PLAYER_END)
+        if (Network.connections.Length == 0 || (Network.peerType == NetworkPeerType.Server))
         {
-            playerOptionsRed = 0;
+            playerOptionsRed++;
+            if (playerOptionsRed == PlayerOptions.PLAYER_END)
+            {
+                playerOptionsRed = 0;
+            }
+            HandlePlayerOptions(playerOptionsRed, ref RedFrame, ref RedInput, ref RedAI);
+            CheckStartGamePossibility();
         }
-        HandlePlayerOptions(playerOptionsRed,ref RedFrame,ref RedInput,ref RedAI);
-        CheckStartGamePossibility();
     }
     public void NextPlayerOptionGreen()
     {
-        playerOptionsGreen++;
-        if (playerOptionsGreen == PlayerOptions.PLAYER_END)
+        if (Network.connections.Length == 0 || Client_number == 1)
         {
-            playerOptionsGreen = 0;
+            playerOptionsGreen++;
+            if (playerOptionsGreen == PlayerOptions.PLAYER_END)
+            {
+                playerOptionsGreen = 0;
+            }
+            HandlePlayerOptions(playerOptionsGreen, ref GreenFrame, ref GreenInput, ref GreenAI);
+            CheckStartGamePossibility();
         }
-        HandlePlayerOptions(playerOptionsGreen, ref GreenFrame, ref GreenInput, ref GreenAI);
-        CheckStartGamePossibility();
     }
     public void NextPlayerOptionBlue()
     {
-        playerOptionsBlue++;
-        if (playerOptionsBlue == PlayerOptions.PLAYER_END)
+        if (Network.connections.Length == 0 || Client_number == 2)
         {
-            playerOptionsBlue = 0;
+            playerOptionsBlue++;
+            if (playerOptionsBlue == PlayerOptions.PLAYER_END)
+            {
+                playerOptionsBlue = 0;
+            }
+            HandlePlayerOptions(playerOptionsBlue, ref BlueFrame, ref BlueInput, ref BlueAI);
+            CheckStartGamePossibility();
         }
-        HandlePlayerOptions(playerOptionsBlue, ref BlueFrame, ref BlueInput, ref BlueAI);
-        CheckStartGamePossibility();
     }
     public void NextPlayerOptionYellow()
     {
-        playerOptionsYellow++;
-        if (playerOptionsYellow == PlayerOptions.PLAYER_END)
+        if (Network.connections.Length == 0 || Client_number == 3)
         {
-            playerOptionsYellow = 0;
+            playerOptionsYellow++;
+            if (playerOptionsYellow == PlayerOptions.PLAYER_END)
+            {
+                playerOptionsYellow = 0;
+            }
+            HandlePlayerOptions(playerOptionsYellow, ref YellowFrame, ref YellowInput, ref YellowAI);
+            CheckStartGamePossibility();
         }
-        HandlePlayerOptions(playerOptionsYellow, ref YellowFrame, ref YellowInput, ref YellowAI);
-        CheckStartGamePossibility();
     }
     public void NextPlayerOptionBlack()
     {
-        playerOptionsBlack++;
-        if (playerOptionsBlack == PlayerOptions.PLAYER_END)
+        if (Network.connections.Length == 0 || Client_number == 4)
         {
-            playerOptionsBlack = 0;
+            playerOptionsBlack++;
+            if (playerOptionsBlack == PlayerOptions.PLAYER_END)
+            {
+                playerOptionsBlack = 0;
+            }
+            HandlePlayerOptions(playerOptionsBlack, ref BlackFrame, ref BlackInput, ref BlackAI);
+            CheckStartGamePossibility();
         }
-        HandlePlayerOptions(playerOptionsBlack, ref BlackFrame, ref BlackInput, ref BlackAI);
-        CheckStartGamePossibility();
     }
-    public void Update()
+    void Update()
     {
+        int help = 0;
+        NetworkMessage netMsg = new NetworkMessage();
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if (GM.gameState == GameState.MAIN_MENU)
-            Quit();
-            else
-                GM.SetGameState(GameState.MAIN_MENU);
+            networkView.RPC("debug", RPCMode.All);
+        }
+        if (Network.peerType == NetworkPeerType.Server)
+        {
+            if (Network.connections.Length != Connenctions_number)
+            {
+                if (Network.connections.Length > Connenctions_number)
+                {
+                    for (int i = 0; i < 4; i++)
+                        if (Connections[i] == false)
+                        {
+                            Connections[i] = true;
+                            help = i + 1;
+                            i = 10;
+                        }
+                    Connenctions_number += 1;
+                    networkView.RPC("Client_PlayerJoined", RPCMode.All, help);
+                    Debug.Log("player connect:" + Connenctions_number);
+                    change = true;
+                }
+                else
+                {
+                    wait = Network.connections.Length;
+                    for (int i = 0; i < 4; i++)
+                    {
+                        Connections[i] = false;
+                        networkView.RPC("Client_PlayerDisconnet", RPCMode.All, i + 1);
+                    }
+                    Connenctions_number -= 1;
+                    Debug.Log("player disconnect:" + Connenctions_number);
+                    change = true;
+                }
+            }
+            if (GM.gameState == GameState.LOBBY)
+                if (Network.peerType == NetworkPeerType.Server && change == true && wait == 0)
+                {
+                    change = false;
+                    networkView.RPC("Lobby", RPCMode.All, Connections);
+                }
+        }
+        if (Network.peerType == NetworkPeerType.Client)
+        {
         }
     }
-
     public void HandleOnStateChange()
     {
         Debug.Log("CHANGED STATE!");
+    }
+    void Start()
+    {
+        wait = 0;
+        Connenctions_number = 0;
+        player = 1;
+        group = 1;
+        Client_number = 0;
+        Connections = new bool[4];
+        for (int i = 0; i < 4; i++)
+            Connections[i] = false;
+        networkView = GetComponent<NetworkView>();
+        if (networkView == null)
+            Debug.Log("null");
+    }
+    void RpcFunction()
+    {
+        Debug.Log("esc");
+    }
+    [RPC]
+    public void Client_PlayerJoined(int number)
+    {
+        if (Network.peerType == NetworkPeerType.Client)
+        {
+            if (Client_number == 0)
+                Client_number = number;
+            RedFrame.SetActive(true);
+            RedInput.SetActive(true);
+        }
 
     }
+    [RPC]
+    public void Client_PlayerDisconnet(int number)
+    {
+        if (Network.peerType == NetworkPeerType.Client)
+        {
+            if (Client_number == number)
+                networkView.RPC("Check_Connection", RPCMode.All, number);
+        }
+    }
+    [RPC]
+    public void Check_Connection(int number)
+    {
+        if (Network.peerType == NetworkPeerType.Server)
+        {
+            Connections[number - 1] = true;
+            wait--;
+        }
+    }
+    [RPC]
+    public void debug()
+    {
+        int z;
+        if (Network.peerType == NetworkPeerType.Server)
+            for (int i = 0; i < 4; i++)
+            {
+                z = i + 1;
+                Debug.Log("gracz " + z + ":" + Connections[i]);
+            }
+    }
+    [RPC]
+    public void Lobby(bool[] conection)
+    {
+        for (int i = 0; i < 5; i++)
+        {
+            if (Network.peerType == NetworkPeerType.Client && i != 0)
+            {
+                Connections[i - 1] = conection[i - 1];
+                Debug.Log("Connections[" + i + "]:" + Connections[i]);
+            }
+            switch (i)
+            {
+                case 0:
+                    RedFrame.SetActive(true);
+                    RedInput.SetActive(true);
+                    break;
+                case 1:
+                    if (conection[i - 1])
+                    {
+
+                        GreenFrame.SetActive(true);
+                        GreenInput.SetActive(true);
+                    }
+                    else
+                    {
+                        GreenFrame.SetActive(false);
+                        GreenInput.SetActive(false);
+                    }
+                    break;
+                case 2:
+                    if (conection[i - 1])
+                    {
+                        BlueFrame.SetActive(true);
+                        BlueInput.SetActive(true);
+                    }
+                    else
+                    {
+                        BlueFrame.SetActive(false);
+                        BlueInput.SetActive(false);
+                    }
+                    break;
+                case 3:
+                    if (conection[i - 1])
+                    {
+                        YellowFrame.SetActive(true);
+                        YellowInput.SetActive(true);
+                    }
+                    else
+                    {
+                        YellowFrame.SetActive(false);
+                        YellowInput.SetActive(false);
+                    }
+                    break;
+                case 4:
+                    if (conection[i - 1])
+                    {
+                        BlackFrame.SetActive(true);
+                        BlackInput.SetActive(true);
+                    }
+                    else
+                    {
+                        BlackFrame.SetActive(false);
+                        BlackInput.SetActive(false);
+                    }
+                    break;
+            }
+        }
+    }
+    [RPC]
+    public void LanStartGame()
+    {
+        if (Network.peerType == NetworkPeerType.Client)
+        {
+            StartGame();
+        }
+    }
 }
-
-
 

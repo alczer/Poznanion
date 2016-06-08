@@ -14,7 +14,12 @@ public delegate void OnStateChangeHandler();
 
 public class GameManager : MonoBehaviour
 {
+    // ads - not needed
     public string zoneId;
+
+    // for lan games
+    public int Client_number;
+    public bool[] Connections;
 
     public List<Player> playersList = new List<Player>();
     private int currentPlayer = 0;
