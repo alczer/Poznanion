@@ -162,6 +162,11 @@ public class UIManager : NetworkBehaviour
         GM.SetGameState(GameState.ADD_PLAYER_MENU);
         Debug.Log(GM.gameState);
     }
+    public void GoToRules()
+    {
+        GM.SetGameState(GameState.RULES);
+        //GM.ShowAdPlacement();
+    }
     public void GoToSettings()
     {
         //GM.ShowAdPlacement();
@@ -269,7 +274,7 @@ public class UIManager : NetworkBehaviour
     void Update()
     {
         int help = 0;
-        NetworkMessage netMsg = new NetworkMessage();
+        //NetworkMessage netMsg = new NetworkMessage();
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             networkView.RPC("debug", RPCMode.All);
@@ -333,6 +338,11 @@ public class UIManager : NetworkBehaviour
         networkView = GetComponent<NetworkView>();
         if (networkView == null)
             Debug.Log("null");
+        if (Network.peerType == NetworkPeerType.Server)
+            Debug.Log("to serwer");
+        if (Network.peerType == NetworkPeerType.Client)
+            Debug.Log("to client");
+
     }
     void RpcFunction()
     {
@@ -345,8 +355,6 @@ public class UIManager : NetworkBehaviour
         {
             if (Client_number == 0)
                 Client_number = number;
-            RedFrame.SetActive(true);
-            RedInput.SetActive(true);
         }
 
     }
@@ -387,7 +395,7 @@ public class UIManager : NetworkBehaviour
             if (Network.peerType == NetworkPeerType.Client && i != 0)
             {
                 Connections[i - 1] = conection[i - 1];
-                Debug.Log("Connections[" + i + "]:" + Connections[i]);
+                Debug.Log("Connections[" + i + "]:" + Connections[i - 1]);
             }
             switch (i)
             {

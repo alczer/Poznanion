@@ -57,7 +57,6 @@
      <Compile Include="Assets\PlayersManager.cs" />
      <Compile Include="Assets\PointsCounter.cs" />
      <Compile Include="Assets\RaycastCheck.cs" />
-     <Compile Include="Assets\Test.cs" />
      <Compile Include="Assets\Tile.cs" />
      <Compile Include="Assets\TilesManager.cs" />
      <Compile Include="Assets\UIManager.cs" />

@@ -8,7 +8,7 @@ using UnityEngine.Advertisements;
 using System.Collections;
 
 // Game States
-public enum GameState { MAIN_MENU, ADD_PLAYER_MENU, PAUSED, GAME, LOBBY, LANGAME, CREDITS, HELP }
+public enum GameState { MAIN_MENU, ADD_PLAYER_MENU, PAUSED, GAME, LOBBY, RULES, CREDITS, HELP }
 
 public delegate void OnStateChangeHandler();
 
@@ -113,19 +113,19 @@ public class GameManager : MonoBehaviour
                 SceneManager.LoadScene("game");
                 break;
             case GameState.ADD_PLAYER_MENU:
-                ShowAdPlacement();
+                //ShowAdPlacement();
                 SceneManager.LoadScene("addPlayer");
                 break;
             case GameState.LOBBY:
-                ShowAdPlacement();
+                //ShowAdPlacement();
                 SceneManager.LoadScene("lanLobby");
                 break;
-            case GameState.LANGAME:
+            case GameState.RULES:
+                SceneManager.LoadScene("rules");
                 break;
             case GameState.CREDITS:
                 break;
             case GameState.HELP:
-                SceneManager.LoadScene("rules");
                 break;
             case GameState.PAUSED:
                 break;

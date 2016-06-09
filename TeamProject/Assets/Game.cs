@@ -59,7 +59,7 @@ public class Game : MonoBehaviour
     public GameObject objectToinstantiate;
     public int currentNbrTiles;
     // int tilesLeft = 71;
-    int tilesLeft = 2;
+    int tilesLeft = 15;
     int currentTileIndex;
     bool finished = true;
 
@@ -76,8 +76,8 @@ public class Game : MonoBehaviour
 
     public void AcceptButtonClicked()
     {
-       // FloatingTextController.Initialize();
-       // FloatingTextController.CreateFloatingText2("OK",0, 10,Color.blue);
+        // FloatingTextController.Initialize();
+        // FloatingTextController.CreateFloatingText2("OK",0, 10,Color.blue);
         SerwerAns = 0;
         if (Network.connections.Length == 0)
         {
@@ -243,7 +243,7 @@ public class Game : MonoBehaviour
     }
     public void MeepleButtonClicked()
     {
-        if (GM.GetCurrentPlayer().meeples > 0 )
+        if (GM.GetCurrentPlayer().meeples > 0)
         {
             if (currentlyPlacingMeeple == true)
             {
@@ -380,7 +380,7 @@ public class Game : MonoBehaviour
         //tilesLeft = TM.tilesList.Count;
 
         //lan[
-        Debug.Log("client_number:"+clientNumber);
+        Debug.Log("client_number:" + clientNumber);
         if (Network.peerType == NetworkPeerType.Client)
             networkView.RPC("Gameconn", RPCMode.All);
         //]
@@ -413,7 +413,7 @@ public class Game : MonoBehaviour
                 rolled = UnityEngine.Random.Range(0, possiblePositions.Count);
 
                 TM.tilesList.RemoveAt(i);
-                
+
                 currentlyPlacingTile = true;
                 playername.text = GM.GetCurrentPlayer().name;
 
@@ -453,14 +453,14 @@ public class Game : MonoBehaviour
             int rolledPosition = UnityEngine.Random.Range(0, possibleMeeple.Count);
             int selectedPosition = possibleMeeple[rolledPosition].meeplePlacementIndex;
             currentlyPlacingMeeple = false;
-            
-        
+
+
             tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Collider>().enabled = false;
             if (tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas.Find(a => a.meeplePlacementIndex == selectedPosition) != null)
             {
                 int ed = tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas.Find(a => a.meeplePlacementIndex == selectedPosition).meeplePlacementIndex;
-                
-              //  Debug.Log("Wykrywam obszar o indeksie: " + ed + "  //selected position: " + selectedPosition);
+
+                //  Debug.Log("Wykrywam obszar o indeksie: " + ed + "  //selected position: " + selectedPosition);
 
             }
             if (possibleMeeple.Any(a => a.meeplePlacementIndex == selectedPosition))
@@ -476,7 +476,7 @@ public class Game : MonoBehaviour
                     tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas.Find(a => a.meeplePlacementIndex == selectedPosition).player = new Player(GM.GetCurrentPlayer().name, GM.GetCurrentPlayer().color, GM.GetCurrentPlayer().rgbaColor);
                     placedMeeple = false;
                 }
-            //    Debug.Log("TAK, tu można postawić meepla!");
+                //    Debug.Log("TAK, tu można postawić meepla!");
 
                 if (possibleMeeple.Find(a => a.meeplePlacementIndex == selectedPosition).terrain == terrainTypes.grass)
                 {
@@ -501,7 +501,7 @@ public class Game : MonoBehaviour
             }
             else
             {
-             //   Debug.Log("NIE MOŻNA tu postawić meepla!");
+                //   Debug.Log("NIE MOŻNA tu postawić meepla!");
             }
         }
     }
@@ -524,7 +524,7 @@ public class Game : MonoBehaviour
             } while (possiblePositions.Count == 0 && j < 10);
 
             NextTileImage.GetComponent<Image>().material = choosenTile.Material;
-            
+
             // FIX na potem - lista w expectimax musi byc mniejsza o tego klocka
             //TM.tilesList.RemoveAt(currentTileIndex);
 
@@ -537,23 +537,23 @@ public class Game : MonoBehaviour
 
             //audio.PlayOneShot(impact, 1.0F);
 
-            Move move = AM.Expectimax(tilesOnBoard, TM.tilesList, choosenTile, 2, GM.GetPlayerListCopy());
+            Move move = AM.Expectimax(tilesOnBoard, TM.tilesList, choosenTile, 1, GM.GetPlayerListCopy());
 
             if ((object)move.tile == null)
             {
                 Debug.Log("Expectimax wyrzucił nulla :(");
             }
-      
+
             choosenTile.Clone(move.tile); // Material is still in choosen tile Clone() copies all other params
             float[] pos = TM.getCoordinates(move.x, move.y);
 
-            Debug.Log(move.x+ " "+move.y);//
+            Debug.Log(move.x + " " + move.y);//
             tilesOnBoard[move.x, move.y] = Instantiate(objectToinstantiate, new Vector3(pos[0], 0.13f, pos[1]), Quaternion.identity) as GameObject;// instatiate a prefab on the position where the ray hits the floor.                         
             Tile tile = tilesOnBoard[move.x, move.y].AddComponent<Tile>();
             tile.Init(choosenTile.IdNumber, choosenTile.UpTerrain, choosenTile.RightTerrain, choosenTile.DownTerrain, choosenTile.LeftTerrain, move.x, move.y, choosenTile.Material, choosenTile.Mask, choosenTile.Rotation, choosenTile.Plus, choosenTile.Areas);
             masks[move.x, move.y] = Instantiate(Mask, new Vector3(pos[0], (float)0.1, pos[1]), Quaternion.identity) as GameObject;
 
-            Debug.Log("rotacja "+move.tile.Rotation);//
+            //Debug.Log("rotacja " + move.tile.Rotation);//
 
             TM.rotateXTimes(move.tile.Rotation, ref tilesOnBoard[move.x, move.y], ref masks[move.x, move.y]); // rotates materials to match other params
 
@@ -568,7 +568,7 @@ public class Game : MonoBehaviour
             {
                 Debug.Log("Brak Meepla na klocku");
             }
-            if (move.tile.Areas.Find(a => a.player != null)!= null)
+            if (move.tile.Areas.Find(a => a.player != null) != null)
             {
                 int selectedPosition = move.tile.Areas.Find(a => a.player != null).meeplePlacementIndex;
                 Debug.Log(" selected pos: " + selectedPosition);
@@ -732,7 +732,7 @@ public class Game : MonoBehaviour
                                             {
                                                 tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas[index].player = null;
                                             }
-                                            tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas.Find(a => a.colorIndex == ColorType).player 
+                                            tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas.Find(a => a.colorIndex == ColorType).player
                                                 = new Player(GM.GetCurrentPlayer().name, GM.GetCurrentPlayer().color, GM.GetCurrentPlayer().rgbaColor);
                                             choosenAreaColor = -1;
                                             placedMeeple = false;
@@ -749,7 +749,7 @@ public class Game : MonoBehaviour
                                             meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]].transform.Translate(new Vector3(0, (float)0.44, 0));
                                             meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]].transform.Rotate(new Vector3(0, 0, 90));
                                             meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Renderer>().material.color = GM.GetCurrentPlayer().rgbaColor;
-                                            tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas.Find(a => a.colorIndex == ColorType).player 
+                                            tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas.Find(a => a.colorIndex == ColorType).player
                                                 = new Player(GM.GetCurrentPlayer().name, GM.GetCurrentPlayer().color, GM.GetCurrentPlayer().rgbaColor);
                                         }
                                         else
@@ -760,7 +760,7 @@ public class Game : MonoBehaviour
                                             meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]].transform.Translate(new Vector3(0, (float)2.13, 0));
                                             meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]].transform.Rotate(new Vector3(0, 90, 0));
                                             meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Renderer>().material.color = GM.GetCurrentPlayer().rgbaColor;
-                                            tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas.Find(a => a.colorIndex == ColorType).player 
+                                            tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas.Find(a => a.colorIndex == ColorType).player
                                                 = new Player(GM.GetCurrentPlayer().name, GM.GetCurrentPlayer().color, GM.GetCurrentPlayer().rgbaColor);
                                         }
                                     }
@@ -861,262 +861,260 @@ public class Game : MonoBehaviour
         }
         else if (round1 == true)
         {
-           Debug.Log(wait);
-           if (wait == 0)
+            Debug.Log(wait);
+            if (wait == 0)
                 round1 = false;
         }
         else
-        if (clientNumber==actualTurn)
-        {
-             // Sprawdzamy czy to komputer
-            if (GM.GetCurrentPlayer().type == PlayerType.AI)
+            if (clientNumber == actualTurn)
             {
-                AI(); // Funkcja wyzej tymczasowo
-            }
-            else if (currentlyPlacingTile == false)
-            {
-                if (TM.tilesList.Count > 0)
+                // Sprawdzamy czy to komputer
+                if (GM.GetCurrentPlayer().type == PlayerType.AI)
                 {
-                    List<int[]> possiblePositions;
-                    if (Network.peerType != NetworkPeerType.Client || SerwerAns == 0)
+                    AI(); // Funkcja wyzej tymczasowo
+                }
+                else if (currentlyPlacingTile == false)
+                {
+                    if (TM.tilesList.Count > 0)
                     {
-                        SerwerAns = 1;
-                        networkView.RPC("debuglan", RPCMode.All, clientNumber);
-                        //int i;
-                        int j = 0;
-                        
-                        do
+                        List<int[]> possiblePositions;
+                        if (Network.peerType != NetworkPeerType.Client || SerwerAns == 0)
                         {
-                            currentTileIndex = UnityEngine.Random.Range(0, TM.tilesList.Count);
-                            choosenTile = gameObject.AddComponent<Tile>();
-                            choosenTile.Clone(TM.tilesList[currentTileIndex]);
-                            possiblePositions = TM.findMatchingEdges(TM.findSourrounding(ref tilesOnBoard), choosenTile, ref tilesOnBoard);
-                            j++;
-                        } while (possiblePositions.Count == 0 && j < 10);
-                    }
-                    if (Network.peerType != NetworkPeerType.Client || SerwerAns == 2)
-                    {
-                        SerwerAns = 3;
-                        networkView.RPC("SendTitle", RPCMode.All);
-                    }
-                    if (Network.peerType != NetworkPeerType.Client || SerwerAns == 4)
-                    {
-                        SerwerAns = 5;
-                        currentlyPlacingTile = true;
-                        /*
-                        TM.tilesList[i].TypeCount--;
-                        if (TM.tilesList[i].TypeCount == 0)
-                        {
-                            TM.tilesList.RemoveAt(i);
-                        }
-                        */
-                        possiblePositions = TM.findMatchingEdges(TM.findSourrounding(ref tilesOnBoard), choosenTile, ref tilesOnBoard);
-                        foreach (var arrPosition in possiblePositions)
-                        {
-                            //networkView.RPC("ShowPosition", RPCMode.All, arrPosition[0], arrPosition[1]);
-                            float[] position = TM.getCoordinates(arrPosition[0], arrPosition[1]);
-                            if (possibleMoves[arrPosition[0], arrPosition[1]] == null)
+                            SerwerAns = 1;
+                            networkView.RPC("debuglan", RPCMode.All, clientNumber);
+                            //int i;
+                            int j = 0;
+
+                            do
                             {
-                                possibleMoves[arrPosition[0], arrPosition[1]] 
-                                    = Instantiate(Selected, new Vector3(position[0], (float)0.1, position[1]), Quaternion.identity) as GameObject;
-                            }
+                                networkView.RPC("RandomTitle", RPCMode.All);
+                                possiblePositions = TM.findMatchingEdges(TM.findSourrounding(ref tilesOnBoard), choosenTile, ref tilesOnBoard);
+                                j++;
+                            } while (possiblePositions.Count == 0 && j < 10);
                         }
-                        OKButton.SetActive(false);
-                        MeepleButton.SetActive(false);
+                        if (Network.peerType != NetworkPeerType.Client || SerwerAns == 2)
+                        {
+                            SerwerAns = 3;
+                            networkView.RPC("SendTitle", RPCMode.All);
+                        }
+                        if (Network.peerType != NetworkPeerType.Client || SerwerAns == 4)
+                        {
+                            SerwerAns = 5;
+                            currentlyPlacingTile = true;
+                            /*
+                            TM.tilesList[i].TypeCount--;
+                            if (TM.tilesList[i].TypeCount == 0)
+                            {
+                                TM.tilesList.RemoveAt(i);
+                            }
+                            */
+                            possiblePositions = TM.findMatchingEdges(TM.findSourrounding(ref tilesOnBoard), choosenTile, ref tilesOnBoard);
+                            foreach (var arrPosition in possiblePositions)
+                            {
+                                //networkView.RPC("ShowPosition", RPCMode.All, arrPosition[0], arrPosition[1]);
+                                float[] position = TM.getCoordinates(arrPosition[0], arrPosition[1]);
+                                if (possibleMoves[arrPosition[0], arrPosition[1]] == null)
+                                {
+                                    possibleMoves[arrPosition[0], arrPosition[1]]
+                                        = Instantiate(Selected, new Vector3(position[0], (float)0.1, position[1]), Quaternion.identity) as GameObject;
+                                }
+                            }
+                            OKButton.SetActive(false);
+                            MeepleButton.SetActive(false);
+                        }
                     }
                 }
-            }
-            else // USTAWIANIE MEEPLE'A
-            {
-                myRay = Camera.main.ScreenPointToRay(Input.mousePosition);
-                if (Physics.Raycast(myRay, out hit))
+                else // USTAWIANIE MEEPLE'A
                 {
-                    if (Input.GetMouseButtonUp(0))
+                    myRay = Camera.main.ScreenPointToRay(Input.mousePosition);
+                    if (Physics.Raycast(myRay, out hit))
                     {
-                        if (currentlyPlacingMeeple == true)
+                        if (Input.GetMouseButtonUp(0))
                         {
-                            tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Collider>().enabled = false;
-                            //Debug.Log(hit.transform.GetInstanceID());
-                            if (hit.transform.GetInstanceID() == masks[currentlyPlacedTile[0], currentlyPlacedTile[1]].transform.GetInstanceID())
+                            if (currentlyPlacingMeeple == true)
                             {
-                                Texture2D tex = hit.collider.GetComponent<MeshRenderer>().material.mainTexture as Texture2D;
-                                Vector2 pixelUV = hit.textureCoord;
-                                float uvX = pixelUV.x * tex.width;
-                                float uvY = pixelUV.y * tex.height;
-
-                                Color hitColor = tex.GetPixel((int)uvX, (int)uvY);
-                                ColorType = TM.ColorClassify(hitColor.r);
-                                //Debug.Log(ColorType.ToString() + " - typ koloru");
-                                //Debug.Log(hitColor.ToString());
-
-
-                                //if (tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas.Find(a => a.colorIndex == ColorType) != null)
-                                //{
-                                //    List<int> ed = tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas.Find(a => a.colorIndex == ColorType).edges;
-                                //    string resulthahahah = String.Join(" ", ed.Select(item => item.ToString()).ToArray());
-                                //    Debug.Log("Wykrywam obszar o krawędziach: " + resulthahahah);
-
-                                //}
-
-                                if (possibleMeeple.Any(a => a.colorIndex == ColorType))
+                                tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Collider>().enabled = false;
+                                //Debug.Log(hit.transform.GetInstanceID());
+                                if (hit.transform.GetInstanceID() == masks[currentlyPlacedTile[0], currentlyPlacedTile[1]].transform.GetInstanceID())
                                 {
-                                    if (ColorType == choosenAreaColor)
+                                    Texture2D tex = hit.collider.GetComponent<MeshRenderer>().material.mainTexture as Texture2D;
+                                    Vector2 pixelUV = hit.textureCoord;
+                                    float uvX = pixelUV.x * tex.width;
+                                    float uvY = pixelUV.y * tex.height;
+
+                                    Color hitColor = tex.GetPixel((int)uvX, (int)uvY);
+                                    ColorType = TM.ColorClassify(hitColor.r);
+                                    //Debug.Log(ColorType.ToString() + " - typ koloru");
+                                    //Debug.Log(hitColor.ToString());
+
+
+                                    //if (tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas.Find(a => a.colorIndex == ColorType) != null)
+                                    //{
+                                    //    List<int> ed = tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas.Find(a => a.colorIndex == ColorType).edges;
+                                    //    string resulthahahah = String.Join(" ", ed.Select(item => item.ToString()).ToArray());
+                                    //    Debug.Log("Wykrywam obszar o krawędziach: " + resulthahahah);
+
+                                    //}
+
+                                    if (possibleMeeple.Any(a => a.colorIndex == ColorType))
                                     {
-                                        networkView.RPC("meeple", RPCMode.All, -1, hit.point.x, hit.point.y, hit.point.z);
-                                        //   Debug.Log("Usuwam meeple który już był tutaj!");
-                                        /*
+                                        if (ColorType == choosenAreaColor)
+                                        {
+                                            networkView.RPC("meeple", RPCMode.All, -1, hit.point.x, hit.point.y, hit.point.z);
+                                            //   Debug.Log("Usuwam meeple który już był tutaj!");
+                                            /*
                                            
-                                        */
-                                        choosenAreaColor = -1;
-                                        placedMeeple = false;
-                                            
+                                            */
+                                            choosenAreaColor = -1;
+                                            placedMeeple = false;
+
+                                        }
+                                        else
+                                        {
+                                            if (meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]] != null)
+                                            {
+                                                networkView.RPC("meeple", RPCMode.All, 0, hit.point.x, hit.point.y, hit.point.z);
+
+                                                //Destroy(meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]]);
+                                                //meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]] = null;
+                                                //for (int index = 0; index < tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas.Count; index++)
+                                                //{
+                                                //    tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas[index].player = null;
+                                                //}
+                                                //tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas.Find(a => a.colorIndex == ColorType).player
+                                                //    = new Player(GM.GetCurrentPlayer().name, GM.GetCurrentPlayer().color, GM.GetCurrentPlayer().rgbaColor);
+                                                //choosenAreaColor = -1;
+                                                //placedMeeple = false;
+                                            }
+
+                                            //   Debug.Log("TAK, tu można postawić meepla!");
+                                            choosenAreaColor = possibleMeeple.Find(a => a.colorIndex == ColorType).colorIndex;
+                                            int selectedPosition = possibleMeeple.Find(a => a.colorIndex == ColorType).meeplePlacementIndex;
+                                            //   Debug.Log(selectedPosition);
+                                            placedMeeple = true;
+                                            if (possibleMeeple.Find(a => a.colorIndex == ColorType).terrain == terrainTypes.grass)
+                                            {
+                                                networkView.RPC("meeple", RPCMode.All, 1, hit.point.x, hit.point.y, hit.point.z);
+                                                //meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]] = Instantiate(FarmerMeeple, TM.GetMeeplePosition(selectedPosition, TM.getCoordinates(currentlyPlacedTile[0], currentlyPlacedTile[1])), Quaternion.identity) as GameObject;
+                                            }
+                                            else
+                                            {
+                                                networkView.RPC("meeple", RPCMode.All, 2, hit.point.x, hit.point.y, hit.point.z);
+                                                //meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]] = Instantiate(StandingMeeple, TM.GetMeeplePosition(selectedPosition, TM.getCoordinates(currentlyPlacedTile[0], currentlyPlacedTile[1])), Quaternion.identity) as GameObject;
+                                            }
+                                        }
                                     }
                                     else
                                     {
-                                        if (meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]] != null)
-                                        {
-                                            networkView.RPC("meeple", RPCMode.All, 0, hit.point.x, hit.point.y, hit.point.z);
-                                                
-                                            //Destroy(meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]]);
-                                            //meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]] = null;
-                                            //for (int index = 0; index < tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas.Count; index++)
-                                            //{
-                                            //    tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas[index].player = null;
-                                            //}
-                                            //tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas.Find(a => a.colorIndex == ColorType).player
-                                            //    = new Player(GM.GetCurrentPlayer().name, GM.GetCurrentPlayer().color, GM.GetCurrentPlayer().rgbaColor);
-                                            //choosenAreaColor = -1;
-                                            //placedMeeple = false;
-                                        }
-
-                                        //   Debug.Log("TAK, tu można postawić meepla!");
-                                        choosenAreaColor = possibleMeeple.Find(a => a.colorIndex == ColorType).colorIndex;
-                                        int selectedPosition = possibleMeeple.Find(a => a.colorIndex == ColorType).meeplePlacementIndex;
-                                        //   Debug.Log(selectedPosition);
-                                        placedMeeple = true;
-                                        if (possibleMeeple.Find(a => a.colorIndex == ColorType).terrain == terrainTypes.grass)
-                                        {
-                                            networkView.RPC("meeple", RPCMode.All,1, hit.point.x, hit.point.y, hit.point.z);
-                                            //meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]] = Instantiate(FarmerMeeple, TM.GetMeeplePosition(selectedPosition, TM.getCoordinates(currentlyPlacedTile[0], currentlyPlacedTile[1])), Quaternion.identity) as GameObject;
-                                        }
-                                        else
-                                        {
-                                            networkView.RPC("meeple", RPCMode.All,2,hit.point.x,hit.point.y,hit.point.z);
-                                            //meeples[currentlyPlacedTile[0], currentlyPlacedTile[1]] = Instantiate(StandingMeeple, TM.GetMeeplePosition(selectedPosition, TM.getCoordinates(currentlyPlacedTile[0], currentlyPlacedTile[1])), Quaternion.identity) as GameObject;
-                                        }
+                                        //   Debug.Log("NIE MOŻNA tu postawić meepla!");
                                     }
                                 }
-                                else
-                                {
-                                    //   Debug.Log("NIE MOŻNA tu postawić meepla!");
-                                }
                             }
-                        }
-                        else
-                        {
-                            Vector3 position = hit.point;
-                            position.x = Mathf.Round(position.x / 10) * 10; // 10 is the size of a Tile
-                            position.z = Mathf.Round(position.z / 10) * 10; // 10 is the size of a Tile
-                                                                            //Debug.Log("Position x: " + position.x.ToString() + " Position z: " + position.z.ToString());
-                            int[] arrayIndex = TM.getArrayPosition(position.x, position.z);
-                            //Debug.Log("Position Array row: " + arrayIndex[0].ToString() + " Position array column: " + arrayIndex[1].ToString());
-
-                            if (tilesOnBoard[arrayIndex[0], arrayIndex[1]] != null)
+                            else
                             {
-                                if (OKButton.activeSelf)
+                                Vector3 position = hit.point;
+                                position.x = Mathf.Round(position.x / 10) * 10; // 10 is the size of a Tile
+                                position.z = Mathf.Round(position.z / 10) * 10; // 10 is the size of a Tile
+                                //Debug.Log("Position x: " + position.x.ToString() + " Position z: " + position.z.ToString());
+                                int[] arrayIndex = TM.getArrayPosition(position.x, position.z);
+                                //Debug.Log("Position Array row: " + arrayIndex[0].ToString() + " Position array column: " + arrayIndex[1].ToString());
+
+                                if (tilesOnBoard[arrayIndex[0], arrayIndex[1]] != null)
                                 {
-                                    if (arrayIndex[0] == currentlyPlacedTile[0] && arrayIndex[1] == currentlyPlacedTile[1])
+                                    if (OKButton.activeSelf)
                                     {
-                                        if (Network.connections.Length != 0)
-                                            networkView.RPC("Rotate", RPCMode.All, arrayIndex[0], arrayIndex[1], arrayIndex);
-                                        else
+                                        if (arrayIndex[0] == currentlyPlacedTile[0] && arrayIndex[1] == currentlyPlacedTile[1])
                                         {
-                                            TM.rotateFirstMatchingRotation(ref tilesOnBoard[arrayIndex[0], arrayIndex[1]], ref masks[arrayIndex[0], arrayIndex[1]], arrayIndex, ref tilesOnBoard);
-                                        }
+                                            if (Network.connections.Length != 0)
+                                                networkView.RPC("Rotate", RPCMode.All, arrayIndex[0], arrayIndex[1], arrayIndex);
+                                            else
+                                            {
+                                                TM.rotateFirstMatchingRotation(ref tilesOnBoard[arrayIndex[0], arrayIndex[1]], ref masks[arrayIndex[0], arrayIndex[1]], arrayIndex, ref tilesOnBoard);
+                                            }
                                             //String result3 = "";
                                             //foreach (var l in tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]].GetComponent<Tile>().Areas)
                                             //{
                                             //    result3 += String.Join(" ", l.edges.Select(item => item.ToString()).ToArray());
                                             //    result3 += " | ";
                                             //}
-                                        //  Debug.Log(result3);
-                                        //rotateClockwise90(ref tilesOnBoard[arrayIndex[0], arrayIndex[1]]);              
+                                            //  Debug.Log(result3);
+                                            //rotateClockwise90(ref tilesOnBoard[arrayIndex[0], arrayIndex[1]]);              
+                                        }
                                     }
-                                }
-                                else
-                                {
-                                    // Debug.Log("A tile is already at this position");
-                                }
-                            }
-                            else if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject() == false)
-                            {
-                                if (possibleMoves[arrayIndex[0], arrayIndex[1]] != null)
-                                {
-                                    if (currentlyPlacedTile != null)
-                                    {
-                                        Destroy(tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]]);
-                                        Destroy(masks[currentlyPlacedTile[0], currentlyPlacedTile[1]]);
-                                        tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]] = null;
-                                        masks[currentlyPlacedTile[0], currentlyPlacedTile[1]] = null;
-
-                                        //choosenTile.Clone(TM.tilesList[i]);
-                                    }
-                                    OKButton.SetActive(true);
-                                    MeepleButton.SetActive(true);
-                                    //  Debug.Log("#################################");
-
-                                    choosenTile.Clone(TM.tilesList[currentTileIndex]);
-                                    if (Network.connections.Length != 0)
-                                        networkView.RPC("PutTitle", RPCMode.All, arrayIndex[0], arrayIndex[1], position.x, position.y, position.z, arrayIndex);
                                     else
-                                    { 
-                                        tilesOnBoard[arrayIndex[0], arrayIndex[1]] = Instantiate(objectToinstantiate, position, Quaternion.identity) as GameObject; // instatiate a prefab on the position where the ray hits the floor. 
-                                        masks[arrayIndex[0], arrayIndex[1]] = Instantiate(Mask, position, Quaternion.identity) as GameObject;
-
-                                        Tile tile = tilesOnBoard[arrayIndex[0], arrayIndex[1]].AddComponent<Tile>();
-                                        //    Debug.Log("choosen tile:");
-                                    
-                                        String result9 = "";
-                                        foreach (var l in choosenTile.Areas)
-                                        {
-                                            result9 += String.Join(" ", l.edges.Select(item => item.ToString()).ToArray());
-                                            result9 += " | ";
-                                        }
-                                        //   Debug.Log(result9);
-
-
-                                        tile.Init(choosenTile.IdNumber, choosenTile.UpTerrain, choosenTile.RightTerrain, choosenTile.DownTerrain, choosenTile.LeftTerrain, position.x, position.z, choosenTile.Material, choosenTile.Mask, choosenTile.Rotation, choosenTile.Plus, choosenTile.Areas);
-                                        TM.rotateFirstMatchingRotation(ref tilesOnBoard[arrayIndex[0], arrayIndex[1]], ref masks[arrayIndex[0], arrayIndex[1]], arrayIndex, ref tilesOnBoard);
-
-                                        String result4 = "";
-                                        foreach (var l in tilesOnBoard[arrayIndex[0], arrayIndex[1]].GetComponent<Tile>().Areas)
-                                        {
-                                            result4 += String.Join(" ", l.edges.Select(item => item.ToString()).ToArray());
-                                            result4 += " | ";
-
-                                        }
-                                        //       Debug.Log(result4);
+                                    {
+                                        // Debug.Log("A tile is already at this position");
                                     }
+                                }
+                                else if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject() == false)
+                                {
+                                    if (possibleMoves[arrayIndex[0], arrayIndex[1]] != null)
+                                    {
+                                        if (currentlyPlacedTile != null)
+                                        {
+                                            Destroy(tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]]);
+                                            Destroy(masks[currentlyPlacedTile[0], currentlyPlacedTile[1]]);
+                                            tilesOnBoard[currentlyPlacedTile[0], currentlyPlacedTile[1]] = null;
+                                            masks[currentlyPlacedTile[0], currentlyPlacedTile[1]] = null;
 
-                                    //tilesOnBoard[arrayIndex[0], arrayIndex[1]].GetComponent<Renderer>().material = choosenTile.Material;
-                                    // masks[arrayIndex[0], arrayIndex[1]].GetComponent<Renderer>().material = choosenTile.Mask;
+                                            //choosenTile.Clone(TM.tilesList[i]);
+                                        }
+                                        OKButton.SetActive(true);
+                                        MeepleButton.SetActive(true);
+                                        //  Debug.Log("#################################");
 
-                                    //currentlyPlacedTile = arrayIndex;
-                                    //networkView.RPC("PutTitle2", RPCMode.All, arrayIndex[0], arrayIndex[1], position.x, position.y, position.z, arrayIndex);
-                                    CM.CheckCamera(arrayIndex);
+                                        choosenTile.Clone(TM.tilesList[currentTileIndex]);
+                                        if (Network.connections.Length != 0)
+                                            networkView.RPC("PutTitle", RPCMode.All, arrayIndex[0], arrayIndex[1], position.x, position.y, position.z, arrayIndex);
+                                        else
+                                        {
+                                            tilesOnBoard[arrayIndex[0], arrayIndex[1]] = Instantiate(objectToinstantiate, position, Quaternion.identity) as GameObject; // instatiate a prefab on the position where the ray hits the floor. 
+                                            masks[arrayIndex[0], arrayIndex[1]] = Instantiate(Mask, position, Quaternion.identity) as GameObject;
+
+                                            Tile tile = tilesOnBoard[arrayIndex[0], arrayIndex[1]].AddComponent<Tile>();
+                                            //    Debug.Log("choosen tile:");
+
+                                            String result9 = "";
+                                            foreach (var l in choosenTile.Areas)
+                                            {
+                                                result9 += String.Join(" ", l.edges.Select(item => item.ToString()).ToArray());
+                                                result9 += " | ";
+                                            }
+                                            //   Debug.Log(result9);
+
+
+                                            tile.Init(choosenTile.IdNumber, choosenTile.UpTerrain, choosenTile.RightTerrain, choosenTile.DownTerrain, choosenTile.LeftTerrain, position.x, position.z, choosenTile.Material, choosenTile.Mask, choosenTile.Rotation, choosenTile.Plus, choosenTile.Areas);
+                                            TM.rotateFirstMatchingRotation(ref tilesOnBoard[arrayIndex[0], arrayIndex[1]], ref masks[arrayIndex[0], arrayIndex[1]], arrayIndex, ref tilesOnBoard);
+
+                                            String result4 = "";
+                                            foreach (var l in tilesOnBoard[arrayIndex[0], arrayIndex[1]].GetComponent<Tile>().Areas)
+                                            {
+                                                result4 += String.Join(" ", l.edges.Select(item => item.ToString()).ToArray());
+                                                result4 += " | ";
+
+                                            }
+                                            //       Debug.Log(result4);
+                                        }
+
+                                        //tilesOnBoard[arrayIndex[0], arrayIndex[1]].GetComponent<Renderer>().material = choosenTile.Material;
+                                        // masks[arrayIndex[0], arrayIndex[1]].GetComponent<Renderer>().material = choosenTile.Mask;
+
+                                        //currentlyPlacedTile = arrayIndex;
+                                        //networkView.RPC("PutTitle2", RPCMode.All, arrayIndex[0], arrayIndex[1], position.x, position.y, position.z, arrayIndex);
+                                        CM.CheckCamera(arrayIndex);
+                                    }
                                 }
                             }
                         }
                     }
                 }
             }
-        }
-        else
-        { 
-            OKButton.SetActive(false);
-            MeepleButton.SetActive(false);
-        }
-        
+            else
+            {
+                OKButton.SetActive(false);
+                MeepleButton.SetActive(false);
+            }
+
     }
     // ------------------------ RPC's ----------------------------
 
@@ -1166,6 +1164,7 @@ public class Game : MonoBehaviour
         {
             if (SerwerAns == 3)
                 SerwerAns = 4;
+
             NextTileImage.GetComponent<Image>().material = choosenTile.Material;
             playername.text = GM.GetCurrentPlayer().name;
         }
@@ -1223,9 +1222,9 @@ public class Game : MonoBehaviour
         Debug.Log("numer gracza podłączony:" + number);
     }
     [RPC]
-    public void debuglan2(int zero, int jeden, int klient)
+    public void debuglan2()
     {
-        Debug.Log("zero:" + zero + " jeden:" + jeden + " klient:" + klient);
+        Debug.Log("null");
     }
     [RPC]
     public void Gameconn()
@@ -1261,7 +1260,7 @@ public class Game : MonoBehaviour
             result9 += String.Join(" ", l.edges.Select(item => item.ToString()).ToArray());
             result9 += " | ";
         }
-        tile.Init(choosenTile.IdNumber, choosenTile.UpTerrain, choosenTile.RightTerrain, choosenTile.DownTerrain, choosenTile.LeftTerrain, px, pz, choosenTile.Material, choosenTile.Mask, choosenTile.Rotation, choosenTile.Plus, choosenTile.Areas);                 
+        tile.Init(choosenTile.IdNumber, choosenTile.UpTerrain, choosenTile.RightTerrain, choosenTile.DownTerrain, choosenTile.LeftTerrain, px, pz, choosenTile.Material, choosenTile.Mask, choosenTile.Rotation, choosenTile.Plus, choosenTile.Areas);
         TM.rotateFirstMatchingRotation(ref tilesOnBoard[arr0, arr1], ref masks[arr0, arr1], index, ref tilesOnBoard);
         String result4 = "";
         foreach (var l in tilesOnBoard[arr0, arr1].GetComponent<Tile>().Areas)

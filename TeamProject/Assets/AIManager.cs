@@ -63,23 +63,23 @@ public class AIManager : MonoBehaviour {
             playersTmp.Add(tmp);
         }
 
-        int ioio = 1;
-        foreach (var tile in simulation)
-        {
-            if(tile != null)
-            {
-                Debug.Log("Kafelek nr " + ioio);
-                String result4 = "";
-                for (int pp = 0; pp < tile.Areas.Count;pp++)
-                {
-                    result4 += String.Join(" ", tile.Areas[pp].edges.Select(item => item.ToString()).ToArray());
-                    result4 += " | ";
+        //int ioio = 1;
+        //foreach (var tile in simulation)
+        //{
+        //    if(tile != null)
+        //    {
+        //        Debug.Log("Kafelek nr " + ioio);
+        //        String result4 = "";
+        //        for (int pp = 0; pp < tile.Areas.Count;pp++)
+        //        {
+        //            result4 += String.Join(" ", tile.Areas[pp].edges.Select(item => item.ToString()).ToArray());
+        //            result4 += " | ";
 
-                }
-                Debug.Log(result4+"\n");
-                ioio++;
-            }
-        }
+        //        }
+        //        Debug.Log(result4+"\n");
+        //        ioio++;
+        //    }
+        //}
         
         // tileList
         //List<TileAI> tileListTemp = new List<TileAI>();
@@ -98,14 +98,14 @@ public class AIManager : MonoBehaviour {
         // List<Move> possibleMoves = GetPossibleMoves1(simulation, tileListTemp, players[1]); // tutaj dla wszystkich tiles test
 
         List<Move> possibleMoves = GetPossibleMoves(simulation, currentlyRolledTile, playersTmp[1]); // 1 to AI jednak
-        foreach (Move move in possibleMoves)
-        {
-            Debug.Log(" x: " + move.x + " y: " + move.y + " rot: " + move.tile.Rotation+" "+move.rotation  +" typ tila: "+move.tile.IdNumber+ " tyle razy ma się powtarzać dla każdej pozycji i obrotu (+1)" + move.tile.Areas.Count);
-        }
+        //foreach (Move move in possibleMoves)
+        //{
+        //    Debug.Log(" x: " + move.x + " y: " + move.y + " rot: " + move.tile.Rotation+" "+move.rotation  +" typ tila: "+move.tile.IdNumber+ " tyle razy ma się powtarzać dla każdej pozycji i obrotu (+1)" + move.tile.Areas.Count);
+        //}
         // tymczasowy rand
         //int rand = UnityEngine.Random.Range(0, possibleMoves.Count);
         //Move bestMove = possibleMoves[rand];
-        Move bestMove = new Move();
+       
         for (int u = 0; u < possibleMoves.Count; u++)
         {
 
@@ -117,47 +117,52 @@ public class AIManager : MonoBehaviour {
                 tmp.Clone(tileList[i]);
                 tileListTemp.Add(tmp);
             }
-            Debug.Log("Na liście jest " + tileListTemp.Count + " kafelków o numerach:");
-            foreach (TileAI t in tileListTemp)
-            {
-                Debug.Log(t.IdNumber);
-            }
+            //Debug.Log("Na liście jest " + tileListTemp.Count + " kafelków o numerach:");
+            //foreach (TileAI t in tileListTemp)
+            //{
+            //    Debug.Log(t.IdNumber);
+            //}
 
             // kopia
-            TileAI[,] tempBoard = new TileAI[200, 200];
-            for (int x = 0; x < simulation.GetLength(0); x++)
-            {
-                for (int y = 0; y < simulation.GetLength(1); y++)
-                {
-                    if (simulation[x, y] != null)
-                    {
-                        tempBoard[x, y] = new TileAI();
-                        tempBoard[x, y].Clone(simulation[x, y]);
-                    }
-                }
-            }
+            //TileAI[,] tempBoard = new TileAI[200, 200];
+            //for (int x = 0; x < simulation.GetLength(0); x++)
+            //{
+            //    for (int y = 0; y < simulation.GetLength(1); y++)
+            //    {
+            //        if (simulation[x, y] != null)
+            //        {
+            //            tempBoard[x, y] = new TileAI();
+            //            tempBoard[x, y].Clone(simulation[x, y]);
+            //        }
+            //    }
+            //}
 
-            Debug.Log("sprawdzamy czy temp się dobrze zresetował : "+tempBoard.Cast<TileAI>().Count(s => s != null));
-            Debug.Log("WYWOLUJE MINMAX DLA " + " x: " + possibleMoves[u].x + " y: " + possibleMoves[u].y + " rot: " + possibleMoves[u].tile.Rotation + " " + possibleMoves[u].rotation + " typ tila: " + possibleMoves[u].tile.IdNumber);
-            possibleMoves[u] = DoMove(possibleMoves[u], ref tempBoard, ref tileListTemp, ref playersTmp, 1);
+            //Debug.Log("sprawdzamy czy temp się dobrze zresetował : "+tempBoard.Cast<TileAI>().Count(s => s != null));
+            //Debug.Log("WYWOLUJE MINMAX DLA " + " x: " + possibleMoves[u].x + " y: " + possibleMoves[u].y + " rot: " + possibleMoves[u].tile.Rotation + " " + possibleMoves[u].rotation + " typ tila: " + possibleMoves[u].tile.IdNumber);
+            possibleMoves[u] = DoMove(possibleMoves[u], ref simulation, ref tileListTemp, ref playersTmp, 1);
 
             // var itemtoremove = tileListTemp.Where(item => item.IdNumber == possibleMoves[u].tile.IdNumber).First();
             // tileListTemp.Remove(itemtoremove);
             //tileListTemp.Remove(possibleMoves[u].tile);
             
-            Debug.Log("sprawdzamy czy ruch się wykonał : " + tempBoard.Cast<TileAI>().Count(s => s != null));
-            Debug.Log("Na liście teraz jest " + tileListTemp.Count + " kafelków o numerach");
-            foreach (TileAI t in tileListTemp)
-            {
-                Debug.Log(t.IdNumber);
+            //Debug.Log("sprawdzamy czy ruch się wykonał : " + tempBoard.Cast<TileAI>().Count(s => s != null));
+            //Debug.Log("Na liście teraz jest " + tileListTemp.Count + " kafelków o numerach");
+            //foreach (TileAI t in tileListTemp)
+            //{
+            //    Debug.Log(t.IdNumber);
 
-            }
+            //}
 
-            possibleMoves[u].score += MinMax(tempBoard, tileListTemp, 0, maxDepth, playersTmp, 1); //1 to chance
+            possibleMoves[u].score += MinMax(simulation, tileListTemp, 0, maxDepth, playersTmp, 1); //1 to chance
+            simulation[possibleMoves[u].x, possibleMoves[u].y] = null;
         }
+
+        Move bestMove = new Move();
+        bestMove.score = -1;
         
         foreach (var move in possibleMoves)
         {
+            Debug.Log("tile "+ move.tile.IdNumber + " pos: " + move.x+","+move.y +" rot: " + move.tile.Rotation + " --punkty "+ move.score);
             if (move.score > bestMove.score)
             {
                 bestMove = move;
@@ -170,21 +175,21 @@ public class AIManager : MonoBehaviour {
 
     public float MinMax(TileAI[,] tiles, List<TileAI> tileList, int currentDepth, int maxDepth, List<Player> players, int currentPlayer)
     {
-        Debug.Log("Jestem w minmaxie player " + currentPlayer + " głębokość "+ currentDepth+"/"+maxDepth);
-        Debug.Log("MINMAX Na liście teraz jest " + tileList.Count + " kafelków o numerach");
-        foreach (TileAI t in tileList)
-        {
-            Debug.Log(t.IdNumber);
+        //Debug.Log("Jestem w minmaxie player " + currentPlayer + " głębokość "+ currentDepth+"/"+maxDepth);
+        //Debug.Log("MINMAX Na liście teraz jest " + tileList.Count + " kafelków o numerach");
+        //foreach (TileAI t in tileList)
+        //{
+        //    Debug.Log(t.IdNumber);
 
-        }
+        //}
         if (maxDepth == currentDepth)
         {
-            Debug.Log("nie jest inne "+ maxDepth+" == "+currentDepth+" więc returnuję");
+            //Debug.Log("nie jest inne "+ maxDepth+" == "+currentDepth+" więc returnuję");
             return CountCurrentPoints(ref tiles, ref players, currentPlayer);
         }
         else
         {
-            Debug.Log(maxDepth+" jest inne niz "+currentDepth);
+            //Debug.Log(maxDepth+" jest inne niz "+currentDepth);
         }
 
         List<Move> possibleMoves;
@@ -200,13 +205,13 @@ public class AIManager : MonoBehaviour {
             possibleMoves = GetPossibleMoves1(tiles, tileList, players[0]);
         }
 
-        foreach (Move move in possibleMoves)
-        {
-            Debug.Log(" MINMAX x: " + move.x + " y: " + move.y + " rot: " + move.tile.Rotation + " " + move.rotation + " typ tila: " + move.tile.IdNumber + " tyle razy ma się powtarzać dla każdej pozycji i obrotu (+1)" + move.tile.Areas.Count);
+        //foreach (Move move in possibleMoves)
+        //{
+        //    Debug.Log(" MINMAX x: " + move.x + " y: " + move.y + " rot: " + move.tile.Rotation + " " + move.rotation + " typ tila: " + move.tile.IdNumber + " tyle razy ma się powtarzać dla każdej pozycji i obrotu (+1)" + move.tile.Areas.Count);
 
-        }
+        //}
 
-        Debug.Log("hihihi");
+        //Debug.Log("hihihi");
         foreach (var move in possibleMoves)
         {
             List<TileAI> tileListTemp = new List<TileAI>();
@@ -216,25 +221,25 @@ public class AIManager : MonoBehaviour {
                 tmp.Clone(tileList[i]);
                 tileListTemp.Add(tmp);
             }
-            Debug.Log("### SPRAWDZAM DLA "+move.tile.IdNumber+ " x: "+ move.x+" y: "+move.x+ " rot: "+ move.tile.Rotation );
+            //Debug.Log("### SPRAWDZAM DLA " + move.tile.IdNumber + " x: " + move.x + " y: " + move.y + " rot: " + move.tile.Rotation);
 
 
             float p = Probability(tileListTemp, move.tile);
-            TileAI[,] tempBoard = new TileAI[200, 200];
-            // kopia planszy
-            for (int x = 0; x < tiles.GetLength(0); x++)
-            {
-                for (int y = 0; y < tiles.GetLength(1); y++)
-                {
-                    if ((object)tiles[x, y] != null)
-                    {
-                        tempBoard[x, y] = new TileAI();
-                        tempBoard[x, y].Clone(tiles[x, y]);
-                    }
-                }
-            }
+            //TileAI[,] tempBoard = new TileAI[200, 200];
+            //// kopia planszy
+            //for (int x = 0; x < tiles.GetLength(0); x++)
+            //{
+            //    for (int y = 0; y < tiles.GetLength(1); y++)
+            //    {
+            //        if ((object)tiles[x, y] != null)
+            //        {
+            //            tempBoard[x, y] = new TileAI();
+            //            tempBoard[x, y].Clone(tiles[x, y]);
+            //        }
+            //    }
+            //}
 
-            Debug.Log("Kopiuję tempBoard z " + tempBoard.Cast<TileAI>().Count(s => s != null) + " tilami");
+            //Debug.Log("Kopiuję tempBoard z " + tempBoard.Cast<TileAI>().Count(s => s != null) + " tilami");
 
 
 
@@ -242,22 +247,23 @@ public class AIManager : MonoBehaviour {
             //Debug.Log("GŁĘBOKOŚĆ +1 !!!!!!!!!!!!!!!! RAZEM : " + currentDepth);
             if (currentPlayer == 1)
             {
-                Debug.Log("Wywołuję minmaxa dla 0 "+ currentDepth + "/" + maxDepth);
-                Move tmp = DoMove(move, ref tempBoard, ref tileListTemp, ref players, 0);
-                Debug.Log("sprawdzamy czy ruch się wykonał : " + tempBoard.Cast<TileAI>().Count(s => s != null));
+                //Debug.Log("Wywołuję minmaxa dla 0 "+ currentDepth + "/" + maxDepth);
+                Move tmp = DoMove(move, ref tiles, ref tileListTemp, ref players, 0);
+                //Debug.Log("sprawdzamy czy ruch się wykonał : " + tempBoard.Cast<TileAI>().Count(s => s != null));
 
                 int copyDepyth = currentDepth + 1;
 
-                result = p * Math.Min(result, tmp.score + MinMax(tempBoard, tileListTemp, copyDepyth, maxDepth, players, 0));
+                result = p * Math.Min(result, tmp.score + MinMax(tiles, tileListTemp, copyDepyth, maxDepth, players, 0));
             }
             else
             {
                 int copyDepyth = currentDepth + 1;
 
-                Debug.Log("Wywołuję minmaxa dla 0 " + currentDepth + "/" + maxDepth);
-                Move tmp = DoMove(move, ref tempBoard, ref tileListTemp, ref players, 1);
-                result = p * Math.Max(result, tmp.score + MinMax(tempBoard, tileListTemp, copyDepyth, maxDepth, players, 1));
+                //Debug.Log("Wywołuję minmaxa dla 0 " + currentDepth + "/" + maxDepth);
+                Move tmp = DoMove(move, ref tiles, ref tileListTemp, ref players, 1);
+                result = p * Math.Max(result, tmp.score + MinMax(tiles, tileListTemp, copyDepyth, maxDepth, players, 1));
             }
+            tiles[move.x, move.y] = null;
         }
         return result;
     }
@@ -265,12 +271,12 @@ public class AIManager : MonoBehaviour {
     public Move DoMove(Move move, ref TileAI[,] tiles, ref List<TileAI> tileList, ref List<Player> players, int currentPlayer)
     {
         //Debug.Log("Na liście teraz jest " + tileList.Count + " kafelków o numerach");
-        foreach (TileAI t in tileList)
-        {
-         //   Debug.Log(t.IdNumber);
+        //foreach (TileAI t in tileList)
+        //{
+        // //   Debug.Log(t.IdNumber);
 
-        }
-        Debug.Log("Usuwamy tile o id " + move.tile.IdNumber);
+        //}
+        //Debug.Log("Usuwamy tile o id " + move.tile.IdNumber);
 
 
         List<Player> playersTmp = new List<Player>();
@@ -316,14 +322,14 @@ public class AIManager : MonoBehaviour {
             {
                 if ((object)tiles[x, y] != null)
                 {
-                    Debug.Log("X : " + x + " Y: " + y);
-                    String result4 = "";
-                    foreach (var l in tiles[x, y].Areas)
-                    {
-                        result4 += String.Join(" ", l.edges.Select(item => item.ToString()).ToArray());
-                        result4 += " | ";
+                   // Debug.Log("X : " + x + " Y: " + y);
+                    //String result4 = "";
+                   // foreach (var l in tiles[x, y].Areas)
+                   // {
+                   //     result4 += String.Join(" ", l.edges.Select(item => item.ToString()).ToArray());
+                   //     result4 += " | ";
 
-                    }
+                   // }
 
                     if ((object)tiles[x, y].Areas != null)
                     {

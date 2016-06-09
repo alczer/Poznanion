@@ -73,7 +73,7 @@ public class TilesManager : MonoBehaviour
         for (int i = 0; i < count; i++)
         {
             tilesList.Add(tmp);
-            //Debug.Log(i);
+            //[ug.Log(i);
         }
     }
     public void placeTile(ref GameObject tile, ref GameObject mask, int x, int y, ref GameObject[,] tilesOnBoard, ref GameObject[,] masks)
@@ -821,17 +821,17 @@ public class TilesManager : MonoBehaviour
     public void init()
     {
         //CRFR
-        addTileToList(1, terrainTypes.castle, terrainTypes.road, terrainTypes.grass, terrainTypes.road, 0, 0, CRFR, CRFR_Mask, 1, 0, false, new List<Area>() {
+        addTileToList(1, terrainTypes.castle, terrainTypes.road, terrainTypes.grass, terrainTypes.road, 0, 0, CRFR, CRFR_Mask, 5, 0, false, new List<Area>() {
             new Area { edges = new List<int>() {1,2,3} ,terrain = terrainTypes.castle, colorIndex = 1, meeplePlacementIndex = 3},
             new Area { edges = new List<int>() {4,12}, terrain = terrainTypes.grass, colorIndex = 2, meeplePlacementIndex = 5},
             new Area { edges = new List<int>() {5, 11}, terrain = terrainTypes.road, colorIndex = 3, meeplePlacementIndex = 0},
             new Area { edges = new List<int>() {6,7,8,9,10}, terrain = terrainTypes.grass, colorIndex = 4, meeplePlacementIndex = 23}});
         //CFFC
-        addTileToList(3, terrainTypes.castle, terrainTypes.grass, terrainTypes.grass, terrainTypes.castle, 0, 0, CFFC, CFFC_Mask, 1, 0, false, new List<Area>() {
+        addTileToList(3, terrainTypes.castle, terrainTypes.grass, terrainTypes.grass, terrainTypes.castle, 0, 0, CFFC, CFFC_Mask, 5, 0, false, new List<Area>() {
             new Area { edges = new List<int>() {1,2,3,10,11,12}, terrain = terrainTypes.castle, colorIndex = 1, meeplePlacementIndex =1},
             new Area { edges = new List<int>() {0,4,5,6,7,8,9}, terrain = terrainTypes.grass, colorIndex = 2, meeplePlacementIndex = 25}});
         //CFFC_2
-        addTileToList(4, terrainTypes.castle, terrainTypes.grass, terrainTypes.grass, terrainTypes.castle, 0, 0, CFFC_2, CFFC_2_Mask, 1, 0, false, new List<Area>() {
+        addTileToList(4, terrainTypes.castle, terrainTypes.grass, terrainTypes.grass, terrainTypes.castle, 0, 0, CFFC_2, CFFC_2_Mask, 5, 0, false, new List<Area>() {
             new Area { edges = new List<int>() {1,2,3}, terrain = terrainTypes.castle, colorIndex = 1, meeplePlacementIndex = 3},
             new Area { edges = new List<int>() {0,4,5,6,7,8,9}, terrain = terrainTypes.grass, colorIndex = 2, meeplePlacementIndex = 25},
             new Area { edges = new List<int>() {10,11,12}, terrain = terrainTypes.castle, colorIndex = 3, meeplePlacementIndex = 33}});
@@ -1005,8 +1005,6 @@ public class TilesManager : MonoBehaviour
         addTileToList(24, terrainTypes.grass, terrainTypes.grass, terrainTypes.grass, terrainTypes.grass, 0, 0, FFFF_M, FFFF_M_Mask, 4, 0, false, new List<Area>() {
             new Area { edges = new List<int>() {1,2,3,4,5,6,7,8,9,10,11,12}, terrain = terrainTypes.grass, colorIndex = 1, meeplePlacementIndex = 21},
             new Area { edges = new List<int>() {0}, terrain = terrainTypes.monastery, colorIndex = 2, meeplePlacementIndex = 0}});
-            
-
     */
 
 
