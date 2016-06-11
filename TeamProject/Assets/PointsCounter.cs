@@ -319,11 +319,31 @@ public class PointsCounter : MonoBehaviour {
                 if ((object)board[coord[0] + i, coord[1] + j] == null)
                     return;
 
-        PlayerColor color = board[coord[0], coord[1]].Areas.Find(a => a.player != null).player.color;
+        //PlayerColor color = board[coord[0], coord[1]].Areas.Find(a => a.player != null).player.color;
+        PlayerColor color = PlayerColor.RED;
+        int areaindex = 0;
+        for (int i = 0; i < board[coord[0], coord[1]].Areas.Count; i++)
+        {
+            if (board[coord[0], coord[1]].Areas[i].player != null)
+            {
+                color = board[coord[0], coord[1]].Areas[i].player.color;
+                areaindex = i;
+                //Debug.Log(x + ", " + y + "   " + players[0].points + ", " + players[1].points);
+
+            }
+        }
+        foreach (var area in board[coord[0], coord[1]].Areas)
+        {
+            if (area.player != null)
+            {
+                color = area.player.color;
+            }
+        }
         players.Find(a => a.color == color).ChangeScore(9);
         players.Find(a => a.color == color).meeples++;
 
-        board[coord[0], coord[1]].Areas.Find(a => a.player != null).player = null;
+        //board[coord[0], coord[1]].Areas.Find(a => a.player != null).player = null;
+        board[coord[0], coord[1]].Areas[areaindex].player = null;
     }
 
     public void countMonasteryPointsEnd(int[] coord, ref GameObject[,] board, ref GameObject[,] meeples)
@@ -352,19 +372,28 @@ public class PointsCounter : MonoBehaviour {
 
         //PlayerColor color = board[coord[0], coord[1]].Areas.Find(a => a.player != null).player.color;
         PlayerColor color = PlayerColor.RED;
+        int areaindex = 0;
+        for (int i = 0; i < board[coord[0], coord[1]].Areas.Count; i++)
+        {
+            if (board[coord[0], coord[1]].Areas[i].player != null)
+            {
+                color = board[coord[0], coord[1]].Areas[i].player.color;
+                areaindex = i;
+                //Debug.Log(x + ", " + y + "   " + players[0].points + ", " + players[1].points);
+
+            }
+        }
         foreach (var area in board[coord[0], coord[1]].Areas)
         {
             if (area.player != null)
             {
                 color = area.player.color;
-                //Debug.Log(x + ", " + y + "   " + players[0].points + ", " + players[1].points);
-
             }
         }
         players.Find(a => a.color == color).ChangeScore(value);
         players.Find(a => a.color == color).meeples++;
 
-        board[coord[0], coord[1]].Areas.Find(a => a.player != null).player = null;
+        board[coord[0], coord[1]].Areas[areaindex].player = null;
     }
 
     public void countPointsAfterMove(ref GameObject[,] board, int x, int y, ref GameObject[,] meeples, bool endgame = false)
