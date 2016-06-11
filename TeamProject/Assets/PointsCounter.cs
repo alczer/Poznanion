@@ -350,7 +350,17 @@ public class PointsCounter : MonoBehaviour {
                 if ((object)board[coord[0] + i, coord[1] + j] != null)
                     value++;
 
-        PlayerColor color = board[coord[0], coord[1]].Areas.Find(a => a.player != null).player.color;
+        //PlayerColor color = board[coord[0], coord[1]].Areas.Find(a => a.player != null).player.color;
+        PlayerColor color = PlayerColor.RED;
+        foreach (var area in board[coord[0], coord[1]].Areas)
+        {
+            if (area.player != null)
+            {
+                color = area.player.color;
+                //Debug.Log(x + ", " + y + "   " + players[0].points + ", " + players[1].points);
+
+            }
+        }
         players.Find(a => a.color == color).ChangeScore(value);
         players.Find(a => a.color == color).meeples++;
 

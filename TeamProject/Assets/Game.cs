@@ -5,8 +5,27 @@ using UnityEngine.UI;
 using System.Linq;
 using System;
 using System.Globalization;
+using System.Security.Cryptography;
 
-
+public static class shuffle
+{
+    public static void Shuffle<T>(this IList<T> list)
+    {
+        RNGCryptoServiceProvider provider = new RNGCryptoServiceProvider();
+        int n = list.Count;
+        while (n > 1)
+        {
+            byte[] box = new byte[1];
+            do provider.GetBytes(box);
+            while (!(box[0] < n * (Byte.MaxValue / n)));
+            int k = (box[0] % n);
+            n--;
+            T value = list[k];
+            list[k] = list[n];
+            list[n] = value;
+        }
+    }
+}
 
 public class Game : MonoBehaviour
 {
@@ -335,7 +354,6 @@ public class Game : MonoBehaviour
     {
         GM = GameManager.Instance;
     }
-
     void Start()
     {
         //lan[
@@ -377,7 +395,8 @@ public class Game : MonoBehaviour
         audio = GetComponent<AudioSource>();
 
         TM.init(); // Inicjowanie Tiles
-        //tilesLeft = TM.tilesList.Count;
+        tilesLeft = TM.tilesList.Count;
+        TM.tilesList.Shuffle();
 
         //lan[
         Debug.Log("client_number:" + clientNumber);
@@ -515,13 +534,24 @@ public class Game : MonoBehaviour
             int j = 0;
 
             List<int[]> possiblePositions;
-            do
+            //do
+            //{
+            //    currentTileIndex = UnityEngine.Random.Range(0, TM.tilesList.Count);
+            //    choosenTile.Clone(TM.tilesList[currentTileIndex]);
+            //    possiblePositions = TM.findMatchingEdges(TM.findSourrounding(ref tilesOnBoard), choosenTile, ref tilesOnBoard);
+            //    j++;
+            //} while (possiblePositions.Count == 0 && j < 10);
+            choosenTile = gameObject.AddComponent<Tile>();
+            choosenTile.Clone(TM.tilesList[0]);
+            possiblePositions = TM.findMatchingEdges(TM.findSourrounding(ref tilesOnBoard), choosenTile, ref tilesOnBoard);
+            while (possiblePositions.Count == 0)
             {
-                currentTileIndex = UnityEngine.Random.Range(0, TM.tilesList.Count);
-                choosenTile.Clone(TM.tilesList[currentTileIndex]);
+                Tile t = choosenTile;
+                TM.tilesList.RemoveAt(0);
+                TM.tilesList.Add(t);
+                choosenTile.Clone(TM.tilesList[0]);
                 possiblePositions = TM.findMatchingEdges(TM.findSourrounding(ref tilesOnBoard), choosenTile, ref tilesOnBoard);
-                j++;
-            } while (possiblePositions.Count == 0 && j < 10);
+            }
 
             NextTileImage.GetComponent<Image>().material = choosenTile.Material;
 
@@ -571,7 +601,7 @@ public class Game : MonoBehaviour
             if (move.tile.Areas.Find(a => a.player != null) != null)
             {
                 int selectedPosition = move.tile.Areas.Find(a => a.player != null).meeplePlacementIndex;
-                Debug.Log(" selected pos: " + selectedPosition);
+                //Debug.Log(" selected pos: " + selectedPosition);
 
                 // meeple
                 if (move.tile.Areas.Find(a => a.player != null).terrain == terrainTypes.grass)
@@ -631,15 +661,25 @@ public class Game : MonoBehaviour
                     //int i;
                     int j = 0;
                     List<int[]> possiblePositions;
-                    do
+                    //do
+                    //{
+                    //    currentTileIndex = UnityEngine.Random.Range(0, TM.tilesList.Count);
+                    //    choosenTile = gameObject.AddComponent<Tile>();
+                    //    choosenTile.Clone(TM.tilesList[currentTileIndex]);
+                    //    possiblePositions = TM.findMatchingEdges(TM.findSourrounding(ref tilesOnBoard), choosenTile, ref tilesOnBoard);
+                    //    j++;
+                    //} while (possiblePositions.Count == 0 && j < 10);
+                    choosenTile = gameObject.AddComponent<Tile>();
+                    choosenTile.Clone(TM.tilesList[0]);
+                    possiblePositions = TM.findMatchingEdges(TM.findSourrounding(ref tilesOnBoard), choosenTile, ref tilesOnBoard);
+                    while (possiblePositions.Count == 0)
                     {
-                        currentTileIndex = UnityEngine.Random.Range(0, TM.tilesList.Count);
-                        choosenTile = gameObject.AddComponent<Tile>();
-                        choosenTile.Clone(TM.tilesList[currentTileIndex]);
+                        Tile t = choosenTile;
+                        TM.tilesList.RemoveAt(0);
+                        TM.tilesList.Add(t);
+                        choosenTile.Clone(TM.tilesList[0]);
                         possiblePositions = TM.findMatchingEdges(TM.findSourrounding(ref tilesOnBoard), choosenTile, ref tilesOnBoard);
-                        j++;
-                    } while (possiblePositions.Count == 0 && j < 10);
-
+                    }
                     //Probability check
                     float prob = AM.Probability(TM.tilesList, choosenTile);
                     Debug.Log("Prawdopodobieństwo wylosowania wylosowanego tile'a: " + prob);
