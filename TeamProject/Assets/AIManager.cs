@@ -34,7 +34,7 @@ public class AIManager : MonoBehaviour {
 
     public Move Expectimax(GameObject[,] tiles, List<Tile> tileList, Tile currentTile, int maxDepth, List<Player> players)
     {
-        // currentTile
+        // currentTile clone
         TileAI currentlyRolledTile = new TileAI();
         currentlyRolledTile.Clone(currentTile);
 
@@ -56,14 +56,14 @@ public class AIManager : MonoBehaviour {
             }
         }
 
-        // players
-        List<Player> playersTmp = new List<Player>();
-        foreach (var player in players)
-        {
-            Player tmp = new Player();
-            tmp.Clone(player);
-            playersTmp.Add(tmp);
-        }
+        // players clone
+        //List<Player> playersTmp = new List<Player>();
+        //foreach (var player in players)
+        //{
+        //    Player tmp = new Player();
+        //    tmp.Clone(player);
+        //    playersTmp.Add(tmp);
+        //}
 
         //int ioio = 1;
         //foreach (var tile in simulation)
@@ -99,7 +99,7 @@ public class AIManager : MonoBehaviour {
         //}
         // List<Move> possibleMoves = GetPossibleMoves1(simulation, tileListTemp, players[1]); // tutaj dla wszystkich tiles test
 
-        List<Move> possibleMoves = GetPossibleMoves(currentlyRolledTile, playersTmp[1]); // 1 to AI jednak
+        List<Move> possibleMoves = GetPossibleMoves(currentlyRolledTile, players[1], tileList.Count); // 1 to AI jednak
         //foreach (Move move in possibleMoves)
         //{
         //    Debug.Log(" x: " + move.x + " y: " + move.y + " rot: " + move.tile.Rotation+" "+move.rotation  +" typ tila: "+move.tile.IdNumber+ " tyle razy ma się powtarzać dla każdej pozycji i obrotu (+1)" + move.tile.Areas.Count);
@@ -141,8 +141,17 @@ public class AIManager : MonoBehaviour {
 
             //Debug.Log("sprawdzamy czy temp się dobrze zresetował : "+tempBoard.Cast<TileAI>().Count(s => s != null));
             //Debug.Log("WYWOLUJE MINMAX DLA " + " x: " + possibleMoves[u].x + " y: " + possibleMoves[u].y + " rot: " + possibleMoves[u].tile.Rotation + " " + possibleMoves[u].rotation + " typ tila: " + possibleMoves[u].tile.IdNumber);
-
+            // players clone
+            List<Player> playersTmp = new List<Player>();
+            foreach (var player in players)
+            {
+                Player tmp = new Player();
+                tmp.Clone(player);
+                tmp.points = 0;
+                playersTmp.Add(tmp);
+            }
             possibleMoves[u] = DoMove(possibleMoves[u], ref tileListTemp, ref playersTmp, 1);
+            //possibleMoves[u].score += 0.5f * CountCurrentPoints(playersTmp, 1);
 
             // var itemtoremove = tileListTemp.Where(item => item.IdNumber == possibleMoves[u].tile.IdNumber).First();
             // tileListTemp.Remove(itemtoremove);
@@ -153,26 +162,34 @@ public class AIManager : MonoBehaviour {
             //foreach (TileAI t in tileListTemp)
             //{
             //    Debug.Log(t.IdNumber);
-
             //}
 
             possibleMoves[u].score += MinMax(tileListTemp, 0, maxDepth, playersTmp, 1); //1 to chance
             simulation[possibleMoves[u].x, possibleMoves[u].y] = null;
         }
 
+        float bestScore = -1;
+        List<Move> bestMoves = new List<Move>();
 
-        Move bestMove = new Move();
-        bestMove.score = -1;
-        
         foreach (var move in possibleMoves)
         {
-            Debug.Log("tile "+ move.tile.IdNumber + " pos: " + move.x+","+move.y +" rot: " + move.tile.Rotation + " --punkty "+ move.score);
-            if (move.score > bestMove.score)
+            //Debug.Log("tile "+ move.tile.IdNumber + " pos: " + move.x+","+move.y +" rot: " + move.tile.Rotation + " --punkty "+ move.score);
+            if (move.score > bestScore)
             {
-                bestMove = move;
+                bestScore = move.score;
             }
         }
-        return bestMove;
+        foreach (var move in possibleMoves)
+        {
+            if (move.score == bestScore)
+            {
+                Debug.Log("tile " + move.tile.IdNumber + " pos: " + move.x + "," + move.y + " rot: " + move.tile.Rotation + " --punkty " + move.score);
+                bestMoves.Add(move);
+            }
+        }
+        int rand = UnityEngine.Random.Range(0, bestMoves.Count);    
+
+        return bestMoves[rand];
     }
 
     public float MinMax(List<TileAI> tileList, int currentDepth, int maxDepth, List<Player> players, int currentPlayer)
@@ -208,12 +225,12 @@ public class AIManager : MonoBehaviour {
         if (currentPlayer == 0)
         {
             result = 8192f;
-            possibleMoves = GetPossibleMoves(tileList[currentDepth], players[1]);
+            possibleMoves = GetPossibleMoves(tileList[currentDepth], players[1], tileList.Count);
             //possibleMoves = GetPossibleMoves1(tileList, players[1]);
         }
         else
         {
-            possibleMoves = GetPossibleMoves(tileList[currentDepth], players[0]);
+            possibleMoves = GetPossibleMoves(tileList[currentDepth], players[0], tileList.Count);
             //possibleMoves = GetPossibleMoves1(tileList, players[0]);
         }
 
@@ -296,6 +313,7 @@ public class AIManager : MonoBehaviour {
         {
             Player tmpp = new Player();
             tmpp.Clone(player);
+            tmpp.points = 0;
             playersTmp.Add(tmpp);
         }
 
@@ -324,9 +342,17 @@ public class AIManager : MonoBehaviour {
 
     public float CountCurrentPoints(List<Player> players, int currentPlayer)
     {
+        List<Player> playersTmp = new List<Player>();
+        foreach (var player in players)
+        {
+            Player tmp = new Player();
+            tmp.Clone(player);
+            tmp.points = 0;
+            playersTmp.Add(tmp);
+        }
         float result = 0f;
         //policz punkty za niedokończone rzeczy
-        int tmp = players[currentPlayer].points;
+        int pointsDiff = playersTmp[currentPlayer].points;
 
         for (int x = 0; x < simulation.GetLength(0); x += 1)
         {
@@ -349,7 +375,7 @@ public class AIManager : MonoBehaviour {
                     {
                         if (area.player != null)
                         {
-                            PC.countPointsAfterMove(ref simulation, ref players, x, y, true);
+                            PC.countPointsAfterMove(ref simulation, ref playersTmp, x, y, true);
                             //Debug.Log(x + ", " + y + "   " + players[0].points + ", " + players[1].points);
                             
                         }
@@ -365,7 +391,7 @@ public class AIManager : MonoBehaviour {
             }
         }
 
-        result = players[currentPlayer].points - tmp;
+        result = playersTmp[currentPlayer].points - pointsDiff;
        // Debug.Log("counting return: " + result);
         return result;
     }
@@ -465,7 +491,7 @@ public class AIManager : MonoBehaviour {
         }
         return MovesList;
     }
-    public List<Move> GetPossibleMoves(TileAI tile, Player player)
+    public List<Move> GetPossibleMoves(TileAI tile, Player player, int tilesLeft)
     {
         // What we return;
         List<Move> MovesList = new List<Move>();
@@ -536,11 +562,18 @@ public class AIManager : MonoBehaviour {
                         {
                             if (possibleMeeple.Any(a => a.meeplePlacementIndex == area.meeplePlacementIndex))
                             {
-                                area.player = player;
-                                tmp3 = new Move();
-                                tmp3.Clone(tmp2);
-                                MovesList.Add(tmp3);
-                                area.player = null;
+                                if (area.terrain == terrainTypes.grass && tilesLeft > 20)
+	                            {
+                                    //skip
+	                            }
+                                else
+                                {
+                                    area.player = player;
+                                    tmp3 = new Move();
+                                    tmp3.Clone(tmp2);
+                                    MovesList.Add(tmp3);
+                                    area.player = null;
+                                }
                             }
                         }
                     }
