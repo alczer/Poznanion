@@ -107,7 +107,16 @@ public class AIManager : MonoBehaviour {
         // tymczasowy rand
         //int rand = UnityEngine.Random.Range(0, possibleMoves.Count);
         //Move bestMove = possibleMoves[rand];
-       
+
+        List<Player> playersTmp = new List<Player>();
+        foreach (var player in players)
+        {
+            Player tmp = new Player();
+            tmp.Clone(player);
+            tmp.points = 0;
+            playersTmp.Add(tmp);
+        }
+
         for (int u = 0; u < possibleMoves.Count; u++)
         {
 
@@ -142,14 +151,7 @@ public class AIManager : MonoBehaviour {
             //Debug.Log("sprawdzamy czy temp się dobrze zresetował : "+tempBoard.Cast<TileAI>().Count(s => s != null));
             //Debug.Log("WYWOLUJE MINMAX DLA " + " x: " + possibleMoves[u].x + " y: " + possibleMoves[u].y + " rot: " + possibleMoves[u].tile.Rotation + " " + possibleMoves[u].rotation + " typ tila: " + possibleMoves[u].tile.IdNumber);
             // players clone
-            List<Player> playersTmp = new List<Player>();
-            foreach (var player in players)
-            {
-                Player tmp = new Player();
-                tmp.Clone(player);
-                tmp.points = 0;
-                playersTmp.Add(tmp);
-            }
+            
             possibleMoves[u] = DoMove(possibleMoves[u], ref tileListTemp, ref playersTmp, 1);
             //possibleMoves[u].score += 0.5f * CountCurrentPoints(playersTmp, 1);
 
@@ -164,7 +166,7 @@ public class AIManager : MonoBehaviour {
             //    Debug.Log(t.IdNumber);
             //}
 
-            possibleMoves[u].score += MinMax(tileListTemp, 0, maxDepth, playersTmp, 1); //1 to chance
+            //possibleMoves[u].score += MinMax(tileListTemp, 0, maxDepth, playersTmp, 1); //1 to chance
             simulation[possibleMoves[u].x, possibleMoves[u].y] = null;
         }
 
@@ -187,7 +189,8 @@ public class AIManager : MonoBehaviour {
                 bestMoves.Add(move);
             }
         }
-        int rand = UnityEngine.Random.Range(0, bestMoves.Count);    
+        int rand = UnityEngine.Random.Range(0, bestMoves.Count);
+        Debug.Log("count" + bestMoves.Count);
 
         return bestMoves[rand];
     }
@@ -199,8 +202,8 @@ public class AIManager : MonoBehaviour {
         //foreach (TileAI t in tileList)
         //{
         //    Debug.Log(t.IdNumber);
-
         //}
+
         int otherPlayer = 1;
         if (currentPlayer == 1)
         {
@@ -210,7 +213,7 @@ public class AIManager : MonoBehaviour {
         if (maxDepth == currentDepth)
         {
             //Debug.Log("nie jest inne "+ maxDepth+" == "+currentDepth+" więc returnuję");
-            float currentp = CountCurrentPoints(players, otherPlayer);
+            float currentp = CountCurrentPoints(players, currentPlayer);
             //Debug.Log("currentp: " + currentp);
             return currentp;
         }
@@ -306,7 +309,11 @@ public class AIManager : MonoBehaviour {
 
         //}
         //Debug.Log("Usuwamy tile o id " + move.tile.IdNumber);
-
+        int otherPlayer = 1;
+        if (currentPlayer == 1)
+        {
+            otherPlayer = 0;
+        }
 
         List<Player> playersTmp = new List<Player>();
         foreach (var player in players)
@@ -332,11 +339,13 @@ public class AIManager : MonoBehaviour {
         
 
         int tmp = playersTmp[currentPlayer].points;
-        PC.countPointsAfterMove(ref simulation, ref playersTmp, move.x, move.y, false);
+        int tmp2 = playersTmp[otherPlayer].points;
+        PC.countPointsAfterMove(ref simulation, ref playersTmp, move.x, move.y, true);
 
         //Wykonaj obecny ruch
         //Policz punkty za obecny ruch i zmień odpowiednio planszę
-        move.score = playersTmp[currentPlayer].points - tmp;
+        float otherScore = playersTmp[otherPlayer].points - tmp2;
+        move.score = playersTmp[currentPlayer].points - tmp - otherScore;
         return move;
     }
 
@@ -347,7 +356,7 @@ public class AIManager : MonoBehaviour {
         {
             Player tmp = new Player();
             tmp.Clone(player);
-            tmp.points = 0;
+            //tmp.points = 0;
             playersTmp.Add(tmp);
         }
         float result = 0f;
@@ -366,7 +375,6 @@ public class AIManager : MonoBehaviour {
                    // {
                    //     result4 += String.Join(" ", l.edges.Select(item => item.ToString()).ToArray());
                    //     result4 += " | ";
-
                    // }
 
                     //if ((object)simulation[x, y].Areas != null)
@@ -536,7 +544,6 @@ public class AIManager : MonoBehaviour {
                     }
                     else if (rotation == 2)
                     {
-
                         TM.rotateClockwise90(ref tmp2.tile);
                         TM.rotateClockwise90(ref tmp2.tile);
                         tmp2.rotation = rotation;
